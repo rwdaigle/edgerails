@@ -40,7 +40,7 @@ desc "Begin a new post in #{source}/_posts"
 task :post, :filename do |t, args|
   args.with_defaults(:filename => 'new-post')
   #system "touch #{source}/_posts/#{Time.now.strftime('%Y-%m-%d_%H-%M')}-#{args.filename}.markdown"
-  open("#{source}/_posts/#{Time.now.strftime('%Y-%m-%d_%H-%M')}-#{args.filename.gsub(/[ _]/, '-')}.markdown", 'w') do |post|
+  open("#{source}/_posts/#{Time.now.strftime('%Y-%m-%d')}-#{args.filename.gsub(/[ _]/, '-').downcase}.markdown", 'w') do |post|
     post.puts "---"
     post.puts "title: \"#{args.filename.gsub(/[-_]/, ' ').titlecase}\""
     post.puts "---"
