@@ -1,0 +1,20 @@
+---
+title: "DB Console"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+For those of you that haven't committed the database username and passwords for your many apps to memory yet, there comes some help from edge Rails - the addition of a @dbconsole@ script that will automatically drop you into a database prompt using the info in @config/database.yml@ configuration.
+
+In an edge rails app that has a mysql db config:
+
+_Update:_ Because of the insecure nature of passing in the password on the command line on shared hosts - you now need to use the @-p@ or @--include-password@ option to force the password to be read from your config file.
+
+<code><pre>
+script/dbconsole -p
+...
+mysql>
+</pre></code>
+
+And there I am, logged into the dev database in the mysql command prompt.  No scrounging around for that app-specific username or db name or @cat@ ing the @config/database.yml@ file anymore.

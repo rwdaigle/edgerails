@@ -1,0 +1,70 @@
+---
+title: "Touching"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature was released in Rails v2.3.3_
+<hr/>
+
+There are often times when you want an update made to one object to be reflected up the object graph as an update of an associated parent object.  For instance, if a new comment is created on an article, you may very well want to mark the article as being updated.  With the "new touch feature":http://github.com/rails/rails/commit/abb899c54e8777428b7a607774370ba29a5573bd of ActiveRecord, this is a whole lot easier.  Using our previous example, here's is how it works:
+
+<notextile>
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  has_many :comments
+end
+
+class Comment < ActiveRecord::Base
+
+  # Make create/update/deletes of a comment mark its
+  # parent article as updated
+  belongs_to :article, :touch => true
+end
+
+# Adding a new comment marks the article as being updated
+article.updated_at #=> "Mon Apr 20 07:42:53 -0400 2009"
+article.comments.create(:body => "New comment")
+article.updated_at #=> "Mon Apr 20 07:43:27 -0400 2009"
+
+# Same for updates/deletes
+article.comments.first.destroy
+article.updated_at #=> "Mon Apr 20 07:45:23 -0400 2009"
+{% endhighlight %}
+</notextile>
+
+This is a great way to keep tightly coupled domain models in-sync without resorting to a potential maze of callback logic.
+
+Also, if you have a timestamp field named something other than the standard @updated_at@ or @updated_on@ you can explicitly specify that field as the value to the @:touch@ option and it will get marked instead:
+
+<notextile>
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  has_many :comments
+  validates_presence_of :last_updated_at  # non-standard
+end
+
+class Comment < ActiveRecord::Base
+  belongs_to :article, :touch => :last_updated_at
+end
+
+# Adding a new comment marks the article as being updated
+article.last_updated_at #=> "Mon Apr 20 07:42:53 -0400 2009"
+article.comments.create(:body => "New comment")
+article.last_updated_at #=> "Mon Apr 20 07:43:27 -0400 2009"
+{% endhighlight %}
+</notextile>
+
+Also, somewhat conveniently, you can invoke @touch@ directly on a model to update its timestamp outside any association callbacks:
+
+<notextile>
+{% highlight ruby %}
+article.updated_at #=> "Mon Apr 20 07:42:53 -0400 2009"
+article.touch
+article.updated_at #=> "Mon Apr 20 07:43:27 -0400 2009"
+{% endhighlight %}
+</notextile>
+
+So, touch away (in a non-creepy kind of way)!

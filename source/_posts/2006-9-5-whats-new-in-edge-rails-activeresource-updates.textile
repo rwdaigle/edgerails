@@ -1,0 +1,10 @@
+---
+title: "ActiveResource Updates"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+The maturation of "ActiveResource":/articles/2006/06/30/whats-new-in-edge-rails-activeresource-is-here continues with a pretty "significant update":http://dev.rubyonrails.org/changeset/4890 with "full support for find/create/update/destroy" operations.
+
+If you're living on the bleeding edge and have had some issues getting ActiveResource to work as advertised you may want to check out the details of this update.

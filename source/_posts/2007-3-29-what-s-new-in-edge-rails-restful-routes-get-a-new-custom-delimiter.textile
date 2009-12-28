@@ -1,0 +1,34 @@
+---
+title: "RESTful Routes Get a New Custom Delimiter"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+No really, I couldn't think of any better way to title this post, and I apologize for that.  However, if you actually clicked on this post from your feed reader, you are definitely a geek, and I like that in you.
+
+So what's "this about":http://dev.rubyonrails.org/changeset/6485?  It's really a tiny little change in RESTful routing, but it negates a lot of material out there, "including":/articles/2006/8/1/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it my "own":/articles/2007/3/14/rest-activeresource.  Whenever you have a custom action route defined in Rails:
+
+<notextile>
+{% highlight ruby %}
+map.resources :users, :collection => { :filter => :get }
+{% endhighlight %}
+</notextile>
+
+the resulting route no longer uses a semi-colon (@;@) to delimit the custom action:
+
+<notextile>
+{% highlight bash %}
+GET /users;filter
+{% endhighlight %}
+</notextile>
+
+and instead will use your standard forward-slash (@/@):
+
+<notextile>
+{% highlight bash %}
+GET /users/filter
+{% endhighlight %}
+</notextile>
+
+Not a big change at all, but it has big repercussions if you've got remote clients accessing these URIs already.  (And "we all do now-a-days, right?":http://contactsapi.com).

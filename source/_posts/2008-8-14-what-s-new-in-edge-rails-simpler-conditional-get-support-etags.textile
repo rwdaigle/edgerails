@@ -1,0 +1,77 @@
+---
+title: "Simpler Conditional Get Support (ETags)"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+*Note:* _This feature has been greatly improved since the writing of this article.  "See here":/articles/2008/10/25/what-s-new-in-edge-rails-even-better-conditional-get-support for the latest and greatest._
+
+Conditional-gets are a facility of the HTTP spec that provide a way for web servers to tell browsers that the response to a @GET@ request hasn't changed since the last request and can be safely pulled from the browser cache.
+
+They work by using the @ HTTP_IF_NONE_MATCH@ and @ HTTP_IF_MODIFIED_SINCE@ headers to pass back and forth both a unique content identifier and the timestamp of when the content was last changed.  If the browser makes a request where the content identifier (etag) or last modified since timestamp matches the server's version then the server only needs to send back an empty response with a not modified status.
+
+It is the server's (i.e. our) responsibility to look for a last modified timestamp and the if-none-match header and determine whether or not to send back the full response.  With "this new conditional-get support in rails":http://github.com/JackDanger/rails/commit/b7529ed1cc7cfd8df5fd1b069e2881d39d3d984c this is a pretty easy task:
+
+<notextile>
+{% highlight ruby %}
+class ArticlesController < ApplicationController
+
+  def show
+    @article = Article.find(params[:id])
+
+    # Set the response headers to accurately reflect the state of the
+    # requested object(s)
+    response.last_modified = @article.published_at.utc
+    response.etag = @article
+
+    # If the request's state is the same as the server's state then we know
+    # we don't have to send back the whole body
+    if request.fresh?(response)
+      head :not_modified
+    else
+      respond_to do |wants|
+        # normal response processing
+      end
+    end
+end
+{% endhighlight %}
+</notextile>
+
+The etag value is calculated for you with the @etag=@ setter method.  All you have to do is provide a single object or array of objects that uniquely identify this request.  In this example the article itself contains all the information that uniquely identifies the state of this request.  However, you may need to use more than one key in your app.  For instance, if the request is user specific:
+
+<notextile>
+{% highlight ruby %}
+response.etag = [@article, current_user]
+{% endhighlight %}
+</notextile>
+
+The @request.fresh?(response)@ method is what will then tell you if the incoming request matches either the last-modified-since or if-none-match values of the outgoing response.  If it does you can avoid passing the full body of the response back and save some bandwidth.
+
+It's also possible that you can avoid hitting the database all together if your application deals with completely static resources (though this is rare):
+
+<notextile>
+{% highlight ruby %}
+class ArticlesController < ApplicationController
+
+  def show
+
+    # If articles don't change, the etag can be based solely
+    # on items we have in the request
+    response.etag = [:article, params[:id]]
+
+    # If the request's state is the same as the server's state then we can
+    # avoid the db call all together
+    if request.fresh?(response)
+      head :not_modified
+    else
+      @article = Article.find(params[:id])
+      respond_to do |wants|
+        ...
+      end
+    end
+end
+{% endhighlight %}
+</notextile>
+
+So be a good citizen and make your requests conditional-get compatible.  It's the right thing to do - and can make your apps more performant.

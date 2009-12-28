@@ -1,0 +1,132 @@
+---
+title: "ActiveResource Gets Custom Methods"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+ActiveResource got a pretty major update today with the "ability to invoke custom methods":http://dev.rubyonrails.org/changeset/6584 without having to go rooting around to manually build the invocation URI.  This feature is close to my heart not only because of my affinity for ARes, but also because this patch was one I submitted as part of the "Rails Hackfest":http://www.workingwithrails.com/contests/hackfest2007/winners.  There was initially a lot of "back and forth":http://dev.rubyonrails.org/ticket/6979 regarding the implementation and I didn't know if it would ever make it in.  Thankfully, it has.  But enough about me, let's talk about you.
+
+So say you've got your RESTable web service humming along nicely.  It has your standard compliment of CRUD based actions for a @Person@ resource, along with a few custom element methods like @promote@ and @deactivate@ and a custom collection method, @sort@.  Without custom method support in ARes, you would have to manually build the URI you want to call and then start man-handling the underlying http connection to actually invoke the method call.  Yeah, not cool.  Enter custom method support.
+
+Let's assume a remote service that supports the following:
+
+<notextile>
+{% highlight bash %}
+# Collection custom method
+GET /people/sorted.xml?by=sort_field
+
+# Element custom methods
+PUT /people/1/promoted.xml?position=position_name
+DELETE /people/1/deactivated.xml
+{% endhighlight %}
+</notextile>
+
+And we've got our bare-bones ARes @Person@ class:
+
+<notextile>
+{% highlight ruby %}
+class Person < ActiveResource::Base
+  self.site = "http://mypeeps.com/"
+end
+{% endhighlight %}
+</notextile>
+
+The syntax for invoking a custom method in ARes is pretty simple.  Just call one of @get@, @post@, @put@, or @delete@ on either the class (for collection custom methods) or the instance (for element custom methods) that matches the Http method you want to use.  Pass in the name of the custom method to invoke as the first argument with any parameters that need to be passed along as the second.  That description sounded like poo so let me use an example to get the point across a little better.
+
+Since we've got a well-behaved remote REST service, we can do the following:
+
+h3. ActiveResource Collection Custom Method Calls
+
+A collection call is one that is invoked against the collection of resources.  An easier way to think of this is any call that is not operating on an existing resource is a collection call.  They're usually pretty easy to spot as their URI does not reference a resource id.
+
+A custom method call is one that is not one of the default CRUD actions that you get out of the box with RESTful routing.  In our example we've got a collection custom method called @sorted@ that returns the resources sorted by a particular field (_In my original example this was called @sort@, but after a recommendation by DHH, was changed to the adjective form @sorted@.  You'll see that this makes for much more readable, sentence-like URIs and ARes invocations._)
+
+The remote service supports this URI:
+
+<notextile>
+{% highlight bash %}
+# Collection custom method
+GET /people/sorted.xml?by=sort_field
+{% endhighlight %}
+</notextile>
+
+And this is how you invoke it from ARes:
+
+<notextile>
+{% highlight ruby %}
+# Get all people sorted by first name
+people = Person.get(:sorted, :by => 'first_name') # =>
+   # GET /people/sorted.xml?by=first_name
+{% endhighlight %}
+</notextile>
+
+If your company has hit hard times, and you've got a @layoff@ REST action supported by the remote service that expects the @put@ method your invocation would look like this:
+
+<notextile>
+{% highlight ruby %}
+# Fire everybody
+Person.put(:layoff) # => PUT /people/layoff.xml
+{% endhighlight %}
+</notextile>
+
+I hope by now it's clear that you invoke the Http method you want to call the remote service with on your ARes  class, and pass in the name of the custom method as the first argument.  Quite simple.  Custom methods called against the class are known to be collection methods (Since it's not referencing an in existence resource) and so the URI is properly built for the resource collection.
+
+h3. ActiveResource Element Custom Method Calls
+
+If you are manipulating a specific resource, you are invoking an element call.  The only real differentiation in ARes between a collection and element custom method is that with the element call, you're operating on an instance of the ARes model.  The URIs that are built are then appropriate for a specific resource.  Onto our example.
+
+The remote service supports this URI:
+
+<notextile>
+{% highlight bash %}
+# Element custom method to promote a person to specific position
+PUT /people/1/promoted.xml?position=position_name
+{% endhighlight %}
+</notextile>
+
+And this is how you invoke it from ARes:
+
+<notextile>
+{% highlight ruby %}
+# Promote our star developer
+ryan = Person.find(1)
+ryan.put(:promoted, :position => 'Manager')  # Is this really a promotion?
+    # PUT /people/1/promoted.xml?position=Manager
+{% endhighlight %}
+</notextile>
+
+The remote service expects the @promoted@ call to be used with the @PUT@ http method, so all you do is invoke @put@ on the instance of @Person@ that you want to promote and the parameters hash to send along with it.  Similarly, for a delete:
+
+On the server...
+
+<notextile>
+{% highlight bash %}
+DELETE /people/1/deactivated.xml
+{% endhighlight %}
+</notextile>
+
+And in ARes...
+
+<notextile>
+{% highlight ruby %}
+# He turned out to not be so hot
+ryan = Person.find(1)
+ryan.delete(:deactivated)  # DELETE /people/1/deactivate.xml
+{% endhighlight %}
+</notextile>
+
+h3. Other Bits
+
+One thing to note is that all custom method calls except @get@ return the remote service response, from which you can check out the response codes and spin your own response handling.  @get@ returns a hash (or array of hashes for multiple resources) representing the XML data that was returned in the body of the response.  If you want to get actual objects back from a @get@ call, you can use the @find@ method and pass in a symbol:
+
+<notextile>
+{% highlight ruby %}
+# Get all managers
+Person.get(:managers) #=> [{:name => "Ryan"}, {:name => "David"}]
+Person.find(:managers) #=> <#Person...><#Person ...>
+   #=> GET /people/managers.xml
+{% endhighlight %}
+</notextile>
+
+And there you have it, custom methods with ActiveResource.

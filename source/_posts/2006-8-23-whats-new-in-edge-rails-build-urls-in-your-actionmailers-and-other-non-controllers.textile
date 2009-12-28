@@ -1,0 +1,40 @@
+---
+title: "Build URLs in Your ActionMailers (and other non-controllers)"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+For a long time there was no _good_ way to generate a URL within an ActionMailer.  If you wanted to send a registration email when a user signs up for your application you would have had to _pass in_ the url to be included in the email:
+
+<pre>
+<code>
+class MyController < ApplicationController
+  def register
+    # .. registration logic ...
+    UserMailer.deliver_registration(user, home_url)
+  end
+end
+
+class UserMailer < ActionMailer::Base
+  def registration(user, url)
+    @body = { 'user' => user, 'home' => url }
+  end
+end
+</code>
+</pre>
+
+This is hardly a hack, but it's not as nice as it could be.  It would be nice if the mailer itself could generate the url - or perhaps if the email template itself could generate the url?  That day has come with the new "ActionController::UrlWriter":http://dev.rubyonrails.org/changeset/4814 module.
+
+Just include @ActionController::UrlWriter@ in your mailer and you get access to all the familiar @url_for@ and even the named url methods (@home_url@ in this example):
+
+<pre>
+<code>
+class UserMailer < ActionMailer::Base
+  include ActionController::UrlWriter
+  def registration(user)
+    @body = { 'user' => user, 'home' => home_url }
+  end
+end
+</code>
+</pre>

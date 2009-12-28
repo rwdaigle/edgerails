@@ -1,0 +1,62 @@
+---
+title: "Better Cross-Site Request Forging Prevention"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Hot on the heels of the in-depth look at "Rails security options":http://www.quarkruby.com/2007/9/20/ruby-on-rails-security-guide comes the addition of the "CsrfKiller plugin":http://projects.wh.techno-weenie.net/browser/plugins/csrf_killer "into rails core":http://dev.rubyonrails.org/changeset/7592.
+
+The CsrfKiller plugin adds a unique session token field to all forms that is checked on every non-GET request.  This ensures that the request received is in fact coming from the session of the authorized user (check out "wikipedia's CSRF article":http://en.wikipedia.org/wiki/Cross-site_request_forgery if you need more details on the technique).
+
+-All you need to do to enable this protection is to add a @protect_from_forgery@ statement in your controller that takes the familiar @:except@ or @:only@ option along with salt to use when generating the unique token:-
+
+_And now this is the "default functionality":http://dev.rubyonrails.org/changeset/7620.  No need to specify anything if you want the default behavior.  You can still override as in the following examples, however._
+
+<notextile>
+{% highlight ruby %}
+class PostsController < ApplicationController
+
+  protect_from_forgery :secret => '2kdjnaLI8', :only => [:update, :delete, :create]
+  ...
+end
+{% endhighlight %}
+</notextile>
+
+If you're already using edge Rails' default "cookie session store":/articles/2007/2/21/what-s-new-in-edge-rails-cookie-based-sessions then you don't have to specify the @:secret@ key.
+
+<notextile>
+{% highlight ruby %}
+protect_from_forgery :only => [:update, :delete, :create]
+{% endhighlight %}
+</notextile>
+
+If you're not on a cookie session store you can also change the digest method used to generate the unique token (the default is 'SHA1').
+
+<notextile>
+{% highlight ruby %}
+  protect_from_forgery :secret => '2kaienna9ea90djnaLI8', :digest => 'MD5'
+{% endhighlight %}
+</notextile>
+
+If a request comes in that doesn't match the request forgery protection token for the current session then an @ActionController::InvalidAuthenticityToken@ exception will be thrown.  Perhaps a good place to try out the "new exception handling syntax":/articles/2007/9/24/what-s-new-in-edge-rails-better-exception-handling ?
+
+_Caveats:_ The request forgery protection only kicks in in the following scenarios:
+* Non-GET requests, so make sure the only requests that modify state are your @PUT@/@POST@/@DELETE@ requests.
+* On html and ajax requests.  Override @verifiable_request_format?@ if you want to expand that.
+
+And what to do if you want to disable CSRF protection?  Just add this to whatever controllers you don't want to be affected:
+
+<notextile>
+{% highlight ruby %}
+skip_before_filter :verify_authenticity_token
+{% endhighlight %}
+</notextile>
+
+And if you want to disable this site-wide, just add this to @application.rb@:
+
+<notextile>
+{% highlight ruby %}
+self.allow_forgery_protection = false
+{% endhighlight %}
+</notextile>

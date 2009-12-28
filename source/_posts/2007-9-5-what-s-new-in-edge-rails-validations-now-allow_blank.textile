@@ -1,0 +1,21 @@
+---
+title: "Validations Now :allow_blank"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+This is a tiny "update":http://dev.rubyonrails.org/changeset/7407, but one worth mentioning.  The various activerecord validation methods now accept an @:allow_blank@ option that will let validation pass if the value is @nil@ or an empty string.
+
+<notextile>
+{% highlight ruby %}
+class Post < ActiveRecord::Base
+  validates_length_of :meta, :maximum => 3, :allow_blank => true
+end
+
+p = Post.new(:meta => "")
+p.valid?  #=> true
+{% endhighlight %}
+</notextile>
+
+Hardly earth-shattering, but convenient and a nice compliment to @:allow_nil@.

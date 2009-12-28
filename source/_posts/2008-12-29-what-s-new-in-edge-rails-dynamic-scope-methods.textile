@@ -1,0 +1,41 @@
+---
+title: "Dynamic Scope Methods"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature is scheduled for: Rails v2.3/3.0_
+<hr/>
+
+For quite some time now you've been able to perform simple queries using dynamic @find_all_by_xx_and_yy@ methods:
+
+<notextile>
+{% highlight ruby %}
+Article.find_by_published_and_user_id(true, 1)
+  #=> "SELECT * FROM articles WHERE published = 1 AND user_id = 1"
+{% endhighlight %}
+</notextile>
+
+These dynamic finders provide an easy way to quickly encapsulate non-reused query conditions (for commonly used query logic you should consider using "named scopes":/articles/2008/3/24/what-s-new-in-edge-rails-has-finder-functionality).  The downside, however, is that you can't chain query conditions when using these dynamic finders.
+
+With the recent addition of "dynamic scopes":http://github.com/rails/rails/commit/66ee5890c5f21995b7fe0c486547f1287afe2b55, however, you now have a way to both quickly specify query logic and chain further conditions.  The naming works in the same manner as dynamic finders and the chaining works in the same fashion as conventional named scopes:
+
+<notextile>
+{% highlight ruby %}
+Article.scoped_by_published_and_user_id(true, 1).find(:all, :limit => 5)
+  #=> "SELECT * FROM articles WHERE published = 1 AND user_id = 1 LIMIT 5"
+{% endhighlight %}
+</notextile>
+
+Note how you can hang further chainable query methods off the dynamic scope here?  You could also have preceded the dynamic scope with another scope, or even another dynamic scope:
+
+<notextile>
+{% highlight ruby %}
+Article.scoped_by_published(true).scoped_by_user_id(1)
+  #=> "SELECT * FROM articles WHERE published = 1 AND user_id = 1"
+{% endhighlight %}
+</notextile>
+
+This is really just another tool to put in your toolbox based on the powerful named_scope functionality of ActiveRecord.

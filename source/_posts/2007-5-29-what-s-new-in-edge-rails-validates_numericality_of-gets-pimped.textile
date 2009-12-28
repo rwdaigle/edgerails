@@ -1,0 +1,30 @@
+---
+title: "validates_numericality_of Gets Pimped"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+@validates_numericality_of@ "just got a shot of mojo":http://dev.rubyonrails.org/changeset/6850 this weekend in the form of some highly useful options.
+
+Prior to this recent change, your numerical validation options were limited to @only_integer@ and @allow_nil@.  Any desires to do anything slightly more complex meant dropping down into your own validation routine.  Now, some of the more common validations one might want on a number parameter have been option-ized, including:
+* @greater_than@
+* @greater_than_or_equal_to@
+* @equal_to@
+* @less_than@
+* @less_than_or_equal_to@
+* @odd@
+* @even@
+
+Which allows us to do things such as:
+
+<notextile>
+{% highlight ruby %}
+validates_numericality_of :salary, :greater_than_or_equal_to => 40000
+validates_numericality_of :ten, :equal_to => 10
+validates_numericality_of :bonus, :less_than => 5000
+validates_numericality_of :prime, :odd => true
+{% endhighlight %}
+</notextile>
+
+So put away that crusty custom @validate@ and plug into these fresh validation options.  Guaranteed to make your life easier.

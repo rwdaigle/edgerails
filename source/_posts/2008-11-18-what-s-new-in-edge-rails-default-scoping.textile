@@ -1,0 +1,76 @@
+---
+title: "Default Scoping"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature is scheduled for: Rails v2.3/3.0_
+<hr/>
+
+It's pretty common to want SQL queries against a particular table to always be sorted the same way, and is one of the reasons why I added the @ordered@ scope to the "utility scopes":https://github.com/yfactorial/utility_scopes/tree gem.  For instance, when dealing with collections of articles it is reasonable to expect that the default ordering be most recent first, i.e. @created_at DESC@.  Well now you can "specify default ordering, and other scopes, in edge rails":http://github.com/rails/rails/commit/32cb2345a54b9ab38461b2d4bb0dbd1706f2800e directly in your ActiveRecord model.
+
+Taking our @Article@ example let's specify the aforementioned default ordering:
+
+<notextile>
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  default_scope :order => 'created_at DESC'
+end
+{% endhighlight %}
+</notextile>
+
+Now, when any find method or named_scope is executed the default ordering comes along for the ride:
+
+<notextile>
+{% highlight ruby %}
+Article.find(:all) #=> "SELECT * FROM `articles` ORDER BY created_at DESC"
+{% endhighlight %}
+</notextile>
+
+The same holds true for any named scopes you might have:
+
+<notextile>
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  default_scope :order => 'created_at DESC'
+  named_scope :published, :conditions => { :published => true }
+end
+
+Article.published #=> "SELECT * FROM `articles` WHERE published = true ORDER BY created_at DESC"
+{% endhighlight %}
+</notextile>
+
+There are some things to keep in mind, however.  First is that scopes like @:join@, @:offset@, @:limit@ and @:order@ will get clobbered by the innermost rule.  For example, here the default scope ordering loses out to the @named_scope@ ordering.
+
+<notextile>
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  default_scope :order => 'created_at DESC'
+  named_scope :published, :conditions => { :published => true },
+                          :order => 'published_at DESC'
+end
+
+# published_at DESC clobbers default scope
+Article.published
+    #=> "SELECT * FROM `articles` WHERE published = true ORDER BY published_at DESC"
+{% endhighlight %}
+</notextile>
+
+Also keep in mind that the default scoping is inherited, so child-classes of @Article@ will have the same default scoping.
+
+And for those occasions when you want to override or remove your default scope, just use @with_exclusive_scope@:
+
+<notextile>
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  default_scope :order => 'created_at DESC'
+end
+
+# Ignore other scoping within this block
+Article.with_exclusive_scope { find(:all) }  #=> "SELECT * FROM `articles`
+{% endhighlight %}
+</notextile>
+
+@default_scope@ is a great way to specify reasonable query defaults and relieve yourself of having to create your own named_scopes for that purpose or specify such conditions at every invocation.  _Yes, I just said 'relieve yourself'...  giggity giggity_

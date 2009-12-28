@@ -1,0 +1,43 @@
+---
+title: "UTC-based Migration Versioning"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Rails migrations are a somewhat contentious bunch.  On one hand they provide a consistent way of provisioning your database, and on the other hand they like to conflict with each other if there's a heavy stream of development due to a simplistic naming convention.  "Just in":http://dev.rubyonrails.org/changeset/9122 is a change that will name your migrations based on a more unique UTC-based timestamp instead of just a sequential ordering.
+
+When you go to create your next migration you'll see something like this:
+
+<notextile>
+{% highlight bash %}
+> script/generate migration one
+      create  db/migrate/20080402122512_one.rb
+{% endhighlight %}
+</notextile>
+
+Instead of the migration file being named @001_one.rb@ it now has a more unique prefix that will less likely conflict with another migration somebody else happened to check-in around the same time.
+
+_Update:_ When you do an @svn update@ and get new migrations, even if they have a timestamp previous to a migration you've already added and run in your own environment, @rake db:migrate@ will "intelligently apply all migrations":http://dev.rubyonrails.org/changeset/9244 that have not yet run.  This eliminates the interleaved migrations issue that existed on the first rev of this feature (see comments).
+
+Another change that accompanies this functionality is the addition of @rake db:migrate:up@ and @rake db:migrate:down@ tasks, which will let you run the up and down operations of an individual migration (that may have been added on an svn merge or update):
+
+<notextile>
+{% highlight bash %}
+> rake db:migrate:up VERSION=20080402122523
+== 20080402122523 Two: migrating ==============================================
+-- create_table(:two)
+   -> 0.0122s
+== 20080402122523 Two: migrated (0.0124s) =====================================
+{% endhighlight %}
+</notextile>
+
+This functionality was previously available as the "enhanced migrations plugin":http://revolutiononrails.blogspot.com/2007/02/plugin-release-enhanced-rails.html, so if you're on an older version of Rails you can still make your migrations less whiny.
+
+And if you're just not lovin' this (as some of the comments seem to mildly indicate) you can always "revert back":http://github.com/rails/rails/commit/bbab6391366f59189e84d2b8de2a63bea91a9851 to the sequential prefix naming style of migrations with this guy in the config block of your @environment.rb@ file:
+
+<notextile>
+{% highlight ruby %}
+config.active_record.timestamped_migrations = false
+{% endhighlight %}
+</notextile>

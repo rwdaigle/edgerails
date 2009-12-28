@@ -1,0 +1,92 @@
+---
+title: "Independent Model Validators"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature is schedule for: Rails v3.0_
+<hr/>
+
+ActiveRecord validations, ground zero for anybody learning about Rails, got a lil' bit of decoupling mojo today with the "introduction of validator classes":http://github.com/rails/rails/commit/22f339825329e2d4463a4130e9fa68baf9d27eb6.  Until today, the only options you had to define a custom validation was by overriding the "validate":http://api.rubyonrails.org/classes/ActiveRecord/Validations.html#M002158 method or by using "validates_each":http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002161, both of which pollute your models with gobs of validation logic.
+
+h1. ActiveRecord Validators
+
+Validators remedy this by containing granular levels of validation logic that can be reused across your models.  For instance, for that classic email validation example we can create a single validator:
+
+<notextile>
+{% highlight ruby %}
+class EmailValidator < ActiveRecord::Validator
+  def validate()
+    record.errors[:email] << "is not valid" unless
+      record.email =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+  end
+end
+{% endhighlight %}
+</notextile>
+
+Each validator should implement a @validate@ method, within which it has access to the model instance in question as @record@.  Validation errors can then be added to the base model by adding to the @errors@ collection as in this example.
+
+So how do you tell a validator to operate on a model?  @validates_with@ that takes the class of the validator:
+
+<notextile>
+{% highlight ruby %}
+class User < ActiveRecord::Base
+  validates_with EmailValidator
+end
+{% endhighlight %}
+</notextile>
+
+h1. Validation Arguments
+
+This is all well and good, but is a pretty brittle solution in this example as the validator is assuming an @email@ field.  We need a way to pass in the name of the field to validate against for a model class that is unknown until runtime.  We can do this by passing in options to @validates_with@ which are then made available to the validator at runtime as the @options@ hash.  So let's update our email validator to operate on an email field that can be set by the model requiring validation:
+
+<notextile>
+{% highlight ruby %}
+class EmailValidator < ActiveRecord::Validator
+  def validate()
+    email_field = options[:attr]
+    record.errors[email_field] << "is not valid" unless
+      record.send(email_field) =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+  end
+end
+{% endhighlight %}
+</notextile>
+
+And to wire it up from the user model:
+
+<notextile>
+{% highlight ruby %}
+class User < ActiveRecord::Base
+  validates_with EmailValidator, :attr => :email_address
+end
+{% endhighlight %}
+</notextile>
+
+Any arguments can be passed into your validators by hitching a ride onto this options hash of @validates_with@.
+
+h1. Options & Notes
+
+There are also some built-in options that you'll be very familiar with, namely @:on@, @:if@ and @:unless@ that define when the validation will occur.  They're all the same as the options to built-in validations like "@validates_presence_of@":http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002164.
+
+<notextile>
+{% highlight ruby %}
+class User < ActiveRecord::Base
+  validates_with EmailValidator, :if => Proc.new  { |u| u.signup_step > 2 },
+    :attr => :email_address
+end
+{% endhighlight %}
+</notextile>
+
+It's also possible to specify more than one validator with @validates_with@:
+
+<notextile>
+{% highlight ruby %}
+class User < ActiveRecord::Base
+  validates_with EmailValidator, ZipCodeValidator, :on => :create
+end
+{% endhighlight %}
+</notextile>
+
+While this might seem like a pretty minor update, it allows for far better reusability of custom validation logic than what's available now.  So enjoy.

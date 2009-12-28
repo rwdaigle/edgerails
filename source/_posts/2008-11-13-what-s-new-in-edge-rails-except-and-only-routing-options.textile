@@ -1,0 +1,41 @@
+---
+title: ":except and :only Routing Options"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature was released in: Rails v2.2.1_
+<hr/>
+
+Just added to Edge Rails is the "ability to exclude and include the default generated routes":http://github.com/rails/rails/commit/44a3009ff068bf080de6764a8c884fbf0ceb920e in your mapping configuration.  Previously, @map.resources :articles@ would generate routes to all seven default actions on the @ArticlesController@ (index, create, new, edit, show, update, destroy).  You can now tell your routes configuration to only generate a subset of those actions, or to exclude a subset of those actions:
+
+<notextile>
+{% highlight ruby %}
+# Only generate the :index route of articles
+map.resources :articles, :only => :index
+
+# Generate all but the destroy route of articles
+map.resources :articles, :except => :destroy
+
+# Only generate the non-modifying routes of articles
+map.resources :articles, :only => [:index, :show]
+{% endhighlight %}
+</notextile>
+
+Note that you can use the @:all@ and @:none@ values to denote all or none of the default routes.
+
+<notextile>
+{% highlight ruby %}
+# Don't generate any default article routes, just the approve route
+map.resources :articles, :except => :all, :member => { :approve => :put }
+
+# Same
+map.resources :articles, :only => :none, :member => { :approve => :put }
+{% endhighlight %}
+</notextile>
+
+The motivation behind this feature is that "complex routing consumes a lot of memory":http://blog.hungrymachine.com/2008/11/8/how-to-save-100m-of-ram-per-mongrel.  So eliminating unnecessary and unused routes can significantly reduce your memory consumption.  The holy grail of this, however, will be when you can "specify which routes should be formatted":http://blog.hungrymachine.com/2008/11/11/how-to-save-100m-of-ram-per-mongrel-part-2 (@json@, @xml@ etc...) as this is essentially doubling the number of default routes when very rarely does every call need to be API-accessible.
+
+_The original implementation included inheritance of these options, but that has "been reverted":http://github.com/rails/rails/commit/80747e9db16ec60eb0d95b510baf051612ec0768.  So no more inheritance, you need to specify @:except@ and @:only@ at each resource-level._

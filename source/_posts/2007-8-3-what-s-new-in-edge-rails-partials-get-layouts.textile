@@ -1,0 +1,48 @@
+---
+title: "Partials Get Layouts"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+If you've ever taken the time to factor out the various commonalities that often exist in your Rails views into partials, you've probably noticed that there are still opportunities for DRYing up those partials.  Well now you have a tool in your toolbox to help partials become first class citizens in the view-world: "partial layouts":http://dev.rubyonrails.org/changeset/7261.  It's as easy as adding a @:layout@ option to your @render@ call:
+
+<notextile>
+{% highlight ruby %}
+<!-- in posts/show.html.erb -->
+<%= render :partial => 'header', :layout => 'boxed', :locals => {:post => @post} %>
+
+<!-- in posts/_boxed.html.erb -->
+<div class='box'>
+  <div id='post_header_<%= post.id %>'><%= yield %></div>
+</div>
+
+<!-- in posts/_header.html.erb -->
+<%= post.title %> published on <%= post.published_at %>
+{% endhighlight %}
+</notextile>
+
+Notice that the partial layout @boxed@ still uses the partial naming convention of an @_@ prefix and that it exists in the same directory as the calling file (i.e. it doesn't have it's own @layouts@ directory like the other master layouts do).  Also notices that any locals passed into the partial render are also made available to the partial layout (@post@ in this case.)  You include the content of the partial into the layout by calling @yield@, as you do in the master templates.
+
+So with the above setup, the rendering of @posts/show.html.erb@ will result in this:
+
+<notextile>
+{% highlight html %}
+<div class='box'>
+  <div id='post_header_1'>Post Title published on August 3rd, 2007</div>
+</div>
+{% endhighlight %}
+</notextile>
+
+You also have the ability to render a block of code within a partial layout if you want the consistency a layout provides but don't necessarily have the need to break off the content into its own partial:
+
+<notextile>
+{% highlight ruby %}
+<!-- in posts/show.html.erb -->
+<% render(:layout => 'boxed', :locals => {:post => @post}) do %>
+  <%= post.title %> published on <%= post.published_at %>
+<% end %>
+{% endhighlight %}
+</notextile>
+
+DRY away.

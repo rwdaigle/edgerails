@@ -1,0 +1,121 @@
+---
+title: "Simply RESTful Support - And How to Use It"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+_See here from some "syntactical changes":/articles/2007/3/29/what-s-new-in-edge-rails-restful-routes-get-a-new-custom-delimiter that occurred after this post was published_
+
+Though I've been "beaten to the punch":http://www.jvoorhis.com/articles/2006/07/31/whats-new-in-edge-rails-restful-routes on this one, it's still worth a mention.  Edge rails "now has":http://dev.rubyonrails.org/changeset/4637 native support for the "simply resful plugin":http://dev.rubyonrails.org/browser/plugins/simply_restful functionality (though the implementation is not backwards-compatible as it now uses pluralized naming conventions in its mappings).
+
+This addition continues the Rails march towards REST-vana and allows for easy declaration of REST-able controller methods.  Where as edge Rails's new "Active Resource library":/articles/2006/06/30/whats-new-in-edge-rails-activeresource-is-here provides the client-side part of the REST equation, simply RESTful provides the server-side handling of REST-based requests.
+
+h3. Basic Usage
+
+The way it works is that you get a new @map.resources@ method to use in your @routes.rb@ config file that specifies which resource you want to RESTize.  For example, assuming I have a standard @users_controller@ I would add the following to my routes:
+
+@map.resources :users@
+
+Yeah, that's it.  And with that declaration, here are the requests that are mapped for me (all to the @users@ controller):
+<pre>
+<code>
+GET: /users => [:action => 'index']
+GET: /users.xml => [:action => 'index', :format => 'xml']
+GET: /users/1 => [:action => 'show', :id => 1]
+GET: /users/1;edit => [:action => 'edit', :id => 1]
+GET: /users/1.xml => [:action => 'show', :id => 1, :format => 'xml']
+
+POST: /users => [:action => 'create']
+PUT: /users/1 => [:action => 'update', :id => 1]
+DELETE: /users/1 => [:action => 'destroy', :id => 1]
+</code>
+</pre>
+
+Note that in true REST form, this one URL: @/users/1@ serves four different actions depending on request method (@GET => show, POST => create@, etc...).  Beauty in simplicity...
+
+It should be noted that Rails has to cheat to emulate the various HTTP request methods as most browsers don't support sending @PUT@ or @DELETE@ requests.  Rails does this by using the @_method@ parameter in the various "@link_to@ helper methods":/articles/2006/05/30/whats-new-in-edge-rails-restful-method-support-in-link-helpers
+
+h3. Advanced Usage
+
+So REST is great for calling simple CRUD actions, but how do you invoke other actions while not stepping outside the friendly confines of the REST world?  As was hinted at in the edit mapping above, you use the '@;@' delimiter to denote a different action - along with telling @map.resources@ what HTTP methods to use for the non-standard actions.
+
+<pre>
+<code>
+# Provided as default resource mappings
+GET: /users/1;edit => [:action => 'edit', :id => 1]
+GET: /users/1.xml;edit => [:action => 'edit', :id => 1, :format => 'xml']
+
+# Update routes to handle non-standard CRUD actions
+# This one says that a GET on 'filter' is accessing the collection
+map.resources :users, :collection => { :filter => :get }
+
+GET: /users;filter => [:action => 'filter']
+GET: /users;filter?active=true => [:action => 'filter', :active => 'true']
+
+# And this says that a POST to 'deactivate' is accessing a member item
+# (i.e. a single item)
+map.resources :users, :member => { :deactivate => :post }
+
+POST: /users/1;deactivate => [:action => 'deactivate', :id => 1]
+
+# Get funky and allow a PUT to 'new;admin'
+map.resources :users, :new => { :admin => :put }
+
+PUT: /users/new;admin => [:action => 'admin']
+</code>
+</pre>
+
+Hopefully this makes it pretty clear how you can layer your application functionality on top of this new RESTful routing.  And for those looking for a real wow factor...
+
+h3. Wow Usage (i.e. Nested & Prefixed Routes)
+
+...you can also specify path prefixes to your routes for trully spectacular routes:
+
+<pre>
+<code>
+# Give my user routes a prefix by group
+map.resources :users, :path_prefix => "/groups/:group_id"
+
+GET: /groups/13/users/1 => [:controller => 'users', :action => 'show',
+        :group_id => 13, :id => 1]
+</code>
+</pre>
+
+Another way you can achieve this nested routing is by nesting the resource mappings themselves
+
+<pre>
+<code>
+# Make both groups and users RESTable, with users as nested resources of groups
+map.resources :groups do |group|
+  group.resources :users
+end
+
+GET: /groups/13/users/1 => [:controller => 'users', :action => 'show',
+      :group_id => 13, :id => 1]
+GET: /users/1 => [:controller => 'users', :action => 'show', :id => 1]
+GET: /groups/1 => [:controller => 'groups', :action => 'show', :id => 1]
+</code>
+</pre>
+
+h3. Tidbits
+
+With each resource mapping you specify, you also get a handy "named route":http://wiki.rubyonrails.org/rails/pages/NamedRoutes.  So with:
+
+@map.resources :users, :collection => { :filter => :get }@
+
+You get a @filter_users_url@ helper method:
+
+@filter_users_url #=> "/users;filter"@
+
+Don't like the default naming?  Fine, add your own prefix to the generated url name:
+
+@map.resources :users, :collection => { :filter => :get }, :name_prefix => 'my_' @
+
+Now:
+
+@my_filter_users_url #=> "/users;filter"@
+
+I think I'm in love.
+
+<br/>

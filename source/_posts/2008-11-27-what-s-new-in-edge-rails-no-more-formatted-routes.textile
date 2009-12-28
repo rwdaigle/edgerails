@@ -1,0 +1,37 @@
+---
+title: "No More Formatted Routes"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature is scheduled for: Rails v2.3/3.0_
+<hr/>
+
+Parallel to the "addition of :except and :only":/articles/2008/11/13/what-s-new-in-edge-rails-except-and-only-routing-options options to Rails' routing comes the "removal of all those @formatted_xxx@ named routes":http://github.com/rails/rails/commit/fef6c32afe2276dffa0347e25808a86e7a101af1.  Turns out these routes "ate up a lot of memory":http://blog.hungrymachine.com/2008/11/11/how-to-save-100m-of-ram-per-mongrel-part-2 and served minimal purpose.
+
+So with this @routes.rb@ definition:
+
+<notextile>
+{% highlight ruby %}
+ActionController::Routing::Routes.draw do |map|
+  map.resources :articles
+end
+{% endhighlight %}
+</notextile>
+
+you'll no longer have any of the @formatted_xxx@ url helpers available.  However, you will be able to get the same functionality by passing in a @:format@ option to the base view helper methods:
+
+<notextile>
+{% highlight ruby %}
+# Old => New
+formatted_article_path(article, :xml) => article_path(article, :format => :xml)
+formatted_new_article_path(:json) => new_article_path(:format => :json)
+# etc...
+{% endhighlight %}
+</notextile>
+
+A minimal change that will have a big impact on the memory consumption of each of your Rails processes - especially if you've got a complex app with lots of routes.
+
+If you're on Edge Rails you're going to start seeing deprecation warnings where you reference these formatted url helpers, so you've got some warning before you have to make the switch.

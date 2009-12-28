@@ -1,0 +1,12 @@
+---
+title: "Standard Internationalization Framework"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Internationalization (i18n) is a tough nut to crack and has long been handled in Rails by a variety of plugins.  Thanks to a concerted effort by the "Rails i18n team":http://groups.google.com/group/rails-i18n we now have a standardized framework for providing internationalization.
+
+Rather than rehash what's already out there, head over to "Sven's writeup of the new Rails Internationalization framework":http://www.artweb-design.de/2008/7/18/the-ruby-on-rails-i18n-core-api for the skinny.
+
+It's important to note that this does not provide _actual language translations_ but merely a way for you to _plug in other translations and internationalization implementations_ into your app.

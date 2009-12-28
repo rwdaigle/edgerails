@@ -1,0 +1,39 @@
+---
+title: "RESTful Method Support in Link Helpers"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+A "group":http://dev.rubyonrails.org/changeset/4370 of "changes":http://dev.rubyonrails.org/changeset/4371 have "recently":http://dev.rubyonrails.org/changeset/4374 "been":http://dev.rubyonrails.org/changeset/4375 "committed":http://dev.rubyonrails.org/changeset/4376 to edge Rails that allows the use of the various "REST":http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm style HTTP methods when creating links.  Deprecated are the days of using @:post => true@ to indicate a data-altering request (@post@ being only one of the "five main REST methods":http://rest.blueoxen.net/cgi-bin/wiki.pl?HttpMethods):
+
+Bye-bye this:
+<pre>
+<code>
+link_to("Delete article", { :action => "destroy", :id => @article },
+  :confirm => "Are you sure you want to delete this article?",
+  :post => true
+</code>
+</pre>
+
+And hello to proper REST (note the * :method => :delete* and * :method => :put*)!
+<pre>
+<code>
+link_to("Delete article", { :action => "destroy", :id => @article },
+  :confirm => "Are you sure you want to delete this article?",
+  :method => :delete)
+link_to("Edit article", { :action => "edit", :id => @article },
+  :method => :put)
+</code>
+</pre>
+
+All your favorite helper methods now support REST verbs including @link_to@, @link_to_remote@, @form_tag@, @form_for@, @remote_form_tag@ and @remote_form_for@.
+
+Now you can start building links with verbs that actually represent the type of request being made.  On the controller side you can determine the request method the same way you always have - with the @request.post?@, @request.get?@, @request.put?@, @request.delete?@, @request.head?@ methods.
+
+On a related note, here are some links to work being done on providing REST-ful controllers for rails:
+
+* "http://cfis.savagexi.com/articles/2006/03/26/rest-controller-for-rails":http://cfis.savagexi.com/articles/2006/03/26/rest-controller-for-rails
+* "http://microformats.org/discuss/mail/microformats-rest/2006-March/000158.html":http://microformats.org/discuss/mail/microformats-rest/2006-March/000158.html
+* "http://pezra.barelyenough.org/blog/2006/01/rough-resting-on-rails/":http://pezra.barelyenough.org/blog/2006/01/rough-resting-on-rails/
+* "http://www.xml.com/pub/a/2005/11/02/rest-on-rails.html?page=1":http://www.xml.com/pub/a/2005/11/02/rest-on-rails.html?page=1

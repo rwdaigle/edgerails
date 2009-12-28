@@ -1,0 +1,10 @@
+---
+title: "Pre-Environment Load Hook"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+For those looking for a way to manipulate your Rails application before the main initializer block of your @environment.rb@ file runs, your wish has been "answered":http://dev.rubyonrails.org/changeset/8159.
+
+If a @config/preinitializer.rb@ file exists, Rails will load it prior to the @environment.rb@ file, letting you have at the Rails classes before plugins do and before the environment is loaded.

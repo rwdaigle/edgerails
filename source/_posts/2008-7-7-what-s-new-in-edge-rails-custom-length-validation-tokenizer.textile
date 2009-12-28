@@ -1,0 +1,18 @@
+---
+title: "Custom Length Validation Tokenizer"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+The various "ActiveRecord validation methods":http://api.rubyonrails.com/classes/ActiveRecord/Validations/ClassMethods.html are some of the hardest working bits of ActiveRecord and yet they get so little love.  In what may be a little-noticed change, you can "now specify how @validates_length_of@ parses the attribute value":http://github.com/rails/rails/commit/87fbcaa6229e9073095fb8d77c7a536c9466fbce.  While the default behavior is to just count the number of characters in the attribute value, you can now also do something like this to make sure the value has a minimum number of words:
+
+<notextile>
+{% highlight ruby %}
+validates_length_of :article, :minimum => 10,
+  :too_short => "Your article must be at least %d words in length.",
+  :tokenizer => lambda {|str| str.scan(/\w+/) }
+{% endhighlight %}
+</notextile>
+
+Just pass a @proc@ to the @:tokenizer@ option that chops the attribute value into its relevant parts for measure by the length validation routine.  You can do most anything, like ensure a minimum or maximum number of vowels, digits etc...

@@ -1,0 +1,40 @@
+---
+title: "An Interactive Capistrano Shell"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+"This utility":http://dev.rubyonrails.org/changeset/5085 comes with several warnings about its experimental state and unknown future - but we're not going to let that damper our inquisitiveness, are we?  Introducing a way to execute capistrano commands from a shell environment (think @script/console@).  So how does this Capistrano shell work?
+
+First, start the capistrano shell w/
+
+@cap -v shell@
+
+Then enter commands to be executed on your remote environments.  (These are mostly from the "shell source comments":http://dev.rubyonrails.org/browser/tools/capistrano/lib/capistrano/shell.rb itself)
+
+<pre>
+<code>
+# Execute on all servers
+cap> echo ping
+
+# Execute on specific servers
+on myserver1.com,myserver2.com echo ping
+
+# To execute based on roles
+with app,db echo ping
+
+# Execute a capistrano task
+!deploy
+
+# Execute multiple capistrano tasks
+!setup deploy
+
+# Combine all the goodness to execute a task on
+# specific servers and roles
+on myserver1.com !setup
+with app !setup
+</code>
+</pre>
+
+Why would you want to use this shell?  Well, you get the ability to simultaneously manipulate several environments from one shell - and all within the friendly confines of capistrano.  You should find the @rollback@ task to be especially comforting...

@@ -1,0 +1,20 @@
+---
+title: "Prettier Error Pages!"
+author: "Ryan Daigle"
+categories:
+  - "What's new in Edge Rails"
+---
+
+Ruby code block
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController
+  def create
+    @user = User.create(params[:user])
+    flash[:notice] = "The user was successfully created"
+    redirect_to user_path(@user)
+  end
+end
+{% endhighlight %}
+</notextile>

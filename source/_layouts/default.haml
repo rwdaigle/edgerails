@@ -67,6 +67,12 @@ google_analytics_tracking_id:
               %p.pubdate
                 Published:
                 =page.date.strftime("%d %b, %Y")
+              %p.related_articles
+                %h2 Related Articles
+                %ul                
+                - for post in site.related_posts[0..2] do
+                  %li
+                    %a{:href => post.url}= post.title
               - if page.respond_to? :disqus_short_name
                 #disqus_thread
                 :javascript

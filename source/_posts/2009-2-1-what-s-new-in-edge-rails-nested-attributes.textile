@@ -1,0 +1,264 @@
+---
+title: "Nested Object Forms"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature is scheduled for: Rails v2.3_
+<hr/>
+
+We were all teased a few months ago about the possibility of finally "solving the nested model/complex forms problem in Rails":/articles/2008/7/19/what-s-new-in-edge-rails-nested-models, but were then cruelly notified that it wasn't "quite ready for prime time":http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5.  But our day has come - the "most requested feature":http://rails.uservoice.com/pages/rails3/suggestions/99641-nested-model-forms for Rails 2.3, the "ability to handle multiple models in a single form":http://github.com/rails/rails/commit/ec8f04584479aff895b0b511a7ba1e9d33f84067, is here.
+
+_This "API update":http://github.com/rails/rails/commit/5dbc9d40a49f5f0f50c2f3ebe6dda942f0e61562 was added after the original commit.  I've updated the examples here to account for this._
+
+This feature has "already been written about on the Rails Blog":http://weblog.rubyonrails.org/2009/1/26/nested-model-forms quite well by Eloy Duran, the committer of this fine feature, so I'll try not to replicate what's already out there.  However, here's a basic rundown of what you need to do to get your models nested-form capable.
+
+h3. Step 1: Notify Your Model of Nest-able Associations
+
+The first step is to tell your models which of their associations will be able to receive nested attributes.  For all associations you want exposed in nested forms you'll need to use @accepts_nested_attributes_for@:
+
+<notextile>
+{% highlight ruby %}
+class Person < ActiveRecord::Base
+
+  validates_presence_of :name
+
+  has_many :children, :class_name => 'Person'
+  accepts_nested_attributes_for :children, :allow_destroy => true
+    # can also be used on has_one etc.. associations
+
+end
+{% endhighlight %}
+</notextile>
+
+With this bit in place, you can now directly create, edit and delete children from a person:
+
+<notextile>
+{% highlight ruby %}
+# Add a new child to this person
+@person.children_attributes = [ { :name => 'Son' } ]
+@person.children #=> [ <#Person: name: 'Son'> ]
+@person.children.clear
+
+# Add two new children to this person
+@person.children_attributes =
+  [ { :name => 'Son' }, { :name => 'Daughter' } ]
+@person.save
+@person.children #=> [ <#Person: name: 'Son'>, <#Person: name: 'Daughter'> ]
+
+# Edit the son (assuming id == 1)
+@person.children_attributes = [ { :id => 1, :name => 'Lad' } ]
+@person.save
+  #=> the son's name is now 'Lad'
+
+# Edit the daughter (id == 2) and add a new offspring
+@person.children_attributes =
+  [ { :id => 2, :name => 'Lassie' }, { :name => 'Pat' } ]
+@person.save
+  #=> the daughter's name is now 'Lassie' and there's a new offspring called 'Pat'
+
+# Remove Pat (id = 3), we don't like him/her
+@person.children_attributes = [ :id => 3, '_delete' => '1' } ]
+@person.save
+  #=> Pat is now deleted
+{% endhighlight %}
+</notextile>
+
+You'll want to take away a few things from these examples.
+* To support both the creation of new objects and the editing of existing ones we have to use an array of hashes for one-to-many associations or a single hash for one-to-one associations.  If no @:id@ property exists then it is assumed to represent a nested model to create.
+* To delete an existing nested model, use this format: @[ :id => pk, '_delete' => '1' } ]@ where the value of @_delete@ evaluates to anything @true@.  You must also set the @ accepts_nested_attributes_for@ option @:allow_destroy@ to true as that capability is turned off by default.
+
+While this may appear a bit hackish when you're used to dealing with the pleasantries of a rich object model and with ActiveRecord's associations, this provides the foundation for a seamless transition to the view where you need to create your nested model forms...
+
+h3. Step 2: Create a Nested Model Form
+
+In the view, simply use "fields_for":http://api.rubyonrails.com/classes/ActionView/Helpers/FormHelper.html#M001386 on these nested models to expose the fields for each such model:
+
+<notextile>
+{% highlight erb %}
+<% form_for @person do |person_form| %>
+
+  <%= person_form.label :name %>
+  <%= person_form.text_field :name %>
+
+  <% person_form.fields_for :children do |child_form| %>
+
+    <%= child_form.label :name %>
+    <%= child_form.text_field :name %>
+
+    <% unless child_form.object.new_record? %>
+      <%= child_form.check_box '_delete' %>
+      <%= child_form.label '_delete', 'Remove' %>
+    <% end %>
+
+  <% end %>
+
+  <%= submit_tag %>
+<% end %>
+{% endhighlight %}
+</notextile>
+
+This will create a form with all the form fields necessary for submitting to a RESTful controller, transparently pushing your @children_attributes@ onto the person.
+
+If there are any validation errors on a child, they will be added to @person.errors@, and nothing will save if any of the children fail (i.e. fully transactional).
+
+A few notes that might be useful to you:
+* Using @fields_for@ on a has_many association automatically executes once for each nested model present, so think of yourself as being inside a loop when building your @child_form@
+* If you ever need to change behavior based on the nested model currently in scope, it can be accessed via @child_form.object@.  In this example we use @child_form.object.new_record?@ to determine whether or not to display the delete checkbox (as that only makes sense on an existing record).
+
+h3. Step 3: In Your Controllers ... Do Nothing
+
+The third step should be the easiest, because we're all dealing with purely RESTful controllers, right?  The beauty of this solution is that it takes your controllers out of the mix and makes standard for submissions work perfectly with no interference at the controller level.  Just so there's no confusion, here's how your create and update actions will look:
+
+<notextile>
+{% highlight ruby %}
+class PersonController < ApplicationController
+
+  def create
+    @person = Person.new(params[:person])
+    @person.save ? redirect_to(person_path(@person)) : render(:action => :new)
+  end
+
+  def update
+    @person = Person.find(params[:id])
+    @person.update_attributes(params[:person]) ?
+      redirect_to(person_path(@person)) : render(:action => :edit)
+  end
+
+end
+{% endhighlight %}
+</notextile>
+
+Not a peep of those pesky nested models - with the rich support for nested objects at the model layer, it just works!
+
+h3. Extras
+
+As with most powerful features, there are few little tweaks you may find yourself needing.
+
+h4. Default Create Form Fields
+
+Often times you'll want to have the form displayed with empty fields for easily creating a new nested model.  For example, when a user goes to create a new person I want there to be fields for creating a new child already displayed.
+
+Since the @person@ object is brand new they have an empty @children@ collection and no @child_form@ fields will be displayed.  There are two ways to get around this:
+
+You can build a new nested object on the controller side (i.e. in the @new@ action):
+
+<notextile>
+{% highlight ruby %}
+  def new
+    @person = Person.new
+    @person.children.build
+    # ...
+  end
+{% endhighlight %}
+</notextile>
+
+which will cause there to be empty @child_form@ fields displayed as desired.  Or you can do it on the view side with a view helper:
+
+<notextile>
+{% highlight ruby %}
+module ApplicationHelper
+  def setup_person(person)
+    returning(person) do |p|
+      p.children.build if p.children.empty?
+    end
+  end
+end
+{% endhighlight %}
+</notextile>
+
+Which can then be used within @form_for@ to setup the person to the correct form state:
+
+<notextile>
+{% highlight erb %}
+<% form_for setup_person(@person) do |person_form| %>
+  <!-- ... -->
+<% end %>
+{% endhighlight %}
+</notextile>
+
+I prefer this view-helper approach as it really is a view concern (whether or not to display the form fields to create a new nested object by default).
+
+h4. Specify When Nested Models get Built
+
+If you do have empty nested model form fields displayed by default, you'll run into the issue where the user submits the form with no values filled in and you have to decide if you want to treat that as somebody trying to create a new nested item with no values, or if that means that no new nested item was submitted.  Quite often you just want to ignore the submissions with no nested field values filled out.
+
+Although I would have expected this to be default behavior, you need to manually specify that submissions with empty nested values are ignored using the @:reject_if@ option of @accepts_nested_attributes_for@:
+
+_*Note:* You "now have the option to use @:all_blank@":http://github.com/rails/rails/commit/9010ed27559ed5ab89ea71b4b16f4c8e56d03dbb to ignore the item if all properties are blank.  See below for an updated example._
+
+<notextile>
+{% highlight ruby %}
+class Person < ActiveRecord::Base
+
+  validates_presence_of :name
+
+  has_many :children, :class_name => 'Person'
+
+  # This will prevent children_attributes with all empty values to be ignored
+  accepts_nested_attributes_for :children,
+    :reject_if => proc { |attrs| attrs.all? { |k, v| v.blank? } }
+
+  # This does the same thing using :all_blank
+  accepts_nested_attributes_for :children, :reject_if => :all_blank
+
+end
+{% endhighlight %}
+</notextile>
+
+<notextile>
+{% highlight ruby %}
+@person.children_attributes = [ { :name => '' } ]
+@person.save
+@person.children.count #=> 0
+{% endhighlight %}
+</notextile>
+
+This is also useful if you have boolean values in your nested model fields (since, as a checkbox, '0' will be submitted if there's no value):
+
+<notextile>
+{% highlight ruby %}
+class Person < ActiveRecord::Base
+
+  validates_presence_of :name, :bad
+
+  has_many :children, :class_name => 'Person'
+
+  # This will prevent empty checkboxes submitted for a child to be
+  # construed as a submission
+  accepts_nested_attributes_for :children,
+    :reject_if => proc { |attrs| attrs['bad'] == '0' && attrs['name'].blank? }
+
+end
+{% endhighlight %}
+</notextile>
+
+<notextile>
+{% highlight ruby %}
+@person.children_attributes = [ { :name => '', :bad => '0' } ]
+@person.save
+@person.children.count #=> 0
+{% endhighlight %}
+</notextile>
+
+h4. Dynamically Adding Nested Form Fields
+
+If you want to allow the addition of a large number of nested models via your HTML forms, one option is to just have several empty nested forms displayed by default.  This is a little unappealing, however. The far slicker option is to use javascript to dynamically display the new nested form on the user's request.
+
+Eloy has a great "example application":http://github.com/alloy/complex-form-examples/tree/nested_attributes setup on GitHub outlining how this works, and I'll let you take a peek over there to see how to "wire up your dynamic nested form additions":http://github.com/alloy/complex-form-examples/blob/a234fde4419836f277d7e340657f1d8418911d68/app/views/projects/_form.html.erb#L40.
+
+Eloy's example app is also a great place to see how the whole thing works, end-to-end.  By far the best resource out there.
+
+h3. Conclusion
+
+So there it is, Rails' most requested new feature in the flesh and blood.  I'm not sure if my experiences are indicative of everybody else's, but this is a godsend for me.  Many thanks to all the folks involved with this functionality (if you don't know who they are, check out the next section which links to a bunch of great resources).  A really great effort by the community.
+
+h3. Resources
+
+* "Eloy Duran's example nested model project":http://github.com/alloy/complex-form-examples/tree/nested_attributes
+* "The Lighthouse ticket for this feature with some good discussions":http://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/1202-add-attributes-writer-method-for-an-association
+* "The blog post on the official Rails blog":http://weblog.rubyonrails.org/2009/1/26/nested-model-forms
+* "The discussion of the various incarnations of this feature on the mailing list":http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5
+* "Ryan Bates' Railscast on complex forms":http://railscasts.com/episodes/73

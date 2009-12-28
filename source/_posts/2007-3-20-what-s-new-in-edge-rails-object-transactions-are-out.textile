@@ -1,0 +1,21 @@
+---
+title: "Object Transactions Are Out"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+The days of natively supported object transactions "are gone":http://dev.rubyonrails.org/changeset/6439.  Object transactions you say?  Yeah, that nifty little trick that performs rollbacks not only of the database state, but of the object state as well:
+
+<notextile>
+{% highlight ruby %}
+Account.transaction(from, to) do
+  from.withdraw(100)
+  to.deposit(100)
+end
+{% endhighlight %}
+</notextile>
+
+If there was a failure within the transaction block above not only would the database have been rolled back, but the internal state of each object argument (@from@ and @to@ in this case) would have as well.
+
+This was previously deprecated, so if you're still using it, shame on you.  All is not lost, however - you can use "bitsweat's object transaction plugin":http://code.bitsweat.net/svn/object_transactions/ to get this behavior.

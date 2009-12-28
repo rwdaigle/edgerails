@@ -1,0 +1,62 @@
+---
+title: "Dirty Objects"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+The ability to track whether or not your active record objects have been modified or not becomes a lot easier with the "new dirty object functionality of edge rails":http://dev.rubyonrails.org/changeset/9127.  It's dead simple, and pretty slick, to use:
+
+<notextile>
+{% highlight ruby %}
+article = Article.find(:first)
+article.changed?  #=> false
+
+# Track changes to individual attributes with
+# attr_name_changed? accessor
+article.title  #=> "Title"
+article.title = "New Title"
+article.title_changed? #=> true
+
+# Access previous value with attr_name_was accessor
+article.title_was  #=> "Title"
+
+# See both previous and current value with attr_name_change accessor
+article.title_change  #=> ["Title", "New Title"]
+{% endhighlight %}
+</notextile>
+
+Beyond the clever attribute based accessor methods, you can also query to object directly for its list of all changed attributes.  (Continuing from the previous example):
+
+<notextile>
+{% highlight ruby %}
+# Get a list of changed attributes
+article.changed  #=> ['title']
+
+# Get the hash of changed attributes and their previous and current values
+article.changes  #=> { 'title' => ["Title", "New Title"] }
+{% endhighlight %}
+</notextile>
+
+_Note:_ Once you save a dirty object it clears out its changed state tracking and is once again considered unchanged.
+
+<notextile>
+{% highlight ruby %}
+article.changed?  #=> true
+article.save  #=> true
+article.changed?  #=> false
+{% endhighlight %}
+</notextile>
+
+If you're going to be modifying an attribute outside of the @attr=@ writer, you can use @attr_name_will_change!@ to tell the object to be aware of the change:
+
+<notextile>
+{% highlight ruby %}
+article = Article.find(:first)
+article.title_will_change!
+article.title.upcase!
+article.title_change  #=> ['Title', 'TITLE']
+{% endhighlight %}
+</notextile>
+
+And coming down the pipe is a feature that will make the most of this functionality - "partial SQL updates":/articles/2008/4/1/what-s-new-in-edge-rails-partial-updates that will only update attributes that have changed...

@@ -1,0 +1,50 @@
+---
+title: "Batched Find"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+<hr/>
+_This feature is scheduled for: Rails v2.3_
+<hr/>
+
+ActiveRecord got a little batch-help today with the addition of "ActiveRecord::Base#find_each and ActiveRecord::Base#find_in_batches":http://github.com/rails/rails/commit/d13623ca46c82120c398f4634e206422fc3ad7ea.  The former lets you iterate over all the records in cursor-like fashion (only retrieving a set number of records at a time to avoid cramming too much into memory):
+
+<notextile>
+{% highlight ruby %}
+Article.find_each { |a| ... } # => iterate over all articles, in chunks of 1000 (the default)
+Article.find_each(:conditions => { :published => true }, :batch_size => 100 ) { |a| ... }
+  # iterate over published articles in chunks of 100
+{% endhighlight %}
+</notextile>
+
+You're not exposed to any of the chunking logic - all you need to do is iterate over each record and just trust that they're only being retrieved in manageable groups.
+
+@find_in_batches@ performs a similar function, except that it hands back each chunk array directly instead of just a stream of individual records:
+
+<notextile>
+{% highlight ruby %}
+Article.find_in_batches { |articles| articles.each { |a| ... } }
+  # => articles is array of size 1000
+Article.find_in_batches(batch_size => 100 ) { |articles| articles.each { |a| ... } }
+  # iterate over all articles in chunks of 100
+{% endhighlight %}
+</notextile>
+
+@find_in_batches@ is also kind enough to observe good scoping practices:
+
+<notextile>
+{% highlight ruby %}
+class Article < ActiveRecord::Base
+  named_scope :published, :conditions => { :published => true }
+end
+
+Article.published.find_in_batches(:batch_size => 100 ) { |articles| ... }
+  # iterate over published articles in chunks of 100
+{% endhighlight %}
+</notextile>
+
+One quick caveat exists: you can't specify @:order@ or @:limit@ in the options to @find_each@ or @find_in_batches@ as those values are used in the internal looping logic.
+
+Batched finds are best used when you have a potentially large dataset and need to iterate through all rows.  If done using a normal find the full result-set will be loaded into memory and could cause problems.  With batched finds you can be sure that only 1000 * (each result-object size) will be loaded into memory.

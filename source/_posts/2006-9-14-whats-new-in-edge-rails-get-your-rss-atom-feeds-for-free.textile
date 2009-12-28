@@ -1,0 +1,114 @@
+---
+title: "Get Your RSS & Atom Feeds for Free"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+_Resource feeder is no more, but the "atom feed helper":http://dev.rubyonrails.org/changeset/6835 is here to replace it_
+
+Rails is all about some "open-ness and interopability":http://ryandaigle.com/articles/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it and it has become incrementally easier to achieve this with the "new":http://dev.rubyonrails.org/changeset/5098 "Resource Feeder":http://dev.rubyonrails.org/browser/plugins/resource_feeder?rev=5098 plugin.  This plugin gives you an easy way to create RSS and Atom feeds in your controllers from a collection of model objects with the use of the @rss_feed_for@ and @atom_feed_for@ methods:
+
+<notextile>
+{% highlight ruby %}
+class PostsController < ApplicationController
+
+  # Build an rss feed
+  def rss
+    render_rss_feed_for Post.find(:all, :order => 'created_at DESC',
+                               :limit => 10)
+  end
+
+  # Build an atom feed
+  def atom
+    render_atom_feed_for Post.find(:all, :order => 'created_at DESC',
+                                :limit => 10)
+  end
+
+end
+{% endhighlight %}
+</notextile>
+
+So how do these feed methods know how to pull information from each individual resource of the collection?  It uses a combination of options passed into the feed methods and specific properties of the resource.  If you don't pass any options into these feed methods your model objects should have @title@, @description@ and @created_at@ reader methods (and @updated_at@ for atom).
+
+h4. Options
+
+There are several options you can pass into these nice little feed methods to customize the title of the feed and most of the other feed elements.  Here's my attempt at enumerating all of them for RSS:
+
+<notextile>
+{% highlight ruby %}
+# Feed options (w/ defaults):
+options[:feed][:title]            # Pluralization of the model class, i.e. "Posts"
+options[:feed][:link]            # Url to this record
+options[:feed][:description] # omitted if not specified
+options[:feed][:language]    # "en-us"
+options[:feed][:ttl]              # 40
+
+# Individual item options (w/ defaults).  These are the method symbols used to
+# retrieve the proper values from each individual object:
+options[:item][:title]            # :title
+options[:item][:description] # :description
+options[:item][:pub_date]   # :created_at
+
+# General options:
+options[:url_writer]            # an instance of UrlWriter
+{% endhighlight %}
+</notextile>
+
+Just pass in these options to your feed methods as needed:
+
+<notextile>
+{% highlight ruby %}
+class PostsController < ApplicationController
+
+  # Build an rss feed
+  def rss
+    render_rss_feed_for(Post.find(:all, :order => 'created_at DESC',
+                               :limit => 10),
+                    { :feed => {:title => "All posts"},
+                      :item => {:title => :name,
+                                :pub_date => :updated_at} })
+  end
+
+end
+{% endhighlight %}
+</notextile>
+
+Feelin' sassy?  Try taking advantage of "this guy":/articles/2006/06/01/whats-new-in-edge-rails-parameter-driven-response-type-determination :
+
+<notextile>
+{% highlight ruby %}
+class PostsController < ActionController
+
+  # View a collection of posts.  If "format" is specified
+  # will return view of that type (of either rss or atom format)
+  # /posts/list.rss => RSS
+  # /posts/list.atom => Atom
+
+  def list
+    @posts = Post.find(:all, :order => 'created_at DESC',
+                            :limit => 10)
+    options = { :feed => {:title => "All posts"},
+                    :item => {:title => :name,
+                             :pub_date => :updated_at} }
+
+    respond_to do |wants|
+      wants.html
+      wants.rss { render_rss_feed_for @posts, options }
+      wants.atom { render_atom_feed_for @posts, options }
+    end
+  end
+end
+{% endhighlight %}
+</notextile>
+
+It just feels so right sometimes!
+
+_oh yeah, and to install this pup just do:_
+
+<notextile>
+{% highlight ruby %}
+script/plugin install simply_helpful
+script/plugin install resource_feeder
+{% endhighlight %}
+</notextile>
