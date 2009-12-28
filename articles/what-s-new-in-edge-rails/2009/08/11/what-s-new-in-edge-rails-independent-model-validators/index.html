@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Independent Model Validators</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Independent Model Validators</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature is schedule for: Rails v3.0</em><br />&#x000A;<hr/></p>&#x000A;<p>ActiveRecord validations, ground zero for anybody learning about Rails, got a lil&#8217; bit of decoupling mojo today with the <a href="http://github.com/rails/rails/commit/22f339825329e2d4463a4130e9fa68baf9d27eb6">introduction of validator classes</a>.  Until today, the only options you had to define a custom validation was by overriding the <a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations.html#M002158">validate</a> method or by using <a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002161">validates_each</a>, both of which pollute your models with gobs of validation logic.</p>&#x000A;<h1>ActiveRecord Validators</h1>&#x000A;<p>Validators remedy this by containing granular levels of validation logic that can be reused across your models.  For instance, for that classic email validation example we can create a single validator:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">EmailValidator</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Validator</span>&#x000A;  <span class="k">def</span> <span class="nf">validate</span><span class="p">()</span>&#x000A;    <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;is not valid&quot;</span> <span class="k">unless</span>&#x000A;      <span class="n">record</span><span class="o">.</span><span class="n">email</span> <span class="o">=~</span> <span class="sr">/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Each validator should implement a <code>validate</code> method, within which it has access to the model instance in question as <code>record</code>.  Validation errors can then be added to the base model by adding to the <code>errors</code> collection as in this example.</p>&#x000A;<p>So how do you tell a validator to operate on a model?  <code>validates_with</code> that takes the class of the validator:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_with</span> <span class="no">EmailValidator</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<h1>Validation Arguments</h1>&#x000A;<p>This is all well and good, but is a pretty brittle solution in this example as the validator is assuming an <code>email</code> field.  We need a way to pass in the name of the field to validate against for a model class that is unknown until runtime.  We can do this by passing in options to <code>validates_with</code> which are then made available to the validator at runtime as the <code>options</code> hash.  So let&#8217;s update our email validator to operate on an email field that can be set by the model requiring validation:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">EmailValidator</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Validator</span>&#x000A;  <span class="k">def</span> <span class="nf">validate</span><span class="p">()</span>&#x000A;    <span class="n">email_field</span> <span class="o">=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:attr</span><span class="o">]</span>&#x000A;    <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">[</span><span class="n">email_field</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;is not valid&quot;</span> <span class="k">unless</span>&#x000A;      <span class="n">record</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">email_field</span><span class="p">)</span> <span class="o">=~</span> <span class="sr">/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>And to wire it up from the user model:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_with</span> <span class="no">EmailValidator</span><span class="p">,</span> <span class="ss">:attr</span> <span class="o">=&gt;</span> <span class="ss">:email_address</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Any arguments can be passed into your validators by hitching a ride onto this options hash of <code>validates_with</code>.</p>&#x000A;<h1>Options &amp; Notes</h1>&#x000A;<p>There are also some built-in options that you&#8217;ll be very familiar with, namely <code>:on</code>, <code>:if</code> and <code>:unless</code> that define when the validation will occur.  They&#8217;re all the same as the options to built-in validations like <a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002164"><code>validates_presence_of</code></a>.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_with</span> <span class="no">EmailValidator</span><span class="p">,</span> <span class="ss">:if</span> <span class="o">=&gt;</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span>  <span class="p">{</span> <span class="o">|</span><span class="n">u</span><span class="o">|</span> <span class="n">u</span><span class="o">.</span><span class="n">signup_step</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">},</span>&#x000A;    <span class="ss">:attr</span> <span class="o">=&gt;</span> <span class="ss">:email_address</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>It&#8217;s also possible to specify more than one validator with <code>validates_with</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_with</span> <span class="no">EmailValidator</span><span class="p">,</span> <span class="no">ZipCodeValidator</span><span class="p">,</span> <span class="ss">:on</span> <span class="o">=&gt;</span> <span class="ss">:create</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>While this might seem like a pretty minor update, it allows for far better reusability of custom validation logic than what&#8217;s available now.  So enjoy.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              11 Aug, 2009
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

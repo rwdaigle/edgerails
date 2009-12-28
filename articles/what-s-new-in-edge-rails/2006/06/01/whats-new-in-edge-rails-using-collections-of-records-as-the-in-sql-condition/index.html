@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Using Collections of Records as the "IN" SQL Condition</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Using Collections of Records as the "IN" SQL Condition</h2>
+              &#x000A;<p>It&#8217;s currently somewhat difficult to use the <code>IN</code> <span class="caps">SQL</span> condition within ActiveRecord&#8217;s finder methods &#8211; most solutions I&#8217;ve seen involve building your own <span class="caps">SQL</span> string or popping back out to the object level and performing more queries than necessary to get around this limitation.  Changesets <a href="http://dev.rubyonrails.org/changeset/4391">4391</a>, <a href="http://dev.rubyonrails.org/changeset/4387">4387</a> and <a href="http://dev.rubyonrails.org/changeset/4390">4390</a> let you now pass in a collection of ActiveRecord objects as a parameter to the <span class="caps">SQL</span> condition that will be expanded to a comma-seperated list of ids.</p>&#x000A;<p>So, if you have a collection of <code>posts</code> and want to get all comments for those posts, this finder call:</p>&#x000A;<p><code>comments = Comment.find(:all, :conditions =&gt; ['post_id IN (?)', posts])</code></p>&#x000A;<p>Will result in this <span class="caps">SQL</span>:</p>&#x000A;<p><code>SELECT * FROM COMMENTS WHERE POST_ID IN (1, 2, 3, ..)</code></p>&#x000A;<p>Ya jive?  You&#8217;re now able to pass in a collection of records to your <span class="caps">SQL</span> finder methods that will be automatically expanded into a comma-seperated list of ids.  This makes it much easier to use the <code>IN (?)</code> <span class="caps">SQL</span> condition within ActiveRecord.</p>&#x000A;<p>Parallel to this functionality is the addition of the <code>Array.to_s(:db)</code> method which does basically the same thing, converts an array of ActiveRecord objects into a comma-seperated list of ids (this is what <a href="http://dev.rubyonrails.org/changeset/4387">changeset 4387</a> adds).  This addition makes the following identical to the <code>Comment.find(...)</code> call mentioned earlier:</p>&#x000A;<p><code>comments = Comment.find(:all, :conditions =&gt; ['post_id IN (?)', posts.to_s(:db)])</code></p>&#x000A;<p>Surprisingly, the implementation of the expansion of an ActiveRecord array does not utilize <code>Array.to_s(:db)</code>&#8230;</p>&#x000A;<p><a href="http://technorati.com/tag/rubyonrails">rubyonrails</a>, <a href="http://technorati.com/tag/rails">rails</a></p>
+            </div>
+            <p class="pubdate">
+              Published:
+              01 Jun, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/06/01/whats-new-in-edge-rails-using-collections-of-records-as-the-in-sql-condition";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

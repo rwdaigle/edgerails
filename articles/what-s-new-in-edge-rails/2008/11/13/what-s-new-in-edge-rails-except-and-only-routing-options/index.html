@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: :except and :only Routing Options</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>:except and :only Routing Options</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature was released in: Rails v2.2.1</em><br />&#x000A;<hr/></p>&#x000A;<p>Just added to Edge Rails is the <a href="http://github.com/rails/rails/commit/44a3009ff068bf080de6764a8c884fbf0ceb920e">ability to exclude and include the default generated routes</a> in your mapping configuration.  Previously, <code>map.resources :articles</code> would generate routes to all seven default actions on the <code>ArticlesController</code> (index, create, new, edit, show, update, destroy).  You can now tell your routes configuration to only generate a subset of those actions, or to exclude a subset of those actions:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Only generate the :index route of articles</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="ss">:index</span>&#x000A;&#x000A;<span class="c1"># Generate all but the destroy route of articles</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="ss">:destroy</span>&#x000A;&#x000A;<span class="c1"># Only generate the non-modifying routes of articles</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:index</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Note that you can use the <code>:all</code> and <code>:none</code> values to denote all or none of the default routes.</p>&#x000A;<div class="highlight"><pre><span class="c1"># Don&#39;t generate any default article routes, just the approve route</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="ss">:all</span><span class="p">,</span> <span class="ss">:member</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:approve</span> <span class="o">=&gt;</span> <span class="ss">:put</span> <span class="p">}</span>&#x000A;&#x000A;<span class="c1"># Same</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="ss">:none</span><span class="p">,</span> <span class="ss">:member</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:approve</span> <span class="o">=&gt;</span> <span class="ss">:put</span> <span class="p">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>The motivation behind this feature is that <a href="http://blog.hungrymachine.com/2008/11/8/how-to-save-100m-of-ram-per-mongrel">complex routing consumes a lot of memory</a>.  So eliminating unnecessary and unused routes can significantly reduce your memory consumption.  The holy grail of this, however, will be when you can <a href="http://blog.hungrymachine.com/2008/11/11/how-to-save-100m-of-ram-per-mongrel-part-2">specify which routes should be formatted</a> (<code>json</code>, <code>xml</code> etc&#8230;) as this is essentially doubling the number of default routes when very rarely does every call need to be <span class="caps">API</span>-accessible.</p>&#x000A;<p><em>The original implementation included inheritance of these options, but that has <a href="http://github.com/rails/rails/commit/80747e9db16ec60eb0d95b510baf051612ec0768">been reverted</a>.  So no more inheritance, you need to specify <code>:except</code> and <code>:only</code> at each resource-level.</em></p>
+            </div>
+            <p class="pubdate">
+              Published:
+              13 Nov, 2008
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">Cleaner RESTful Controllers w/ respond_with</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it">Simply RESTful Support - And How to Use It</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/11/13/what-s-new-in-edge-rails-except-and-only-routing-options";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

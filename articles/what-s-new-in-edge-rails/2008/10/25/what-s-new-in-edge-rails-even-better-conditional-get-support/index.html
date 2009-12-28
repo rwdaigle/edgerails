@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Even Better Conditional GET Support</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Even Better Conditional GET Support</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature was released in Rails v2.2.1</em><br />&#x000A;<hr/></p>&#x000A;<p>We talked about the <a href="/articles/2008/8/14/what-s-new-in-edge-rails-simpler-conditional-get-support-etags">new conditional <span class="caps">GET</span> support</a> in rails a couple months ago. As some of the comments alluded, the feature was somewhat cumbersome to use &#8211; especially by Ruby standards.  Well, the feature has since been refined.  So, read the <a href="/articles/2008/8/14/what-s-new-in-edge-rails-simpler-conditional-get-support-etags">original post</a> to get the gist and come back here for the sugar.</p>&#x000A;<p>Instead of manually setting properties directly on the <code>response</code> and querying the <code>request</code> to see if it&#8217;s fresh we have some higher-level accessors we can use.  Observe (extending our <a href="/articles/2008/8/14/what-s-new-in-edge-rails-simpler-conditional-get-support-etags">previous</a> example):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">ArticlesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">show</span>&#x000A;    <span class="vi">@article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>&#x000A;&#x000A;    <span class="c1"># If the request is stale according to the given timestamp and etag value</span>&#x000A;    <span class="c1"># (i.e. it needs to be processed again) then execute this block</span>&#x000A;    <span class="k">if</span> <span class="n">stale?</span><span class="p">(</span><span class="ss">:last_modified</span> <span class="o">=&gt;</span> <span class="vi">@article</span><span class="o">.</span><span class="n">published_at</span><span class="o">.</span><span class="n">utc</span><span class="p">,</span> <span class="ss">:etag</span> <span class="o">=&gt;</span> <span class="vi">@article</span><span class="p">)</span>&#x000A;      <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="n">wants</span><span class="o">|</span>&#x000A;        <span class="c1"># ... normal response processing</span>&#x000A;      <span class="k">end</span>&#x000A;    <span class="k">end</span>&#x000A;&#x000A;    <span class="c1"># If the request is fresh (i.e. it&#39;s not modified) then you don&#39;t need to do</span>&#x000A;    <span class="c1"># anything. The default render checks for this using the parameters</span>&#x000A;    <span class="c1"># used in the previous call to stale? and will automatically send a</span>&#x000A;    <span class="c1"># :not_modified.  So that&#39;s it, you&#39;re done.</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>If you don&#8217;t have any special response processing and are using the default rendering mechanism (i.e. you&#8217;re not using <code>respond_to</code> or calling <code>render</code> yourself) then you&#8217;ve got an easy helper in <code>fresh_when</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">ArticlesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># This will automatically send back a :not_modified if the request is fresh, and</span>&#x000A;  <span class="c1"># will render the default template (article.*) if it&#39;s stale.</span>&#x000A;  <span class="k">def</span> <span class="nf">show</span>&#x000A;    <span class="vi">@article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">fresh_when</span> <span class="ss">:last_modified</span> <span class="o">=&gt;</span> <span class="vi">@article</span><span class="o">.</span><span class="n">published_at</span><span class="o">.</span><span class="n">utc</span><span class="p">,</span> <span class="ss">:etag</span> <span class="o">=&gt;</span> <span class="vi">@article</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>There you have it, the new and improved conditional <span class="caps">GET</span> support in Rails 2.2.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              25 Oct, 2008
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2008/08/14/what-s-new-in-edge-rails-simpler-conditional-get-support-etags">Simpler Conditional Get Support (ETags)</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/10/25/what-s-new-in-edge-rails-even-better-conditional-get-support";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

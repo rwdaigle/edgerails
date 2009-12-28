@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: RESTful Method Support in Link Helpers</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>RESTful Method Support in Link Helpers</h2>
+              &#x000A;<p>A <a href="http://dev.rubyonrails.org/changeset/4370">group</a> of <a href="http://dev.rubyonrails.org/changeset/4371">changes</a> have <a href="http://dev.rubyonrails.org/changeset/4374">recently</a> <a href="http://dev.rubyonrails.org/changeset/4375">been</a> <a href="http://dev.rubyonrails.org/changeset/4376">committed</a> to edge Rails that allows the use of the various <a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"><span class="caps">REST</span></a> style <span class="caps">HTTP</span> methods when creating links.  Deprecated are the days of using <code>:post =&gt; true</code> to indicate a data-altering request (<code>post</code> being only one of the <a href="http://rest.blueoxen.net/cgi-bin/wiki.pl?HttpMethods">five main <span class="caps">REST</span> methods</a>):</p>&#x000A;<p>Bye-bye this:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;link_to("Delete article", { :action =&gt; "destroy", :id =&gt; @article },&#x000A;  :confirm =&gt; "Are you sure you want to delete this article?",&#x000A;  :post =&gt; true&#x000A;</code><br />&#x000A;</pre></p>&#x000A;<p>And hello to proper <span class="caps">REST</span> (note the * :method =&gt; :delete* and * :method =&gt; :put*)!<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;link_to("Delete article", { :action =&gt; "destroy", :id =&gt; @article },&#x000A;  :confirm =&gt; "Are you sure you want to delete this article?",&#x000A;  :method =&gt; :delete)&#x000A;link_to("Edit article", { :action =&gt; "edit", :id =&gt; @article },&#x000A;  :method =&gt; :put)&#x000A;</code><br />&#x000A;</pre></p>&#x000A;<p>All your favorite helper methods now support <span class="caps">REST</span> verbs including <code>link_to</code>, <code>link_to_remote</code>, <code>form_tag</code>, <code>form_for</code>, <code>remote_form_tag</code> and <code>remote_form_for</code>.</p>&#x000A;<p>Now you can start building links with verbs that actually represent the type of request being made.  On the controller side you can determine the request method the same way you always have &#8211; with the <code>request.post?</code>, <code>request.get?</code>, <code>request.put?</code>, <code>request.delete?</code>, <code>request.head?</code> methods.</p>&#x000A;<p>On a related note, here are some links to work being done on providing <span class="caps">REST</span>-ful controllers for rails:</p>&#x000A;<ul>&#x000A;	<li><a href="http://cfis.savagexi.com/articles/2006/03/26/rest-controller-for-rails">http://cfis.savagexi.com/articles/2006/03/26/rest-controller-for-rails</a></li>&#x000A;	<li><a href="http://microformats.org/discuss/mail/microformats-rest/2006-March/000158.html">http://microformats.org/discuss/mail/microformats-rest/2006-March/000158.html</a></li>&#x000A;	<li><a href="http://pezra.barelyenough.org/blog/2006/01/rough-resting-on-rails/">http://pezra.barelyenough.org/blog/2006/01/rough-resting-on-rails/</a></li>&#x000A;	<li><a href="http://www.xml.com/pub/a/2005/11/02/rest-on-rails.html?page=1">http://www.xml.com/pub/a/2005/11/02/rest-on-rails.html?page=1</a></li>&#x000A;</ul>
+            </div>
+            <p class="pubdate">
+              Published:
+              30 May, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it">Simply RESTful Support - And How to Use It</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/05/30/whats-new-in-edge-rails-restful-method-support-in-link-helpers";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

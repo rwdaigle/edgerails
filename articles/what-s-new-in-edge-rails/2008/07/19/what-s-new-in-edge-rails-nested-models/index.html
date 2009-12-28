@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Nested Model Mass Assignment</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Nested Model Mass Assignment</h2>
+              &#x000A;<p><em>Looks like this feature has been pulled from Edge Rails though it&#8217;s tentatively <a href="http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5">scheduled to come back</a> post the 2.2 release.  <a href="http://rails.uservoice.com/pages/rails3/suggestions/99641-nested-model-forms">Vote here</a> if you want to see this feature implemented in Rails!</em></p>&#x000A;<p><a href="http://railscasts.com/episodes/75">Nested models</a> (nested forms by another name) describe the scenario when you want to create and modify values of nested attributes through a containing model.  For instance, if you have an user model with many phone numbers:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:login</span>&#x000A;  <span class="n">has_many</span> <span class="ss">:phone_numbers</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="k">class</span> <span class="nc">PhoneNumber</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:area_code</span><span class="p">,</span> <span class="ss">:number</span>&#x000A;  <span class="n">belongs_to</span> <span class="ss">:user</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>you may want to be able to create the user and a group of phone numbers <em>at the same time_.  This is what this looks like with the new <a href="http://github.com/rails/rails/commit/e0750d6a5c7f621e4ca12205137c0b135cab444a">mass assignment</a> functionality of Rails keyed off of the <code>:accessible</code> option of the association declaration (@:phone</em>numbers@, in this case).</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:login</span>&#x000A;  <span class="n">has_many</span> <span class="ss">:phone_numbers</span><span class="p">,</span> <span class="ss">:accessible</span> <span class="o">=&gt;</span> <span class="kp">true</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="n">ryan</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span> <span class="p">{</span>&#x000A;  <span class="ss">:login</span> <span class="o">=&gt;</span> <span class="s1">&#39;ryan&#39;</span><span class="p">,</span>&#x000A;  <span class="ss">:phone_numbers</span> <span class="o">=&gt;</span> <span class="o">[</span>&#x000A;    <span class="p">{</span> <span class="ss">:area_code</span> <span class="o">=&gt;</span> <span class="s1">&#39;919&#39;</span><span class="p">,</span> <span class="ss">:number</span> <span class="o">=&gt;</span> <span class="s1">&#39;123-4567&#39;</span> <span class="p">},</span>&#x000A;    <span class="p">{</span> <span class="ss">:area_code</span> <span class="o">=&gt;</span> <span class="s1">&#39;920&#39;</span><span class="p">,</span> <span class="ss">:number</span> <span class="o">=&gt;</span> <span class="s1">&#39;123-8901&#39;</span> <span class="p">}</span>&#x000A;  <span class="o">]</span>&#x000A;<span class="p">})</span>&#x000A;&#x000A;<span class="n">ryan</span><span class="o">.</span><span class="n">phone_numbers</span><span class="o">.</span><span class="n">count</span> <span class="c1">#=&gt; 2</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>A single hash of values being sent to <code>User.create</code> results in both a new user object and new associated phone numbers.  Previously, you would have had to manually create your own <code>phone_numbers=</code> setter method on user to get this same functionality:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">phone_numbers</span><span class="o">=</span><span class="p">(</span><span class="n">attrs_array</span><span class="p">)</span>&#x000A;    <span class="n">attrs_array</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">attrs</span><span class="o">|</span>&#x000A;      <span class="n">phone_numbers</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Mass assignment now gives you this functionality for free.</p>&#x000A;<p>This may not look like much, but it is a step in the direction of letting you use nested forms.  Consider a user registration form where a user can enter their login name and their phone numbers in the same form (through the use of <a href="http://api.rubyonrails.com/classes/ActionView/Helpers/FormHelper.html#M001738"><code>fields_for</code></a> which will bundle nested model attributes into a single form):</p>&#x000A;<div class="highlight"><pre><span class="o">&lt;</span><span class="sx">% form_for </span><span class="vi">@user</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="sx">%&gt;</span>&#x000A;<span class="sx">  &lt;%= f.text_field :login %&gt;</span>&#x000A;  <span class="o">&lt;</span><span class="sx">% fields_for </span><span class="ss">:phone_numbers</span> <span class="k">do</span> <span class="o">|</span><span class="n">pn_f</span><span class="o">|</span> <span class="sx">%&gt;</span>&#x000A;<span class="sx">    &lt;%= pn_f.text_field :area_code %&gt;</span>&#x000A;    <span class="o">&lt;</span><span class="sx">%= pn_f.text_field :number %&gt;</span>&#x000A;<span class="sx">  &lt;% end %&gt;</span>&#x000A;<span class="sx">  &lt;%=</span> <span class="n">submit_tag</span> <span class="sx">%&gt;</span>&#x000A;<span class="sx">&lt;% end %&gt;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This form, when submitted to the following standard RESTful <code>UserController</code>, will correctly create the user and its associated phone numbers through the beauty of mass assignment.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UserController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># Create a new user and their phone numbers with mass assignment</span>&#x000A;  <span class="k">def</span> <span class="nf">new</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="n">wants</span><span class="o">|</span>&#x000A;      <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Mass assignment can be used on all association types &#8211; <code>:belongs_to</code>, <code>:has_one</code>, :<code>has_many</code> and <code>:has_and_belongs_to_many</code> as long as the <code>:accessible =&gt; true</code> option is specified.</p>&#x000A;<p>This is a very convenient addition to ActiveRecord, but the real zinger will come with <a href="http://groups.google.com/group/rubyonrails-core/browse_thread/thread/4049b4b313fa8be2">full nested form support</a> when you can create, update and delete these nested models directly from what is pushed down in the parameter hash of a form submission.  This would allow for the functionality in this <a href="http://railscasts.com/episodes/75">complex forms screencast</a> with minimal hassle.  What a fine day that would be.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              19 Jul, 2008
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/07/19/what-s-new-in-edge-rails-nested-models";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

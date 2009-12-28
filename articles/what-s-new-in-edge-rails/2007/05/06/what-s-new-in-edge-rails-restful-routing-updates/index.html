@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: RESTful Routing Updates</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>RESTful Routing Updates</h2>
+              &#x000A;<h1>has_many and has_one RESTful Routing</h1>&#x000A;<p>Until the day comes that Rails&#8217; routing can interrogate your domain model and properly translate the existing ActiveRecord associations into RESTful routes, we will have to settle for the same sugary-sweet declaration syntax.  Instead of nesting resources in your routing configuration to imply an association, &quot;you can now &quot;:http://dev.rubyonrails.org/changeset/6588 directly specify the routing association with <code>has_one</code> and <code>has_many</code>:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:posts</span><span class="p">,</span> <span class="ss">:has_one</span> <span class="o">=&gt;</span> <span class="ss">:author</span><span class="p">,</span> <span class="ss">:has_many</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:comments</span><span class="p">,</span> <span class="ss">:trackbacks</span><span class="o">]</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This gets you what you&#8217;re used to seeing as:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:posts</span> <span class="k">do</span> <span class="o">|</span><span class="n">posts</span><span class="o">|</span>&#x000A;  <span class="n">posts</span><span class="o">.</span><span class="n">resource</span> <span class="ss">:author</span>&#x000A;  <span class="n">posts</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:comments</span>&#x000A;  <span class="n">posts</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:trackbacks</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>You can always drop back to the nested form to specify more detailed options, but for vanilla routes this gets you an intuitive way to specify resource relationships that are directly reflected in your routing.</p>&#x000A;<h1>Auto Routing Name Prefixing</h1>&#x000A;<p>As part of the <a href="http://dev.rubyonrails.org/changeset/6588">same update</a> you no longer have to specify a named prefix for nested resources (to avoid conflicts with other named routes) &#8211; now named prefixes are assumed for you based on the resource nesting.  For instance, this routing:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:posts</span> <span class="k">do</span> <span class="o">|</span><span class="n">posts</span><span class="o">|</span>&#x000A;  <span class="n">posts</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:comments</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>now provides a <code>post_comments_url(post_id)</code> helper method.  Previously, you had to specify the <code>post_</code> part of the name via the <code>name_prefix</code> option for your route:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:posts</span> <span class="k">do</span> <span class="o">|</span><span class="n">posts</span><span class="o">|</span>&#x000A;  <span class="n">posts</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:comments</span><span class="p">,</span> <span class="ss">:name_prefix</span> <span class="o">=&gt;</span> <span class="s2">&quot;post_&quot;</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Now that prefix is assumed for you (an assumption that could potentially break your routing and helper methods).  If you don&#8217;t want the name_prefix assumed, you&#8217;ll need to explicitly set it to nil with <code>:name_prefix =&gt; nil</code>.</p>&#x000A;<p><a href="http://railstips.org/2007/4/28/namespaces-added-to-routes"><em>And don&#8217;t forget about the routing namespace update too</em></a></p>
+            </div>
+            <p class="pubdate">
+              Published:
+              06 May, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/05/06/what-s-new-in-edge-rails-restful-routing-updates";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

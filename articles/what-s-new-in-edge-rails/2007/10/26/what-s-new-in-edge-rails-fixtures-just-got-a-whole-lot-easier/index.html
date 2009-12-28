@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Fixtures Just Got a Whole Lot Easier</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Fixtures Just Got a Whole Lot Easier</h2>
+              &#x000A;<p>There are a <a href="http://code.google.com/p/fixture-scenarios/">plethora</a> of <a href="http://www.caboo.se/articles/2006/11/2/fixture-hack-gets-pluginized-caboose-plugin-repository-lunches">fixture plugins</a> that attempt to make your test fixtures less of a pain in the arse to work with.  And most do succeed in one manner or another.</p>&#x000A;<p>Well one of the nicest fixture plugins, called <a href="http://svn.geeksomnia.com/rathole/trunk/README">Rathole</a>, has just been <a href="http://dev.rubyonrails.org/changeset/8036">sucked down into rails</a> &#8211; and it&#8217;s a doozy.  Let&#8217;s summarize so you can decide whether to dive in or not.</p>&#x000A;<p>Let&#8217;s use the following model for this example:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Company</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">;</span> <span class="n">has_many</span> <span class="ss">:employees</span><span class="p">;</span> <span class="k">end</span>&#x000A;<span class="k">class</span> <span class="nc">Employee</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">;</span> <span class="n">belongs_to</span> <span class="ss">:company</span> <span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Just a simple one-to-many association between a company and its employees, easy enough.  But when we get into setting up our fixtures there&#8217;s a lot of non-essential stuff and easy to mess up ids we have to manually specify.  And all this just gets exponentially hairier as the data-set increases.</p>&#x000A;<p><code>companies.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span>&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no">LLC</span>&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now %&gt;</span>&#x000A;<span class="sx">  updated_at: &lt;%=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span><br />&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no"><span class="caps">LLC</span></span><br />&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now <span>&gt;</span><br />&#x000A;<span class="sx">  updated_at: &lt;</span>=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p><code>employees.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span>&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span>&#x000A;  <span class="n">company_id</span><span class="p">:</span> <span class="mi">1</span>&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now %&gt;</span>&#x000A;<span class="sx">  updated_at: &lt;%=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span><br />&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span><br />&#x000A;  <span class="n">company_id</span><span class="p">:</span> <span class="mi">1</span><br />&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now <span>&gt;</span><br />&#x000A;<span class="sx">  updated_at: &lt;</span>=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>With Rathole&#8217;s features you no longer need to manually reconcile the cross referenced ids and to set the auto-magic date column values.  Watch carefully what your fixtures can be when they grow up:</p>&#x000A;<p><code>companies.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no">LLC</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no"><span class="caps">LLC</span></span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p><code>employees.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span>&#x000A;  <span class="n">company</span><span class="p">:</span> <span class="n">yfactorial</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span><br />&#x000A;  <span class="n">company</span><span class="p">:</span> <span class="n">yfactorial</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>Take special note of the following changes between the two fixture-sets:</p>&#x000A;<ul>&#x000A;	<li>You no longer have to specify the id for each record.  That&#8217;s automatically done for you as the hash of the name of the record (so the integer hash of <code>"yfactorial"</code> becomes that record&#8217;s id)</li>&#x000A;	<li>No need to specify the auto-magic date field values anymore.  All the <code>created_xx</code> and <code>updated_xx</code> fields will be automatically populated with <code>Time.now</code></li>&#x000A;	<li>When referencing other record ids (as in <code>employees.company_id</code>), you can just put the fixture name and it will resolve that column to be the pk value of the referenced record.  This is what allowed me to change the <code>company_id: 1</code> line in <code>employees.yml</code> to be <code>company: yfactorial</code>.</li>&#x000A;</ul>&#x000A;<p><em>Note: Since the primary keys of each record are calculated (as a hash of the fixture name), the fixture doesn&#8217;t need to be loaded before knowing what it&#8217;s pk value will be.  This resolves a lot of the recursive dependency and ordering issues you might&#8217;ve otherwise encountered with an approach such as this.</em></p>&#x000A;<p>But there&#8217;s more&#8230;  Foreign key references get especially twisted when you have join tables that govern your <code>has_and_belongs_to_many</code> associations.  So assume a company <code>has_and_belongs_to_many</code> <code>industry_associations</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Company</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">has_and_belongs_to_many</span> <span class="ss">:industry_associations</span><span class="p">,</span>&#x000A;                          <span class="ss">:join_table</span> <span class="o">=&gt;</span> <span class="s1">&#39;company_industry_associations&#39;</span>&#x000A;<span class="k">end</span>&#x000A;<span class="k">class</span> <span class="nc">IndustryAssociation</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">has_and_belongs_to_many</span> <span class="ss">:companies</span><span class="p">,</span>&#x000A;                          <span class="ss">:join_table</span> <span class="o">=&gt;</span> <span class="s1">&#39;company_industry_associations&#39;</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Instead of having to write our own <code>company_industry_associations.yml</code> fixture file, we can just reference the collection of associations a company belongs to inline in <code>companies.yml</code>:</p>&#x000A;<p><code>companies.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no">LLC</span>&#x000A;  <span class="n">industry_associations</span><span class="p">:</span> <span class="n">ruby</span><span class="p">,</span> <span class="n">webservices</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no"><span class="caps">LLC</span></span><br />&#x000A;  <span class="n">industry_associations</span><span class="p">:</span> <span class="n">ruby</span><span class="p">,</span> <span class="n">webservices</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>Assuming there&#8217;s an <code>industry_associations.yml</code> fixture file that specifies records named <code>ruby</code> and <code>webservices</code>, the habtm join table will be automatically populated for you.</p>&#x000A;<p>This is a really big win for you fixture users (of which I am one).  Perhaps those that have turned their nose up at fixtures will take a second look?  Really great functionality &#8211; thanks, <a href="http://geeksomnia.com/">John</a>, for the contribution!</p>&#x000A;<p><em>Take a look at the bottom of the plugin&#8217;s <a href="http://svn.geeksomnia.com/rathole/trunk/README"><span class="caps">README</span></a> file to see how to setup default values and how to fetch the pks of other fixtures</em></p>
+            </div>
+            <p class="pubdate">
+              Published:
+              26 Oct, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/10/26/what-s-new-in-edge-rails-fixtures-just-got-a-whole-lot-easier";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

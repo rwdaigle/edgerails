@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Parameter Driven Response-Type Determination</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Parameter Driven Response-Type Determination</h2>
+              &#x000A;<p>The <code>HTTP_ACCEPT</code> header is used by web-clients to tell your application what type of response it wants and is the magic behind the very slick <a href="http://api.rubyonrails.com/classes/ActionController/MimeResponds/InstanceMethods.html#M000062"><code>responds_to</code></a> method of your controller.  Rails edge now supports the case when you want to specify the type of response as a request parameter and not as an http header.</p>&#x000A;<p>Currently, when a client sends an Http request to your app with an <code>HTTP_ACCEPT</code> header value of <code>application/xml</code>, you can do this in your controller to render the response as the appropriate <span class="caps">XML</span>:</p>&#x000A;<pre>&#x000A;<code>&#x000A;# From example at:&#x000A;# http://api.rubyonrails.com/classes/ActionController/MimeResponds/InstanceMethods.html#M000062&#x000A;...&#x000A;respond_to do |wants|&#x000A;  wants.html&#x000A;  wants.xml { render :xml =&gt; @people.to_xml }&#x000A;end&#x000A;...&#x000A;</code>&#x000A;</pre>&#x000A;<p>Great, we&#8217;ve got an easy way to render the type of response the client has asked for without duplicating our controller logic.  <em>But</em>, we don&#8217;t yet have a way to trigger this little bit of magic from anything other than the Http header &#8211; not a very friendly place to hang out.  That&#8217;s what <a href="http://dev.rubyonrails.org/changeset/4384">changeset 4384</a> addresses &#8211; the ability to determine the requested response type from a normal http parameter instead of the http header.</p>&#x000A;<h4>How it Works</h4>&#x000A;<p>Telling the request what response type you want is now as easy as adding a <code>format</code> parameter to your request and using the same <code>respond_to</code> determination as before.  So this request sent from your web browser (which always sends an <code>HTTP_ACCEPT</code> header value of <code>text/html</code> or <code>*/*</code>)</p>&#x000A;<pre>&#x000A;<code>&#x000A;http://host/action?format=xml&#x000A;</code>&#x000A;</pre>&#x000A;<p>Will override the supplied <code>HTTP_ACCEPT</code> header and will trigger the <code>xml</code> block of <code>respond_to</code> in your controller (imitating <code>HTTP_ACCEPT</code> = <code>application/xml</code>)</p>&#x000A;<p>Overall a great way to programatically specify the response type without monkeying with http headers.</p>&#x000A;<p>For further reading on the topic, here are some related posts:</p>&#x000A;<ul>&#x000A;	<li><a href="http://www.loudthinking.com/arc/000572.html">Discovering <span class="caps">HTTP</span> #1: The Accept header</a></li>&#x000A;	<li><a href="http://cfis.savagexi.com/articles/2006/03/23/content-negotiation-and-rails">Content Negotiation And Rails</a></li>&#x000A;	<li><a href="http://rails.techno-weenie.net/question/2006/3/28/respond_to_and_redirects">Rails Weenie question: respond_to and redirects</a></li>&#x000A;	<li><a href="http://api.rubyonrails.com/classes/ActionController/MimeResponds/InstanceMethods.html#M000062">respond_to <span class="caps">API</span></a></li>&#x000A;</ul>
+            </div>
+            <p class="pubdate">
+              Published:
+              01 Jun, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">Cleaner RESTful Controllers w/ respond_with</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/06/01/whats-new-in-edge-rails-parameter-driven-response-type-determination";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

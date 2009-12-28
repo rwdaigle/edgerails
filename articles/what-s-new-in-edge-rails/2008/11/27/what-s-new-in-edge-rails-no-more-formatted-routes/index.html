@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: No More Formatted Routes</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>No More Formatted Routes</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature is scheduled for: Rails v2.3/3.0</em><br />&#x000A;<hr/></p>&#x000A;<p>Parallel to the <a href="/articles/2008/11/13/what-s-new-in-edge-rails-except-and-only-routing-options">addition of :except and :only</a> options to Rails&#8217; routing comes the <a href="http://github.com/rails/rails/commit/fef6c32afe2276dffa0347e25808a86e7a101af1">removal of all those <code>formatted_xxx</code> named routes</a>.  Turns out these routes <a href="http://blog.hungrymachine.com/2008/11/11/how-to-save-100m-of-ram-per-mongrel-part-2">ate up a lot of memory</a> and served minimal purpose.</p>&#x000A;<p>So with this <code>routes.rb</code> definition:</p>&#x000A;<div class="highlight"><pre><span class="no">ActionController</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">Routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>&#x000A;  <span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>you&#8217;ll no longer have any of the <code>formatted_xxx</code> url helpers available.  However, you will be able to get the same functionality by passing in a <code>:format</code> option to the base view helper methods:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Old =&gt; New</span>&#x000A;<span class="n">formatted_article_path</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">article_path</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="ss">:format</span> <span class="o">=&gt;</span> <span class="ss">:xml</span><span class="p">)</span>&#x000A;<span class="n">formatted_new_article_path</span><span class="p">(</span><span class="ss">:json</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">new_article_path</span><span class="p">(</span><span class="ss">:format</span> <span class="o">=&gt;</span> <span class="ss">:json</span><span class="p">)</span>&#x000A;<span class="c1"># etc...</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>A minimal change that will have a big impact on the memory consumption of each of your Rails processes &#8211; especially if you&#8217;ve got a complex app with lots of routes.</p>&#x000A;<p>If you&#8217;re on Edge Rails you&#8217;re going to start seeing deprecation warnings where you reference these formatted url helpers, so you&#8217;ve got some warning before you have to make the switch.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              27 Nov, 2008
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">Cleaner RESTful Controllers w/ respond_with</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/11/27/what-s-new-in-edge-rails-no-more-formatted-routes";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

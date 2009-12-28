@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Explicit Deprecation</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Explicit Deprecation</h2>
+              &#x000A;<p>After a bit of a hiatus (due to little reportable action on the source tree), a  deprecation tidbit was <a href="http://dev.rubyonrails.org/changeset/4623">just committed</a>.  What&#8217;s this little nugget do?  The ActiveSupport library now provides the ability to explicitly state what methods are deprecated &#8211; which will pump out a warning message when that method is called.  This is a nice way of not breaking your codebase by removing deprecated methods, while still letting others know that they&#8217;re marked for future removal.</p>&#x000A;<p>Here&#8217;s how it works &#8211; simply include the deprecation module in the class that has a deprecated method (in this example a User model object) &#8211; and mark the method symbol as deprecated:</p>&#x000A;<typo:code lang="ruby">&#x000A;<p>require &#8216;active_support/deprecation&#8217;</p>&#x000A;<p>class User &lt; ActiveRecord::Base</p>&#x000A;<ol>&#x000A;	<li>The method to deprecate<br />&#x000A;  def permitted?(role)<br />&#x000A;    roles.include?(role)<br />&#x000A;  end</li>&#x000A;</ol>&#x000A;<ol>&#x000A;	<li>Formally deprecate it!<br />&#x000A;  deprecate :permitted?</li>&#x000A;</ol>&#x000A;<p>end</p>&#x000A;<ol>&#x000A;	<li>This method will execute as normal &#8211; except now there&#8217;s a warning</li>&#x000A;	<li>message printed to your log file or to standard out:</li>&#x000A;</ol>&#x000A;<p>User.new.permitted?(&#8216;<span class="caps">ADMIN</span>&#8217;) #=&gt; false</p>&#x000A;<ol>&#x000A;	<li>&#8220;Your application calls User##permitted?, which is now deprecated.</li>&#x000A;	<li>Please see the <span class="caps">API</span> documents at http://api.rubyonrails.org/ for more information.&quot;<br />&#x000A;</typo:code></li>&#x000A;</ol>&#x000A;<p>You can also denote deprecation of methods baseed on runtime conditions as well (useful when a method with certain arguments have been deprecated, but the method as a whole is still valid)</p>&#x000A;<pre>&#x000A;<code>&#x000A;require 'active_support/deprecation'&#x000A;&#x000A;class User &lt; ActiveRecord::Base&#x000A;  &#x000A;  # Single arg method is now deprecated&#x000A;  def to_s(format)&#x000A;    if format&#x000A;      ActiveSupport::Deprecation.issue_warning("to_s with a " + &#x000A;      "format is now deprecated, please use the no-arg call.")&#x000A;      # ...&#x000A;    end&#x000A;    #...&#x000A;  end  &#x000A;end&#x000A;&#x000A;# This method will execute as normal - except now there's a warning&#x000A;# message printed to your log file or to standard out:&#x000A;&#x000A;User.new.to_s(:long) #=&gt; "Ryan William Daigle"&#x000A;&#x000A;# "to_s with a format is now deprecated, please use the no-arg call."&#x000A;# Please see the API documents at http://api.rubyonrails.org/ for more information."&#x000A;&#x000A;# However, this method will not have a deprecation warning:&#x000A;&#x000A;User.new.to_s #=&gt; "Ryan Daigle"&#x000A;</code>&#x000A;</pre>&#x000A;<p>It may not seem like much &#8211; but the ability to warn developers that a method is on the path to deprecation can save a lot of pain by making it more apparent which called methods are deprecated and not relying on developers to do their own homework.</p>&#x000A;<p>We hate homework.</p>&#x000A;<p>tags: <a rel="tag" href="http://technorati.com/tag/rails">rails</a>, <a rel="tag" href="http://technorati.com/tag/rubyonrails">rubyonrails</a></p>
+            </div>
+            <p class="pubdate">
+              Published:
+              28 Jul, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/07/28/whats-new-in-edge-rails-explicit-deprecation";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

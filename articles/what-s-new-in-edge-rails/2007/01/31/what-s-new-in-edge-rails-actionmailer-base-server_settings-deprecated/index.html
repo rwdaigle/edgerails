@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: ActionMailer::Base.server_settings Deprecated</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>ActionMailer::Base.server_settings Deprecated</h2>
+              &#x000A;<p>Configuring your action mailer settings just got a little tweak that you&#8217;re going to want to pay attention to, especially if you&#8217;re running off edge.  Instead of using <code>ActionMailer::Base.server_settings</code> you&#8217;re going to want to use <code>ActionMailer::Base.smtp_settings</code>.  The syntax remains the same, it&#8217;s just a name change:</p>&#x000A;<div class="highlight"><pre><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">delivery_method</span> <span class="o">=</span> <span class="ss">:smtp</span>&#x000A;<span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">smtp_settings</span> <span class="o">=</span> <span class="p">{</span>&#x000A;	<span class="ss">:address</span>		<span class="o">=&gt;</span> <span class="s2">&quot;smtp.mymailserver.com&quot;</span><span class="p">,</span>&#x000A;	<span class="ss">:authentication</span>	<span class="o">=&gt;</span> <span class="ss">:login</span><span class="p">,</span>&#x000A;	<span class="ss">:user_name</span>		<span class="o">=&gt;</span> <span class="s2">&quot;me&quot;</span><span class="p">,</span>&#x000A;	<span class="ss">:password</span>		<span class="o">=&gt;</span> <span class="s2">&quot;password&quot;</span>&#x000A;<span class="p">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>In the <a href="http://dev.rubyonrails.org/changeset/6094"><code>1-2-stable</code></a> rails branch the use of <code>server_settings</code> has been deprecated, while over in <a href="http://dev.rubyonrails.org/changeset/6095"><code>edge</code></a> it&#8217;s been renamed outright and you&#8217;ll need to update your usage.</p>&#x000A;<p>Also in the same update is the ability to specify your sendmail executable location and command line arguments options with the new <code>ActionMailer::Base.sendmail_settings</code> (if you&#8217;re using sendmail):</p>&#x000A;<div class="highlight"><pre><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">delivery_method</span> <span class="o">=</span> <span class="ss">:sendmail</span>&#x000A;<span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">sendmail_settings</span> <span class="o">=</span> <span class="p">{</span> &#x000A;  <span class="ss">:location</span>       <span class="o">=&gt;</span> <span class="s1">&#39;/usr/sbin/sendmail&#39;</span><span class="p">,</span> &#x000A;  <span class="ss">:arguments</span>      <span class="o">=&gt;</span> <span class="s1">&#39;-i -t&#39;</span>&#x000A;<span class="p">}</span> &#x000A;</pre>&#x000A;</div>&#x000A;<p>See the <a href="http://api.rubyonrails.org/classes/ActionMailer/Base.html">ActionMailer::Base</a> api for further option details.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              31 Jan, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/01/31/what-s-new-in-edge-rails-actionmailer-base-server_settings-deprecated";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

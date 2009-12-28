@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Batched Find</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Batched Find</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature is scheduled for: Rails v2.3</em><br />&#x000A;<hr/></p>&#x000A;<p>ActiveRecord got a little batch-help today with the addition of <a href="http://github.com/rails/rails/commit/d13623ca46c82120c398f4634e206422fc3ad7ea">ActiveRecord::Base#find_each and ActiveRecord::Base#find_in_batches</a>.  The former lets you iterate over all the records in cursor-like fashion (only retrieving a set number of records at a time to avoid cramming too much into memory):</p>&#x000A;<div class="highlight"><pre><span class="no">Article</span><span class="o">.</span><span class="n">find_each</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="p">}</span> <span class="c1"># =&gt; iterate over all articles, in chunks of 1000 (the default)</span>&#x000A;<span class="no">Article</span><span class="o">.</span><span class="n">find_each</span><span class="p">(</span><span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:published</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="p">},</span> <span class="ss">:batch_size</span> <span class="o">=&gt;</span> <span class="mi">100</span> <span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="p">}</span>&#x000A;  <span class="c1"># iterate over published articles in chunks of 100</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>You&#8217;re not exposed to any of the chunking logic &#8211; all you need to do is iterate over each record and just trust that they&#8217;re only being retrieved in manageable groups.</p>&#x000A;<p><code>find_in_batches</code> performs a similar function, except that it hands back each chunk array directly instead of just a stream of individual records:</p>&#x000A;<div class="highlight"><pre><span class="no">Article</span><span class="o">.</span><span class="n">find_in_batches</span> <span class="p">{</span> <span class="o">|</span><span class="n">articles</span><span class="o">|</span> <span class="n">articles</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="p">}</span> <span class="p">}</span>&#x000A;  <span class="c1"># =&gt; articles is array of size 1000</span>&#x000A;<span class="no">Article</span><span class="o">.</span><span class="n">find_in_batches</span><span class="p">(</span><span class="n">batch_size</span> <span class="o">=&gt;</span> <span class="mi">100</span> <span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">articles</span><span class="o">|</span> <span class="n">articles</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="p">}</span> <span class="p">}</span>&#x000A;  <span class="c1"># iterate over all articles in chunks of 100</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p><code>find_in_batches</code> is also kind enough to observe good scoping practices:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">named_scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:published</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="p">}</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="no">Article</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">find_in_batches</span><span class="p">(</span><span class="ss">:batch_size</span> <span class="o">=&gt;</span> <span class="mi">100</span> <span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">articles</span><span class="o">|</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="p">}</span>&#x000A;  <span class="c1"># iterate over published articles in chunks of 100</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>One quick caveat exists: you can&#8217;t specify <code>:order</code> or <code>:limit</code> in the options to <code>find_each</code> or <code>find_in_batches</code> as those values are used in the internal looping logic.</p>&#x000A;<p>Batched finds are best used when you have a potentially large dataset and need to iterate through all rows.  If done using a normal find the full result-set will be loaded into memory and could cause problems.  With batched finds you can be sure that only 1000 * (each result-object size) will be loaded into memory.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              23 Feb, 2009
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2008/11/18/what-s-new-in-edge-rails-default-scoping">Default Scoping</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">Cleaner RESTful Controllers w/ respond_with</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/02/23/what-s-new-in-edge-rails-batched-find";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

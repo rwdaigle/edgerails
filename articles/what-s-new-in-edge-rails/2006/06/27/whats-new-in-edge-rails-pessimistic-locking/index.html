@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Pessimistic Locking</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Pessimistic Locking</h2>
+              &#x000A;<p><em><a href="http://www.sitepoint.com/articlelist/443">Tim Lucas</a> over at SitePoint <a href="http://www.sitepoint.com/blogs/2006/06/21/activerecord-receives-pessimistic-locking/">already talked about this feature</a> and has added good detailed explanation in the comments.</em></p>&#x000A;<p>Rails has long provided <a href="http://en.wikipedia.org/wiki/Optimistic_locking">optimistic locking</a> through the use of its <a href="http://api.rubyonrails.com/classes/ActiveRecord/Locking.html">lock_version</a> magic column.  In a natural compliment to that functionality, edge rails now also provides <a href="http://www.agiledata.org/essays/concurrencyControl.html#PessimisticLocking">pessimistic locking</a> support:</p>&#x000A;<p><a href="http://dev.rubyonrails.org/changeset/4460">http://dev.rubyonrails.org/changeset/4460</a><br />&#x000A;<a href="http://dev.rubyonrails.org/changeset/4461">http://dev.rubyonrails.org/changeset/4461</a><br />&#x000A;<a href="http://dev.rubyonrails.org/changeset/4462">http://dev.rubyonrails.org/changeset/4462</a></p>&#x000A;<p>Pessimistic locking is specified with the <code>lock</code> option in your standard <code>find</code> method:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;Person.transaction do&#x000A;  p = Person.find(1, :lock=&gt; true)&#x000A;  p.username = 'new'&#x000A;  p.save!&#x000A;end&#x000A;</code><br />&#x000A;</pre><br />&#x000A;This will lock the person row during the course of the specified transaction and prevent updates from occuring while the object is manipulated.</p>&#x000A;<p>You can also lock an already loaded model with the new <code>lock!</code> method:</p>&#x000A;<p><code>person.lock!</code></p>&#x000A;<p>which is equivalent to:</p>&#x000A;<p><code>person.reload(:lock =&gt; true)</code></p>&#x000A;<h3>Optimistic vs. Pessimistic Locking</h3>&#x000A;<p><br/>&#x000A;With optimistic locking a check is done on the <code>lock_version</code> column <em>by the Rails framework</em> when a row is updated to make sure that it has the same value as when the model was first read from the database.  If the <code>lock_version</code> has changed while the object has been in memory we assume that it&#8217;s been updated underneath us and a <code>ActiveRecord::StaleObjectError</code> is thrown.  This is easily implemented by appending a <code>WHERE lock_version = X</code> clause to the update <span class="caps">SQL</span>.  If no rows are updated it means the <code>lock_version</code> has changed.  The important thing to note here is that this protection is provided <em>at the application</em> level.</p>&#x000A;<p>Pessimistic locking is functionality provided by the database that happens at the database level.  When invoked it actually locks the row(s) in question so that other update requests are blocked.  This is usually done with the <code>FOR UPDATE</code> <span class="caps">SQL</span> clause.  The benefit of this is that you have an exclusive lock on that row so no other operations can occur and you are guaranteed the data will not change.  However, this is also the <strong>big</strong> downside &#8211; everybody else is blocked!  You would never want to obtain an exclusive lock on a row and then either forget about it or have it locked for an extended amount of time.  When another part of your application wants to update that data no errors will be raised, it will just hang.  Nasty.  Basically, don&#8217;t use pessimistic locking unless you know what you&#8217;re doing and have a reliable way of releasing the lock.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              27 Jun, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/06/27/whats-new-in-edge-rails-pessimistic-locking";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

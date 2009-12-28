@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: render Stops Being High-Maintenance</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>render Stops Being High-Maintenance</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature is scheduled for: Rails v2.3/3.0</em><br />&#x000A;<hr/></p>&#x000A;<p><code>render</code> is one of those oft-used view-helper methods that always seems to be a little cumbersome.  The most common use is to render a partial within another view:</p>&#x000A;<div class="highlight"><pre><span class="n">render</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s1">&#39;articles/article&#39;</span><span class="p">,</span> <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:article</span> <span class="o">=&gt;</span> <span class="vi">@article</span> <span class="p">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>But this is a lot of work for a simple operation, and <a href="http://github.com/rails/rails/commit/130fe74d17404e5c06353526c7b20beb4019cb69">now it becomes much simpler</a>.  Now the default is to assume that a partial is requested (in the past render a <code>:file</code> was the default) and that the final hash argument is the locals hash.  Here is the above functionality using the new syntax:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Render the &#39;article&#39; partial with an article local variable</span>&#x000A;<span class="n">render</span> <span class="s1">&#39;articles/article&#39;</span><span class="p">,</span> <span class="ss">:article</span> <span class="o">=&gt;</span> <span class="vi">@article</span>&#x000A;&#x000A;<span class="c1"># Or even better (same as above)</span>&#x000A;<span class="n">render</span> <span class="vi">@article</span>&#x000A;&#x000A;<span class="c1"># And for collections, same as:</span>&#x000A;<span class="c1"># render :partial =&gt; &#39;articles/article&#39;, :collection =&gt; @articles</span>&#x000A;<span class="n">render</span> <span class="vi">@articles</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>If you&#8217;ve got some old <code>render</code> calls hanging around that aren&#8217;t using partials you&#8217;ll have to specify the <code>:file</code> option now:</p>&#x000A;<div class="highlight"><pre><span class="n">render</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="s1">&#39;original&#39;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Hassle free partial rendering.  Yay.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              20 Nov, 2008
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/11/20/what-s-new-in-edge-rails-render-stops-being-high-maintenance";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

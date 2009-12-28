@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Create a Hash from XML</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Create a Hash from XML</h2>
+              &#x000A;<p><code>Hash</code> <a href="http://dev.rubyonrails.org/changeset/4453">has been extended</a> to provide the ability to create a new hash from an xml string.  While this is now used internally by Rails to handle <span class="caps">XML</span> requests, it&#8217;s also available for use as you see fit.</p>&#x000A;<p>The basic premise is that <span class="caps">XML</span> is <em>mostly</em> a nested set of key =&gt; value pairs which is pretty much what a hash is.  Population and creation of a hash from an <span class="caps">XML</span> structure makes perfect sense and can simplify your use of <span class="caps">XML</span>.</p>&#x000A;<p>What happens when you call <code>Hash.from_xml(xml)</code> is that each xml element gets set as a key in the hash and the value of that element is stored as the value in the hash (with typecasting).</p>&#x000A;<p>For instance, this:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;Hash.from_xml &lt;&lt;EOX&#x000A;&lt;user&gt;&#x000A;  &lt;id type="integer"&gt;1&lt;/id&gt;&#x000A;  &lt;user-name&gt;ryan&lt;/user-name&gt;</p>&#x000A;</user>&#x000A;<p><span class="caps">EOX</span><br />&#x000A;</code><br />&#x000A;</pre><br />&#x000A;gets you this hash:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;{ :user =&gt; { :id =&gt; 1, :user_name =&gt; "ryan" } }&#x000A;</code><br />&#x000A;</pre><br />&#x000A;Notice how the integer value of the id was actually cast as an integer.  Also note how element names such as <code>user-name</code> get modified into the Ruby form <code>user_name</code>.</p>&#x000A;<p>Collections of more than one item are handled pretty intuitively as well &#8211; being stored as an array of hashes:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;hash = Hash.from_xml &lt;&lt;EOX&#x000A;&lt;users&gt;&#x000A;  &lt;user&gt;&#x000A;    &lt;id type="integer"&gt;1&lt;/id&gt;&#x000A;    &lt;user-name&gt;ryan&lt;/user-name&gt;</p>&#x000A;</user>&#x000A;<user>&#x000A;    <id type="integer">2</id>&#x000A;    <user-name>doug</user-name>&#x000A;</user>&#x000A;</users>&#x000A;<p><span class="caps">EOX</span></p>&#x000A;<p>hash[:users] #=&gt; {:user =&gt; [ { :id =&gt; 1, :user_name =&gt; &#8220;ryan&#8221; },<br />&#x000A;                             { :id =&gt; 2, :user_name =&gt; &#8220;doug&#8221; } ] }</p>&#x000A;<p>hash[:users][:user].last #=&gt; { :id =&gt; 2, :user_name =&gt; &#8220;doug&#8221; }<br />&#x000A;</code><br />&#x000A;</pre></p>&#x000A;<p>All in all just a really easy way to process <span class="caps">XML</span>.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              27 Jun, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it">Simply RESTful Support - And How to Use It</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/06/27/whats-new-in-edge-rails-create-a-hash-from-xml";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

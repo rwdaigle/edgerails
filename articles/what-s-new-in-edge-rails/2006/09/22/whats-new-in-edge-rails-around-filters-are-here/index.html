@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Around Filters are Here</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Around Filters are Here</h2>
+              &#x000A;<p><em>For the <a href="http://ryandaigle.com/articles/2006/07/20/a-rails-feature-you-should-be-using-with_scope#comment-351">second time</a> I&#8217;ve had my virtual hand slapped for trumpeting a poor usage of <code>with_scope</code> .  For the record, I want to make it clear that one should be using the rich domain model that active record provides to operate on associated objects: <code>user.assets.find()</code> and <code>user.asset.create()</code> instead of scoping to a user as my and Roman&#8217;s examples implied. Just a case of not thinking hard enough to come up with an appropriate example.  Sorry David, won&#8217;t happen again!</em></p>&#x000A;<p>I&#8217;ve <a href="/articles/2006/07/20/a-rails-feature-you-should-be-using-with_scope">mentioned</a>    the <a href="http://roman2k.free.fr/rails/meantime_filter/0.1.0/rdoc/">Meantime filter</a> plugin by Roman Le Negrate in the past as a very useful little utility &#8211; apparently the core team agrees as <a href="http://dev.rubyonrails.org/changeset/5163">around filtering</a> is now part of edge Rails.</p>&#x000A;<p>Usage is pretty much the same as with meantime:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class AssetController &lt; ActionController&#x000A;&#x000A;  before_filter :verify_login&#x000A;  around_filter :benchmark&#x000A;&#x000A;  def assets&#x000A;    @assets = Asset.find(:all)&#x000A;  end&#x000A;&#x000A;  def benchmark&#x000A;    benchmark("Asset benchmark") { yield }&#x000A;  end&#x000A;&#x000A;end&#x000A;</pre>&#x000A;<p></code></p>&#x000A;<p>You can also define a class to handle your filtering needs (whose <code>filter</code> method <code>yields</code> to the action block)</p>&#x000A;<pre>&#x000A;<code>&#x000A;class AssetController &lt; ActionController&#x000A;&#x000A;  around_filter BenchmarkFilter   # or BenchmarkFilter.new&#x000A;  ...&#x000A;&#x000A;  class BenchmarkFilter&#x000A;    def filter&#x000A;      benchmark("Benchmarking...") { yield }&#x000A;    end&#x000A;  end&#x000A;&#x000A;end&#x000A;&#x000A;</pre>&#x000A;<p></code></p>&#x000A;<p>Or you can directly pass a Proc in as the filter:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class AssetController &lt; ActionController&#x000A;&#x000A;  around_filter (:only =&gt; :assets) do |controller,action_block| &#x000A;    controller.benchmark("Benchmarking...") { action_block.call }&#x000A;  end&#x000A;  ...&#x000A;end&#x000A;</pre>&#x000A;<p></code></p>&#x000A;<p>Since the around filter explicitly governs the execution of the action being requested, you can use them to skip the action completely. This would act the same as a <code>before_filter</code> that returned false.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              22 Sep, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it">Simply RESTful Support - And How to Use It</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/09/22/whats-new-in-edge-rails-around-filters-are-here";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

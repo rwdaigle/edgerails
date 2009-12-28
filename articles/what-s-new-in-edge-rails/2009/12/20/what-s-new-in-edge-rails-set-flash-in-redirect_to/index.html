@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Set Flash in redirect_to</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Set Flash in redirect_to</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature is schedule for: Rails v2.3 stable</em><br />&#x000A;<hr/></p>&#x000A;<p><a href="http://api.rubyonrails.org/classes/ActionController/Flash.html">Rails&#8217; flash</a> is a convenient way of passing objects (though mostly used for message strings) across http redirects.  In fact, every time you set a flash parameter the very next step is often to perform your redirect w/ <code>redirect_to</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;The user was successfully created&quot;</span>&#x000A;    <span class="n">redirect_to</span> <span class="n">user_path</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>I know I hate to see two lines of code where one makes sense &#8211; in this case what you&#8217;re saying is to &#8220;redirect to the new user page with the given notice message&#8221; &#8211; something that seems to make more sense as a singular command.</p>&#x000A;<p><span class="caps">DHH</span> seems to agree and has <a href="http://github.com/rails/rails/commit/e6cadd422b72ba9818cc2f3b22243a6aa754c9f8">added <code>:notice</code>, <code>:alert</code> and <code>:flash</code> options to <code>redirect_to</code></a> to consolidate commands.  <code>:notice</code> and <code>:alert</code> automatically sets the flash parameters of the same name and <code>:flash</code> let&#8217;s you get as specific as you want.  For instance, to rewrite the above example:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">redirect_to</span> <span class="n">user_path</span><span class="p">(</span><span class="vi">@user</span><span class="p">),</span> <span class="ss">:notice</span> <span class="o">=&gt;</span><span class="s2">&quot;The user was successfully created&quot;</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Or to set a non <code>:alert</code>/<code>:notice</code> flash:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">redirect_to</span> <span class="n">user_path</span><span class="p">(</span><span class="vi">@user</span><span class="p">),</span> <span class="ss">:flash</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:info</span> <span class="o">=&gt;</span> <span class="s2">&quot;The user was successfully created&quot;</span> <span class="p">}</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>I&#8217;ve become accustomed to setting my flash messages in <code>:error</code>, <code>:info</code> and sometimes <code>:notice</code> making the choice to provide only <code>:alert</code> and <code>:notice</code> accessors fell somewhat constrained to me, but maybe I&#8217;m loopy in my choice of flash param names.</p>&#x000A;<p>Whatever your naming scheme, enjoy the new one-line redirect!</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              20 Dec, 2009
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">Cleaner RESTful Controllers w/ respond_with</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

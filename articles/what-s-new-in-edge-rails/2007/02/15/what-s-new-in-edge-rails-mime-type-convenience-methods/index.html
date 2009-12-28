@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Mime::Type Convenience Methods</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Mime::Type Convenience Methods</h2>
+              &#x000A;<p>Everybody loves the goodness of <a href="http://weblog.jamisbuck.org/2006/3/27/web-services-rails-style">respond_to</a>, which encapsulates the mime type of the request into a nice little structure, but there are other places where querying against the request mime-type is useful.  For instance, applying different filter behaviors depending on the request type is often useful.  Starting <a href="http://dev.rubyonrails.org/changeset/6152">today</a> you now have a convenient way of doing so with the new <code>request.format.html?</code>, <code>request.format.xml?</code> etc&#8230; convenience methods.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">MyController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># Toggle authentication method based on request type</span>&#x000A;  <span class="n">before_filter</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>&#x000A;    <span class="n">c</span><span class="o">.</span><span class="n">use_session_auth</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">html?</span>&#x000A;    <span class="n">c</span><span class="o">.</span><span class="n">use_token_auth</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">xml?</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Or you can use these methods to provide a clean way of turning sessions off (from the <a href="http://dev.rubyonrails.org/changeset/6152">changeset</a> example):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">MyController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># Turn off sessions for all non-html requests</span>&#x000A;  <span class="n">sessions</span> <span class="ss">:off</span><span class="p">,</span> <span class="ss">:if</span> <span class="o">=&gt;</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="o">|</span><span class="n">request</span><span class="o">|</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">html?</span> <span class="p">}</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>All in all a tidy way to get at that pesky but deterministic request mime-type.  These aren&#8217;t just limited to the stock recognized mime-types, they can also be used for any mime-types you&#8217;ve registered yourself:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Because I think we all agree I deserve my own mime-type</span>&#x000A;<span class="no">Mime</span><span class="o">::</span><span class="no">Type</span><span class="o">.</span><span class="n">register</span> <span class="s2">&quot;text/ryan&quot;</span><span class="p">,</span> <span class="ss">:ryan</span>&#x000A;&#x000A;<span class="k">class</span> <span class="nc">MyController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># Turn off sessions for all ryan requests</span>&#x000A;  <span class="n">sessions</span> <span class="ss">:off</span><span class="p">,</span> <span class="ss">:if</span> <span class="o">=&gt;</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="o">|</span><span class="n">request</span><span class="o">|</span> <span class="n">request</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">ryan?</span> <span class="p">}</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>
+            </div>
+            <p class="pubdate">
+              Published:
+              15 Feb, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/02/15/what-s-new-in-edge-rails-mime-type-convenience-methods";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

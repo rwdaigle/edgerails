@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Observer Generators</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Observer Generators</h2>
+              &#x000A;<p>I like to keep a close eye on the changes being committed to edge Rails as it&#8217;s a great learning experience &#8211; and thought I might as well post a summary of them as they roll in.  This will definitely not be an exhaustive effort &#8211; just something as I see fit or have the time.  So here goes the first one:</p>&#x000A;<h3><a href="http://dev.rubyonrails.org/changeset/4365">Rails Changeset 4365; Add generator files&#8230;</a></h3>&#x000A;<p>This changeset simply adds the files necessary to use the <code>script/generator</code> utility to auto-create observer stubs.  What&#8217;s an <a href="http://api.rubyonrails.com/classes/ActiveRecord/Observer.html">observer</a> you ask?  It&#8217;s a way to monitor lifecycle events of a model object outside of the model itself and let&#8217;s you avoid cluttering the model class with logic that&#8217;s not core to the model.</p>&#x000A;<p>So how does one use this new observer generator?  Observe:</p>&#x000A;<pre>&#x000A;<code>&#x000A;ruby script/generate observer User&#x000A;</code>&#x000A;</pre>&#x000A;<p>Yeah, that&#8217;s really it.  This will create two files for you, the observer class itself at <code>app/models/user_observer.rb</code>:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class UserObserver &lt; ActiveRecord::Observer&#x000A;end&#x000A;</code>&#x000A;</pre>&#x000A;<p>and the unit test at <code>test/unit/user_observer_test.rb</code>:</p>&#x000A;<pre>&#x000A;<code>&#x000A;require File.dirname(__FILE__) + '/../test_helper'&#x000A;&#x000A;class UserObserverTest &lt; Test::Unit::TestCase&#x000A;  fixtures :users&#x000A;&#x000A;  # Replace this with your real tests.&#x000A;  def test_truth&#x000A;    assert true&#x000A;  end&#x000A;end&#x000A;</code>&#x000A;</pre>&#x000A;<p>You can then edit the observer class with the appropriate callback methods:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class UserObserver &lt; ActiveRecord::Observer&#x000A;  def after_save(comment)&#x000A;    # Do something great&#x000A;  end&lt;/code&gt;&#x000A;end&#x000A;</pre>&#x000A;<p>On a side note, I feel like the generator utility has been getting a bad rap recently from people that frown upon auto-generation of code.  Fair enough, but think of them more as best practices templates and learning tools rather than some sort of coding robot.  They&#8217;re really great tools for seeing how things should be done, and how things are expected to be done.  If you don&#8217;t want to use them, don&#8217;t &#8211; but if you&#8217;re not quite sure how to go about creating an observer, or controller, or model they&#8217;re of great help.</p>&#x000A;<p>So there you have it &#8211; the new observer generator functionality in edge Rails.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              23 May, 2006
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2006/05/23/whats-new-in-edge-rails-observer-generators";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>
