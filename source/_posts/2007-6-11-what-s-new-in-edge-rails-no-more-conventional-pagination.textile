@@ -1,8 +1,0 @@
----
-title: "No More (conventional) Pagination"
-author: "Ryan Daigle"
-categories:
-  - "what-s-new-in-edge-rails"
----
- 
-For those of you "luddites":http://en.wikipedia.org/wiki/Neo-Luddism out there still grasping to the usage of standard pagination, your mind has been made up for you.  "Pagination has been removed":http://dev.rubyonrails.org/changeset/6992 from core Rails and future reliance on it will require the installation of the "classic_pagination":http://require.errtheblog.com/plugins/browser/classic_pagination plugin.  So what's one to do now for your pagination needs?  Why, "will_paginate":http://errtheblog.com/post/4791, of course.
