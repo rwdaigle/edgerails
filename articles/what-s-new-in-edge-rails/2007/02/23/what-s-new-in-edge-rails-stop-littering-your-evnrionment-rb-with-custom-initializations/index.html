@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Stop Littering In Your Environment File</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Stop Littering In Your Environment File</h2>
+              &#x000A;<p>Rails got a nice little bit of <a href="http://dev.rubyonrails.org/changeset/6212">organizational mojo</a> today.  I&#8217;m sure we all have litterings of various configs at the bottom or our <code>environment.rb</code> files, like inflections, mail configs etc&#8230;  Here&#8217;s the bottom of one of my projects&#8217; environment files:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Mail</span>&#x000A;<span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">delivery_method</span> <span class="o">=</span> <span class="ss">:sendmail</span>&#x000A;<span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;&#x000A;<span class="c1"># Exception notification</span>&#x000A;<span class="no">ExceptionNotifier</span><span class="o">.</span><span class="n">exception_recipients</span> <span class="o">=</span> <span class="sx">%w(ryan@me.com)</span>&#x000A;<span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;&#x000A;<span class="c1"># Various engine configs</span>&#x000A;<span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;&#x000A;<span class="c1"># Custom date formats</span>&#x000A;<span class="no">ActiveSupport</span><span class="o">::</span><span class="no">CoreExtensions</span><span class="o">::</span><span class="no">Date</span><span class="o">::</span><span class="no">Conversions</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">.</span><span class="n">merge!</span><span class="p">(</span><span class="ss">:concise</span> <span class="o">=&gt;</span> <span class="s2">&quot;%d.%b.%y&quot;</span><span class="p">)</span>&#x000A;<span class="o">.</span><span class="n">.</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Pretty ugly after the structure and conciseness of the <code>Rails::Initializer</code> block, huh?  Well now you can place your little bits of initialization code in a <code>config/initializers/</code> directory and they will get pulled in and loaded after the <code>Rails::Initializer</code> runs.</p>&#x000A;<p>So now instead of polluting your environment file you can create a single file for each initialization task:</p>&#x000A;<p><code>config/initializers/mail.rb</code>:<br />&#x000A;<div class="highlight"><pre><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">delivery_method</span> <span class="o">=</span> <span class="ss">:sendmail</span>&#x000A;<span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">default_charset</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">delivery_method</span> <span class="o">=</span> <span class="ss">:sendmail</span><br />&#x000A;<span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">default_charset</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p><code>config/initializers/date_formats.rb</code>:<br />&#x000A;<div class="highlight"><pre><span class="no">ActiveSupport</span><span class="o">::</span><span class="no">CoreExtensions</span><span class="o">::</span><span class="no">Date</span><span class="o">::</span><span class="no">Conversions</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">.</span><span class="n">merge!</span><span class="p">(</span><span class="ss">:concise</span> <span class="o">=&gt;</span> <span class="s2">&quot;%d.%b.%y&quot;</span><span class="p">)</span>&#x000A;<span class="no">ActiveSupport</span><span class="o">::</span><span class="no">CoreExtensions</span><span class="o">::</span><span class="no">Date</span><span class="o">::</span><span class="no">Conversions</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">.</span><span class="n">merge!</span><span class="p">(</span><span class="ss">:medium</span> <span class="o">=&gt;</span> <span class="s2">&quot;%b %e, %Y&quot;</span><span class="p">)</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="no">ActiveSupport</span><span class="o">::</span><span class="no">CoreExtensions</span><span class="o">::</span><span class="no">Date</span><span class="o">::</span><span class="no">Conversions</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">.</span><span class="n">merge!</span><span class="p">(</span><span class="ss">:concise</span> <span class="o">=&gt;</span> <span class="s2">&quot;%d.%b.%y&quot;</span><span class="p">)</span><br />&#x000A;<span class="no">ActiveSupport</span><span class="o">::</span><span class="no">CoreExtensions</span><span class="o">::</span><span class="no">Date</span><span class="o">::</span><span class="no">Conversions</span><span class="o">::</span><span class="no">DATE_FORMATS</span><span class="o">.</span><span class="n">merge!</span><span class="p">(</span><span class="ss">:medium</span> <span class="o">=&gt;</span> <span class="s2">&quot;%b %e, %Y&quot;</span><span class="p">)</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>Now go clean your environment file, filthy lil&#8217; runts.</p>&#x000A;<p><em>It should be noted that these initialization files are loaded at startup for all environments, it is not a place to put environment-specific (dev, test, prod etc&#8230;) configs</em></p>
+            </div>
+            <p class="pubdate">
+              Published:
+              23 Feb, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2008/04/01/what-s-new-in-edge-rails-gem-dependencies">Gem Dependencies</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/02/23/what-s-new-in-edge-rails-stop-littering-your-evnrionment-rb-with-custom-initializations";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

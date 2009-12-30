@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Use Rake to List Your Routes</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Use Rake to List Your Routes</h2>
+              &#x000A;<p>While you&#8217;ve always been able to manually take a <a href="http://snipplr.com/view/2415/list-of-all-of-the-routes-you-have-defined/">peek at what routes</a> are defined in your application, this dollop of usefulness has <a href="http://dev.rubyonrails.org/changeset/7149">now found its way into a rake task</a>.</p>&#x000A;<p>Just run</p>&#x000A;<div class="highlight"><pre><span class="n">rake</span> <span class="n">routes</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>and voila, all routes defined will be spit out in a tidy columnar form with the following columns:</p>&#x000A;<p><code>route name, HTTP method, route path, route requirements</code></p>&#x000A;<p>As an example, here is what my output looks like:</p>&#x000A;<div class="highlight"><pre>   all_articles GET  /articles;all/      <span class="o">{</span>:action<span class="o">=</span>&gt;<span class="s2">&quot;all&quot;</span>, :controller<span class="o">=</span>&gt;<span class="s2">&quot;articles&quot;</span><span class="o">}</span>&#x000A;search_articles GET  /articles;search/   <span class="o">{</span>:action<span class="o">=</span>&gt;<span class="s2">&quot;search&quot;</span>, :controller<span class="o">=</span>&gt;<span class="s2">&quot;articles&quot;</span><span class="o">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>For those of us not riding edge, it&#8217;s pretty easy to get access to this task in your app:<br />&#x000A;<div class="highlight"><pre>curl http://svn.rubyonrails.org/rails/trunk/railties/lib/tasks/routes.rake &gt; lib/tasks/routes.rake&#x000A;<br />&#x000A;<div class="highlight"><pre>curl http://svn.rubyonrails.org/rails/trunk/railties/lib/tasks/routes.rake &gt; lib/tasks/routes.rake<br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>This is particularly useful in RESTful implementations as there&#8217;s lot of routing magic happening for you under the covers.  Now you have the means to take a harmless peek under said covers.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              02 Jul, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/07/02/what-s-new-in-edge-rails-use-rake-to-list-your-routes";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

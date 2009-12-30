@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Nested Resource RESTful URL Builder</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Nested Resource RESTful URL Builder</h2>
+              &#x000A;<p><em>Don&#8217;t go too overboard with this stuff &#8211; it&#8217;s meant primarily for internal (to Rails) usage&#8230;</em></p>&#x000A;<p>The march to RESTful nirvana continues with a drop dead easy way to <a href="http://dev.rubyonrails.org/changeset/6951">build nested resource URLs</a>.  Let&#8217;s review.</p>&#x000A;<p>Assuming the following routing configuration:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:categories</span> <span class="k">do</span> <span class="o">|</span><span class="n">categories</span><span class="o">|</span>&#x000A;  <span class="n">categories</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This automatically builds a <code>category_url(category)</code> and <code>category_article_url(category, article)</code> helper (among others) that will build the appropriate URLs:</p>&#x000A;<div class="highlight"><pre><span class="n">category_url</span><span class="p">(</span><span class="vi">@category</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1</span>&#x000A;<span class="n">category_article_url</span><span class="p">(</span><span class="vi">@category</span><span class="p">,</span> <span class="vi">@article</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1/article/1</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>All right, that&#8217;s great.  But why should we have to spell out these lengthy helper method calls when it&#8217;s clear that the first argument is a <code>Category</code> and the second is an <code>Article</code>?  Can&#8217;t the appropriate helper method be implied by the types of these arguments?  Yes &#8211; they can, and now they are with the new <code>url_for</code> update.  Now you can pass in a collection of models to <code>url_for</code>, in order of nesting (root to child), and get the correct <span class="caps">URL</span>:</p>&#x000A;<div class="highlight"><pre><span class="n">url_for</span><span class="p">(</span><span class="vi">@category</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1</span>&#x000A;<span class="n">url_for</span><span class="p">(</span><span class="o">[</span><span class="vi">@category</span><span class="p">,</span> <span class="vi">@article</span><span class="o">]</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1/article/1</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>You can always fall back to the named routes provided for you by RESTful routing, but you now have an option to build URLs with an implied resource nesting.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              06 Jun, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/06/06/what-s-new-in-edge-rails-nested-resource-restful-url-builder";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

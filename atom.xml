@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Edge Rails.info</title>
+  <link href="http://rwdaigle.github.com/edgerails/atom.xml" rel="self" />
+  <link href="http://rwdaigle.github.com/edgerails" />
+  <updated>2009-12-28T12:08:37-05:00</updated>
+  <id>http://rwdaigle.github.com/edgerails</id>
+  <author>
+    <name>Ryan Daigle</name>
+    <email>ryan.daigle@gmail.com</email>
+  </author>
+  <entry>
+    <title>Prettier Error Pages!</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/What's new in Edge Rails/2009/12/26/test-syntax-highlighting" />
+    <updated>2009-12-26T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/What's new in Edge Rails/2009/12/26/test-syntax-highlighting</id>
+    <content type="html">
+      &lt;p&gt;Ruby code block&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;The user was successfully created&quot;&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Set Flash in redirect_to</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to" />
+    <updated>2009-12-20T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is schedule for: Rails v2.3 stable&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;a href=&quot;http://api.rubyonrails.org/classes/ActionController/Flash.html&quot;&gt;Rails&#8217; flash&lt;/a&gt; is a convenient way of passing objects (though mostly used for message strings) across http redirects.  In fact, every time you set a flash parameter the very next step is often to perform your redirect w/ &lt;code&gt;redirect_to&lt;/code&gt;:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;The user was successfully created&quot;&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;I know I hate to see two lines of code where one makes sense &#8211; in this case what you&#8217;re saying is to &#8220;redirect to the new user page with the given notice message&#8221; &#8211; something that seems to make more sense as a singular command.&lt;/p&gt;
+      &lt;p&gt;&lt;span class=&quot;caps&quot;&gt;DHH&lt;/span&gt; seems to agree and has &lt;a href=&quot;http://github.com/rails/rails/commit/e6cadd422b72ba9818cc2f3b22243a6aa754c9f8&quot;&gt;added &lt;code&gt;:notice&lt;/code&gt;, &lt;code&gt;:alert&lt;/code&gt; and &lt;code&gt;:flash&lt;/code&gt; options to &lt;code&gt;redirect_to&lt;/code&gt;&lt;/a&gt; to consolidate commands.  &lt;code&gt;:notice&lt;/code&gt; and &lt;code&gt;:alert&lt;/code&gt; automatically sets the flash parameters of the same name and &lt;code&gt;:flash&lt;/code&gt; let&#8217;s you get as specific as you want.  For instance, to rewrite the above example:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;The user was successfully created&quot;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Or to set a non &lt;code&gt;:alert&lt;/code&gt;/&lt;code&gt;:notice&lt;/code&gt; flash:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:flash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;The user was successfully created&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;I&#8217;ve become accustomed to setting my flash messages in &lt;code&gt;:error&lt;/code&gt;, &lt;code&gt;:info&lt;/code&gt; and sometimes &lt;code&gt;:notice&lt;/code&gt; making the choice to provide only &lt;code&gt;:alert&lt;/code&gt; and &lt;code&gt;:notice&lt;/code&gt; accessors fell somewhat constrained to me, but maybe I&#8217;m loopy in my choice of flash param names.&lt;/p&gt;
+      &lt;p&gt;Whatever your naming scheme, enjoy the new one-line redirect!&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Hello World! I&#8217;m Octopress!</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/2009/11/13/hello-world" />
+    <updated>2009-11-13T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/2009/11/13/hello-world</id>
+    <content type="html">
+      &lt;p&gt;&lt;strong&gt;Octopress is a blogging framework designed for hackers&lt;/strong&gt;, based on &lt;a href=&quot;http://github.com/mojombo/jekyll&quot;&gt;Jekyll&lt;/a&gt; the blog aware static site generator powering &lt;a href=&quot;http://pages.github.com/&quot;&gt;Github pages&lt;/a&gt;.
+      If you don&#8217;t know what Jekyll is, &lt;a href=&quot;http://metajack.im/2009/01/23/blogging-with-git-emacs-and-jekyll/&quot;&gt;Jack Moffitt&lt;/a&gt; wrote a good summary:&lt;/p&gt;
+      
+      &lt;blockquote&gt;&lt;p&gt;Jekyll is a static blog generator; it transforms a directory of input files into another directory of files suitable for a blog. The management of the blog is handled by standard, familiar tools like creating and renaming files, the text editor of your choice, and version control.&lt;br/&gt;
+      &lt;cite&gt;&lt;strong&gt;Jack Moffitt&lt;/strong&gt; &lt;a href=&quot;http://metajack.im/2009/01/23/blogging-with-git-emacs-and-jekyll/&quot;&gt;Blogging with Git Emacs and Jekyll&lt;/a&gt;&lt;/cite&gt;&lt;/p&gt;&lt;/blockquote&gt;
+      
+      &lt;p&gt;There&#8217;s no database to set up, and you get to use tools like Emacs, vim, or TextMate to write your posts, not some lame in-browser text editor. Just write, generate, deploy, using the same tools and patters you already use for your daily work.&lt;/p&gt;
+      
+      &lt;h3&gt;So what&#8217;s Octopress?&lt;/h3&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Independent Model Validators</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators" />
+    <updated>2009-08-11T00:00:00-04:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is schedule for: Rails v3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;ActiveRecord validations, ground zero for anybody learning about Rails, got a lil&#8217; bit of decoupling mojo today with the &lt;a href=&quot;http://github.com/rails/rails/commit/22f339825329e2d4463a4130e9fa68baf9d27eb6&quot;&gt;introduction of validator classes&lt;/a&gt;.  Until today, the only options you had to define a custom validation was by overriding the &lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveRecord/Validations.html#M002158&quot;&gt;validate&lt;/a&gt; method or by using &lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002161&quot;&gt;validates_each&lt;/a&gt;, both of which pollute your models with gobs of validation logic.&lt;/p&gt;
+      &lt;h1&gt;ActiveRecord Validators&lt;/h1&gt;
+      &lt;p&gt;Validators remedy this by containing granular levels of validation logic that can be reused across your models.  For instance, for that classic email validation example we can create a single validator:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EmailValidator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Validator&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;validate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;is not valid&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Each validator should implement a &lt;code&gt;validate&lt;/code&gt; method, within which it has access to the model instance in question as &lt;code&gt;record&lt;/code&gt;.  Validation errors can then be added to the base model by adding to the &lt;code&gt;errors&lt;/code&gt; collection as in this example.&lt;/p&gt;
+      &lt;p&gt;So how do you tell a validator to operate on a model?  &lt;code&gt;validates_with&lt;/code&gt; that takes the class of the validator:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h1&gt;Validation Arguments&lt;/h1&gt;
+      &lt;p&gt;This is all well and good, but is a pretty brittle solution in this example as the validator is assuming an &lt;code&gt;email&lt;/code&gt; field.  We need a way to pass in the name of the field to validate against for a model class that is unknown until runtime.  We can do this by passing in options to &lt;code&gt;validates_with&lt;/code&gt; which are then made available to the validator at runtime as the &lt;code&gt;options&lt;/code&gt; hash.  So let&#8217;s update our email validator to operate on an email field that can be set by the model requiring validation:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EmailValidator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Validator&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;validate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;email_field&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:attr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email_field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;is not valid&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email_field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;And to wire it up from the user model:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:attr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email_address&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Any arguments can be passed into your validators by hitching a ride onto this options hash of &lt;code&gt;validates_with&lt;/code&gt;.&lt;/p&gt;
+      &lt;h1&gt;Options &amp; Notes&lt;/h1&gt;
+      &lt;p&gt;There are also some built-in options that you&#8217;ll be very familiar with, namely &lt;code&gt;:on&lt;/code&gt;, &lt;code&gt;:if&lt;/code&gt; and &lt;code&gt;:unless&lt;/code&gt; that define when the validation will occur.  They&#8217;re all the same as the options to built-in validations like &lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002164&quot;&gt;&lt;code&gt;validates_presence_of&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Proc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;signup_step&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+          &lt;span class=&quot;ss&quot;&gt;:attr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email_address&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;It&#8217;s also possible to specify more than one validator with &lt;code&gt;validates_with&lt;/code&gt;:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ZipCodeValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:on&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:create&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;While this might seem like a pretty minor update, it allows for far better reusability of custom validation logic than what&#8217;s available now.  So enjoy.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Default RESTful Rendering</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering" />
+    <updated>2009-08-10T00:00:00-04:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is schedule for: Rails v3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;A few days ago I wrote about the new &lt;a href=&quot;http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with&quot;&gt;&lt;code&gt;respond_with&lt;/code&gt; functionality&lt;/a&gt; of Rails 3.  It&#8217;s basically a clean way to specify the resource to send back in response to a RESTful request.  This works wonders for successful &lt;code&gt;:xml&lt;/code&gt; and &lt;code&gt;:json&lt;/code&gt; requests where the default response is to send back the integerized form of the resource, but still presents a lot of cruft when handling user-invoked &lt;code&gt;:html&lt;/code&gt; requests (i.e. &#8216;navigational&#8217; requests) and requests where error handling is required.  For instance, consider your standard &lt;code&gt;create&lt;/code&gt; action:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+      
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Have to always override the html format to properly&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# handle the redirect&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User was created successfully.&quot;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+              &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Have to send back the errors collection if they exist for xml, json and&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# redirect back to new for html.&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:unprocessable_entity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+              &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:new&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Even with the heavy lifting of &lt;code&gt;respond_with&lt;/code&gt; you can see that there&#8217;s still a lot of plumbing left for you to do &#8211; plumbing that is mostly the same for all RESTful requests.  Well &lt;a href=&quot;http://blog.plataformatec.com.br/&quot;&gt;José&lt;/a&gt; and the Rails team have a solution to this and have &lt;a href=&quot;http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4&quot;&gt;introduced controller responders&lt;/a&gt;.&lt;/p&gt;
+      &lt;h1&gt;Controller Responders&lt;/h1&gt;
+      &lt;p&gt;Controller responders handle the chore of matching the &lt;span class=&quot;caps&quot;&gt;HTTP&lt;/span&gt; request method and the resource format type to determine what type of response should be sent.  And since &lt;span class=&quot;caps&quot;&gt;REST&lt;/span&gt; is so well-defined it&#8217;s very easy to establish a default responder to handle the basics.&lt;/p&gt;
+      &lt;p&gt;Here&#8217;s what a controller utilizing responder support (now baked into &lt;code&gt;respond_with&lt;/code&gt;) looks like:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;edit&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_attributes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;The built-in responder performs the following logic for each action:&lt;/p&gt;
+      &lt;ul&gt;
+      	&lt;li&gt;If the &lt;code&gt;:html&lt;/code&gt; format was requested:
+      	&lt;ul&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;GET&lt;/code&gt; request, invoke &lt;code&gt;render&lt;/code&gt; (which will display the view template for the current action)&lt;/li&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;POST&lt;/code&gt; request and the resource has validation errors, &lt;code&gt;render&lt;/code&gt; &lt;code&gt;:new&lt;/code&gt; (so the user can fix their errors)&lt;/li&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;PUT&lt;/code&gt; request and the resource has validation errors, &lt;code&gt;render&lt;/code&gt; &lt;code&gt;:edit&lt;/code&gt; (so the user can fix their errors)&lt;/li&gt;
+      		&lt;li&gt;Else, redirect to the resource location (i.e. &lt;code&gt;user_url&lt;/code&gt;)&lt;/li&gt;
+      	&lt;/ul&gt;&lt;/li&gt;
+      	&lt;li&gt;If another format was requested, (i.e. &lt;code&gt;:xml&lt;/code&gt; or &lt;code&gt;:json&lt;/code&gt;)
+      	&lt;ul&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;GET&lt;/code&gt; request, invoke the &lt;code&gt;:to_format&lt;/code&gt; method on the resource and send that back&lt;/li&gt;
+      		&lt;li&gt;If the resource has validation errors, send back the errors in the requested format with the &lt;code&gt;:unprocessable_entity&lt;/code&gt; status code&lt;/li&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;POST&lt;/code&gt; request, invoke the &lt;code&gt;:to_format&lt;/code&gt; method on the resource and send that back with the &lt;code&gt;:created&lt;/code&gt; status and the &lt;code&gt;:location&lt;/code&gt; of the new created resource&lt;/li&gt;
+      		&lt;li&gt;Else, send back the &lt;code&gt;:ok&lt;/code&gt; response with no body&lt;/li&gt;
+      	&lt;/ul&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;p&gt;Wading through this logic tree you can see that the default logic for each RESTful action is appropriately handled, letting your controller actions focus exclusively on resource retrieval and modification.  And with that cruft out of the way your controllers will start to look even more similar &#8211; I suspect we&#8217;ll be seeing a solution for this coming around the bend shortly as well&#8230;?&lt;/p&gt;
+      &lt;p&gt;So, just to recap the basics, here are a few action implementations side by side (the first being before responders and the latter being after):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# Old&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# New&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# Old&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:new&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:unprocessable_entity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:unprocessable_entity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# New&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Oh yeah, that&#8217;s getting real lean.&lt;/p&gt;
+      &lt;h1&gt;Overriding Default Behavior&lt;/h1&gt;
+      &lt;p&gt;If you need to override the default behavior of a particular format you can do so by passing a block to &lt;code&gt;respond_with&lt;/code&gt; (as I wrote about in the &lt;a href=&quot;http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with&quot;&gt;original article&lt;/a&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# Override html format since we want to redirect to the collections page&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# instead of the user page.&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h1&gt;Nested Resources&lt;/h1&gt;
+      &lt;p&gt;It&#8217;s quite common to operate on resources within a nested resource graph (though I prefer to go one level deep, at most).  For such cases you need to let &lt;code&gt;respond_with&lt;/code&gt; know of the object hierarchy (using the same parameters as &lt;a href=&quot;http://api.rubyonrails.org/classes/ActionController/PolymorphicRoutes.html#M000486&quot;&gt;&lt;code&gt;polymorphic_url&lt;/code&gt;&lt;/a&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# In this case, users exist within a company&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@company&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Company&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:company_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@company&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Ensure that the new user location is nested within @company,&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# for html format (/companies/1/users/2.html) as well as&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# resource formats (/companies/1/users/2)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@company&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;If you have a singleton resource within your resource graph just use a symbol instead of an actual object instance.  So to get &lt;code&gt;/admin/users/1&lt;/code&gt; you would invoke &lt;code&gt;respond_with(:admin, @user)&lt;/code&gt;.&lt;/p&gt;
+      &lt;h1&gt;Custom Responders&lt;/h1&gt;
+      &lt;p&gt;While there&#8217;s no facility to provide your own responder classes, it will no doubt be added shortly.  If you look at the &lt;a href=&quot;http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L81&quot;&gt;current responder class definition&lt;/a&gt;, it&#8217;s a very simple &lt;span class=&quot;caps&quot;&gt;API&lt;/span&gt; essentially only requiring a &lt;code&gt;call&lt;/code&gt; method (more intuitively take a look at the &lt;a href=&quot;http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L111&quot;&gt;&lt;code&gt;:to_html&lt;/code&gt;&lt;/a&gt; and &lt;a href=&quot;hhttp://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L125&quot;&gt;&lt;code&gt;:to_format&lt;/code&gt;&lt;/a&gt; methods).&lt;/p&gt;
+      &lt;p&gt;Stay tuned here for further refinements to this very handy functionality &#8211; you&#8217;re going to see a lot more tightening in the coming weeks.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Cleaner RESTful Controllers w/ respond_with</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with" />
+    <updated>2009-08-06T00:00:00-04:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is schedule for: Rails v3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;span class=&quot;caps&quot;&gt;REST&lt;/span&gt; is a first-class citizen in the Rails world, though most of the hard work is done at the routing level.  The controller stack has some niceties revolving around mime type handling with the &lt;code&gt;respond_to&lt;/code&gt; facility but, to date, there&#8217;s not been a lot built into actionpack to handle the serving of resources.  The &lt;a href=&quot;http://github.com/rails/rails/commit/09de34ca56598ae5d0302a14715b2a11b6cc9845&quot;&gt;addition of &lt;code&gt;respond_with&lt;/code&gt;&lt;/a&gt; (and &lt;a href=&quot;http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4&quot;&gt;this follow-up&lt;/a&gt;) takes one step towards more robust RESTful support with an easy way to specify how resources are delivered.  Here&#8217;s how it works:&lt;/p&gt;
+      &lt;h1&gt;Basic Usage&lt;/h1&gt;
+      &lt;p&gt;In your controller you can specify what resource formats are supported with the class method &lt;code&gt;respond_*to*&lt;/code&gt;.  Then, within your individual actions, you tell the controller the resource or resources to be delivered using &lt;code&gt;respond_*with*&lt;/code&gt;:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;This will match each supported format with an appropriate response.  For instance, if the request is for &lt;code&gt;/users.xml&lt;/code&gt; then the controller will look for a &lt;code&gt;/users/index.xml.erb&lt;/code&gt; view template to render.  If such a view template doesn&#8217;t exist then it tries to directly render the resource in the &lt;code&gt;:xml&lt;/code&gt; format by invoking &lt;code&gt;to_xml&lt;/code&gt; (if it exists).  Lastly, if &lt;code&gt;respond_with&lt;/code&gt; was invoked with a &lt;code&gt;:location&lt;/code&gt; option the request will be redirected to that location (as in the case of the &lt;code&gt;create&lt;/code&gt; action in the above example).&lt;/p&gt;
+      &lt;p&gt;So here&#8217;s the equivalent implementation without the use of &lt;code&gt;respond_with&lt;/code&gt; (assuming no index view templates):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+          
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;You can see how much boilerplate response handling is now handled for you especially if it&#8217;s multiplied over the other default actions.  You can pass in &lt;code&gt;:status&lt;/code&gt; and &lt;code&gt;:head&lt;/code&gt; options to &lt;code&gt;respond_with&lt;/code&gt; as well if you need to send these headers back on resources rendered directly (i.e. via &lt;code&gt;to_xml&lt;/code&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h1&gt;Per-Action Overriding&lt;/h1&gt;
+      &lt;p&gt;It&#8217;s also possible to override standard resource handling by passing in a block to &lt;code&gt;respond_with&lt;/code&gt; specifying which formats to override for that action:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# Override html format since we want to redirect to a different page,&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# not just serve back the new resource&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_path&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h1&gt;:except And :only Options&lt;/h1&gt;
+      &lt;p&gt;You can also pass in &lt;code&gt;:except&lt;/code&gt; and &lt;code&gt;:only&lt;/code&gt; options to only support formats for specific actions (as you do with &lt;code&gt;before_filter&lt;/code&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:only&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:index&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:except&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h1&gt;The :any Format&lt;/h1&gt;
+      &lt;p&gt;If you&#8217;re still want to use &lt;code&gt;respond_to&lt;/code&gt; within your individual actions this update has also bundled the &lt;code&gt;:any&lt;/code&gt; resource format that can be used as a wildcard match against any unspecified formats:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+      
+          &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+      
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_sym&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;So all in all this is a small, but meaningful, step towards robust controller-level &lt;span class=&quot;caps&quot;&gt;REST&lt;/span&gt; support.  I should point out that the contributor of this patch is &lt;a href=&quot;http://blog.plataformatec.com.br/&quot;&gt;José Valim&lt;/a&gt; who has authored the very robust &lt;a href=&quot;http://github.com/josevalim/inherited_resources/tree/master&quot;&gt;inherited_resources&lt;/a&gt; framework that already has support for &lt;code&gt;respond_with&lt;/code&gt;-like functionality and many more goodies.  If you&#8217;re on the search for a solid RESTful controller framework to accompany Rails&#8217; native RESTful routing support I would suggest you take a look at his fine work.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Database Seeding</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/05/13/what-s-new-in-edge-rails-database-seeding" />
+    <updated>2009-05-13T00:00:00-04:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/05/13/what-s-new-in-edge-rails-database-seeding</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is schedule for: Rails v3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;I&#8217;m not sure if this was ever stated explicitly has a preferred practice or not, but for the longest time many of us have recognized that using migrations as a way to populate the database with a base configuration dataset is wrong.  Migrations are for manipulating the structure of your database, not for the data within it and certainly not for simple population tasks.&lt;/p&gt;
+      &lt;p&gt;Well, this practice now has a formal support in Rails with the addition of the &lt;a href=&quot;http://github.com/rails/rails/commit/4932f7b38f72104819022abca0c952ba6f9888cb&quot;&gt;database seeding&lt;/a&gt; feature.  Quite simply this is a rake task that sucks in the data specified in a &lt;code&gt;db/seeds.rb&lt;/code&gt;.  Here are the details:&lt;/p&gt;
+      &lt;h3&gt;Specify Seed Data&lt;/h3&gt;
+      &lt;p&gt;Add or open the &lt;code&gt;db/seeds.rb&lt;/code&gt; file and put in model creation statements (or any ruby code) for the data you need to be present in order for your application to run.  I.e. configuration and default data (and nothing more):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:admin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:login&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:role&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;Load the Data&lt;/h3&gt;
+      &lt;p&gt;Once that is in place you can run one of two rake tasks that will populate the database with this data:&lt;br /&gt;
+      &lt;code&gt;rake db:seed&lt;/code&gt; which will only populate the db with this data and &lt;code&gt;rake db:setup&lt;/code&gt; which will create the db, load the schema and then load the seed data.  This is the task you&#8217;ll want to use if you&#8217;re starting in a fresh environment.&lt;/p&gt;
+      &lt;p&gt;So, quit overloading your migrations with seed data and use this new facility.  But, don&#8217;t go overboard and use &lt;code&gt;seeds.rb&lt;/code&gt; for test or staging datasets &#8211; it should only be used for the base data that is necessary for your app to run.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Touching</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/04/20/what-s-new-in-edge-rails-touching" />
+    <updated>2009-04-20T00:00:00-04:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/04/20/what-s-new-in-edge-rails-touching</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature was released in Rails v2.3.3&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;There are often times when you want an update made to one object to be reflected up the object graph as an update of an associated parent object.  For instance, if a new comment is created on an article, you may very well want to mark the article as being updated.  With the &lt;a href=&quot;http://github.com/rails/rails/commit/abb899c54e8777428b7a607774370ba29a5573bd&quot;&gt;new touch feature&lt;/a&gt; of ActiveRecord, this is a whole lot easier.  Using our previous example, here&#8217;s is how it works:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# Make create/update/deletes of a comment mark its&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# parent article as updated&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:touch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Adding a new comment marks the article as being updated&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;New comment&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Same for updates/deletes&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;destroy&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:45:23 -0400 2009&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;This is a great way to keep tightly coupled domain models in-sync without resorting to a potential maze of callback logic.&lt;/p&gt;
+      &lt;p&gt;Also, if you have a timestamp field named something other than the standard &lt;code&gt;updated_at&lt;/code&gt; or &lt;code&gt;updated_on&lt;/code&gt; you can explicitly specify that field as the value to the &lt;code&gt;:touch&lt;/code&gt; option and it will get marked instead:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_presence_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_updated_at&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# non-standard&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:touch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_updated_at&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Adding a new comment marks the article as being updated&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;New comment&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Also, somewhat conveniently, you can invoke &lt;code&gt;touch&lt;/code&gt; directly on a model to update its timestamp outside any association callbacks:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;touch&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;So, touch away (in a non-creepy kind of way)!&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Batched Find</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/02/23/what-s-new-in-edge-rails-batched-find" />
+    <updated>2009-02-23T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/02/23/what-s-new-in-edge-rails-batched-find</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is scheduled for: Rails v2.3&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;ActiveRecord got a little batch-help today with the addition of &lt;a href=&quot;http://github.com/rails/rails/commit/d13623ca46c82120c398f4634e206422fc3ad7ea&quot;&gt;ActiveRecord::Base#find_each and ActiveRecord::Base#find_in_batches&lt;/a&gt;.  The former lets you iterate over all the records in cursor-like fashion (only retrieving a set number of records at a time to avoid cramming too much into memory):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; iterate over all articles, in chunks of 1000 (the default)&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:batch_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# iterate over published articles in chunks of 100&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;You&#8217;re not exposed to any of the chunking logic &#8211; all you need to do is iterate over each record and just trust that they&#8217;re only being retrieved in manageable groups.&lt;/p&gt;
+      &lt;p&gt;&lt;code&gt;find_in_batches&lt;/code&gt; performs a similar function, except that it hands back each chunk array directly instead of just a stream of individual records:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_in_batches&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;articles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;articles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# =&gt; articles is array of size 1000&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_in_batches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;articles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;articles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# iterate over all articles in chunks of 100&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;&lt;code&gt;find_in_batches&lt;/code&gt; is also kind enough to observe good scoping practices:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;named_scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_in_batches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:batch_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;articles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# iterate over published articles in chunks of 100&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;One quick caveat exists: you can&#8217;t specify &lt;code&gt;:order&lt;/code&gt; or &lt;code&gt;:limit&lt;/code&gt; in the options to &lt;code&gt;find_each&lt;/code&gt; or &lt;code&gt;find_in_batches&lt;/code&gt; as those values are used in the internal looping logic.&lt;/p&gt;
+      &lt;p&gt;Batched finds are best used when you have a potentially large dataset and need to iterate through all rows.  If done using a normal find the full result-set will be loaded into memory and could cause problems.  With batched finds you can be sure that only 1000 * (each result-object size) will be loaded into memory.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Nested Object Forms</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes" />
+    <updated>2009-02-01T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is scheduled for: Rails v2.3&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;We were all teased a few months ago about the possibility of finally &lt;a href=&quot;http://rwdaigle.github.com/edgerails/articles/2008/7/19/what-s-new-in-edge-rails-nested-models&quot;&gt;solving the nested model/complex forms problem in Rails&lt;/a&gt;, but were then cruelly notified that it wasn&#8217;t &lt;a href=&quot;http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5&quot;&gt;quite ready for prime time&lt;/a&gt;.  But our day has come &#8211; the &lt;a href=&quot;http://rails.uservoice.com/pages/rails3/suggestions/99641-nested-model-forms&quot;&gt;most requested feature&lt;/a&gt; for Rails 2.3, the &lt;a href=&quot;http://github.com/rails/rails/commit/ec8f04584479aff895b0b511a7ba1e9d33f84067&quot;&gt;ability to handle multiple models in a single form&lt;/a&gt;, is here.&lt;/p&gt;
+      &lt;p&gt;&lt;em&gt;This &lt;a href=&quot;http://github.com/rails/rails/commit/5dbc9d40a49f5f0f50c2f3ebe6dda942f0e61562&quot;&gt;&lt;span class=&quot;caps&quot;&gt;API&lt;/span&gt; update&lt;/a&gt; was added after the original commit.  I&#8217;ve updated the examples here to account for this.&lt;/em&gt;&lt;/p&gt;
+      &lt;p&gt;This feature has &lt;a href=&quot;http://weblog.rubyonrails.org/2009/1/26/nested-model-forms&quot;&gt;already been written about on the Rails Blog&lt;/a&gt; quite well by Eloy Duran, the committer of this fine feature, so I&#8217;ll try not to replicate what&#8217;s already out there.  However, here&#8217;s a basic rundown of what you need to do to get your models nested-form capable.&lt;/p&gt;
+      &lt;h3&gt;Step 1: Notify Your Model of Nest-able Associations&lt;/h3&gt;
+      &lt;p&gt;The first step is to tell your models which of their associations will be able to receive nested attributes.  For all associations you want exposed in nested forms you&#8217;ll need to use &lt;code&gt;accepts_nested_attributes_for&lt;/code&gt;:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;validates_presence_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Person&#39;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;accepts_nested_attributes_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:allow_destroy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# can also be used on has_one etc.. associations&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;With this bit in place, you can now directly create, edit and delete children from a person:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# Add a new child to this person&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children_attributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Son&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [ &lt;#Person: name: &#39;Son&#39;&gt; ]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clear&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Add two new children to this person&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children_attributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Son&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Daughter&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [ &lt;#Person: name: &#39;Son&#39;&gt;, &lt;#Person: name: &#39;Daughter&#39;&gt; ]&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Edit the son (assuming id == 1)&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children_attributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Lad&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; the son&#39;s name is now &#39;Lad&#39;&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Edit the daughter (id == 2) and add a new offspring&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children_attributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Lassie&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Pat&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; the daughter&#39;s name is now &#39;Lassie&#39; and there&#39;s a new offspring called &#39;Pat&#39;&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Remove Pat (id = 3), we don&#39;t like him/her&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children_attributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;_delete&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;1&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; Pat is now deleted&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;You&#8217;ll want to take away a few things from these examples.&lt;/p&gt;
+      &lt;ul&gt;
+      	&lt;li&gt;To support both the creation of new objects and the editing of existing ones we have to use an array of hashes for one-to-many associations or a single hash for one-to-one associations.  If no &lt;code&gt;:id&lt;/code&gt; property exists then it is assumed to represent a nested model to create.&lt;/li&gt;
+      	&lt;li&gt;To delete an existing nested model, use this format: &lt;code&gt;[ :id =&gt; pk, '_delete' =&gt; '1' } ]&lt;/code&gt; where the value of &lt;code&gt;_delete&lt;/code&gt; evaluates to anything &lt;code&gt;true&lt;/code&gt;.  You must also set the @ accepts_nested_attributes_for@ option &lt;code&gt;:allow_destroy&lt;/code&gt; to true as that capability is turned off by default.&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;p&gt;While this may appear a bit hackish when you&#8217;re used to dealing with the pleasantries of a rich object model and with ActiveRecord&#8217;s associations, this provides the foundation for a seamless transition to the view where you need to create your nested model forms&#8230;&lt;/p&gt;
+      &lt;h3&gt;Step 2: Create a Nested Model Form&lt;/h3&gt;
+      &lt;p&gt;In the view, simply use &lt;a href=&quot;http://api.rubyonrails.com/classes/ActionView/Helpers/FormHelper.html#M001386&quot;&gt;fields_for&lt;/a&gt; on these nested models to expose the fields for each such model:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;form_for&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      
+      &lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;person_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;person_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text_field&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      
+      &lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;person_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fields_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;child_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      
+      &lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text_field&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      
+      &lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_record?&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;x&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;check_box&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;_delete&#39;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;x&quot;&gt;      &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;_delete&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Remove&#39;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      
+      &lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      
+      &lt;span class=&quot;x&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;submit_tag&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;This will create a form with all the form fields necessary for submitting to a RESTful controller, transparently pushing your &lt;code&gt;children_attributes&lt;/code&gt; onto the person.&lt;/p&gt;
+      &lt;p&gt;If there are any validation errors on a child, they will be added to &lt;code&gt;person.errors&lt;/code&gt;, and nothing will save if any of the children fail (i.e. fully transactional).&lt;/p&gt;
+      &lt;p&gt;A few notes that might be useful to you:&lt;/p&gt;
+      &lt;ul&gt;
+      	&lt;li&gt;Using &lt;code&gt;fields_for&lt;/code&gt; on a has_many association automatically executes once for each nested model present, so think of yourself as being inside a loop when building your &lt;code&gt;child_form&lt;/code&gt;&lt;/li&gt;
+      	&lt;li&gt;If you ever need to change behavior based on the nested model currently in scope, it can be accessed via &lt;code&gt;child_form.object&lt;/code&gt;.  In this example we use &lt;code&gt;child_form.object.new_record?&lt;/code&gt; to determine whether or not to display the delete checkbox (as that only makes sense on an existing record).&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;h3&gt;Step 3: In Your Controllers &#8230; Do Nothing&lt;/h3&gt;
+      &lt;p&gt;The third step should be the easiest, because we&#8217;re all dealing with purely RESTful controllers, right?  The beauty of this solution is that it takes your controllers out of the mix and makes standard for submissions work perfectly with no interference at the controller level.  Just so there&#8217;s no confusion, here&#8217;s how your create and update actions will look:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PersonController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_attributes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:edit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Not a peep of those pesky nested models &#8211; with the rich support for nested objects at the model layer, it just works!&lt;/p&gt;
+      &lt;h3&gt;Extras&lt;/h3&gt;
+      &lt;p&gt;As with most powerful features, there are few little tweaks you may find yourself needing.&lt;/p&gt;
+      &lt;h4&gt;Default Create Form Fields&lt;/h4&gt;
+      &lt;p&gt;Often times you&#8217;ll want to have the form displayed with empty fields for easily creating a new nested model.  For example, when a user goes to create a new person I want there to be fields for creating a new child already displayed.&lt;/p&gt;
+      &lt;p&gt;Since the &lt;code&gt;person&lt;/code&gt; object is brand new they have an empty &lt;code&gt;children&lt;/code&gt; collection and no &lt;code&gt;child_form&lt;/code&gt; fields will be displayed.  There are two ways to get around this:&lt;/p&gt;
+      &lt;p&gt;You can build a new nested object on the controller side (i.e. in the &lt;code&gt;new&lt;/code&gt; action):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;which will cause there to be empty &lt;code&gt;child_form&lt;/code&gt; fields displayed as desired.  Or you can do it on the view side with a view helper:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;ApplicationHelper&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setup_person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;returning&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;build&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;empty?&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Which can then be used within &lt;code&gt;form_for&lt;/code&gt; to setup the person to the correct form state:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;form_for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setup_person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;person_form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;x&quot;&gt;  &lt;!-- ... --&gt;&lt;/span&gt;
+      &lt;span class=&quot;cp&quot;&gt;&lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%&gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;I prefer this view-helper approach as it really is a view concern (whether or not to display the form fields to create a new nested object by default).&lt;/p&gt;
+      &lt;h4&gt;Specify When Nested Models get Built&lt;/h4&gt;
+      &lt;p&gt;If you do have empty nested model form fields displayed by default, you&#8217;ll run into the issue where the user submits the form with no values filled in and you have to decide if you want to treat that as somebody trying to create a new nested item with no values, or if that means that no new nested item was submitted.  Quite often you just want to ignore the submissions with no nested field values filled out.&lt;/p&gt;
+      &lt;p&gt;Although I would have expected this to be default behavior, you need to manually specify that submissions with empty nested values are ignored using the &lt;code&gt;:reject_if&lt;/code&gt; option of &lt;code&gt;accepts_nested_attributes_for&lt;/code&gt;:&lt;/p&gt;
+      &lt;p&gt;&lt;em&gt;&lt;strong&gt;Note:&lt;/strong&gt; You &lt;a href=&quot;http://github.com/rails/rails/commit/9010ed27559ed5ab89ea71b4b16f4c8e56d03dbb&quot;&gt;now have the option to use &lt;code&gt;:all_blank&lt;/code&gt;&lt;/a&gt; to ignore the item if all properties are blank.  See below for an updated example.&lt;/em&gt;&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;validates_presence_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Person&#39;&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# This will prevent children_attributes with all empty values to be ignored&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;accepts_nested_attributes_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;ss&quot;&gt;:reject_if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;proc&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blank?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# This does the same thing using :all_blank&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;accepts_nested_attributes_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:reject_if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all_blank&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children_attributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; 0&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;This is also useful if you have boolean values in your nested model fields (since, as a checkbox, &#8216;0&#8217; will be submitted if there&#8217;s no value):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;validates_presence_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:bad&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:class_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Person&#39;&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# This will prevent empty checkboxes submitted for a child to be&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# construed as a submission&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;accepts_nested_attributes_for&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;ss&quot;&gt;:reject_if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;proc&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;bad&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;0&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;&amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;name&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blank?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children_attributes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:bad&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;0&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; 0&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h4&gt;Dynamically Adding Nested Form Fields&lt;/h4&gt;
+      &lt;p&gt;If you want to allow the addition of a large number of nested models via your &lt;span class=&quot;caps&quot;&gt;HTML&lt;/span&gt; forms, one option is to just have several empty nested forms displayed by default.  This is a little unappealing, however. The far slicker option is to use javascript to dynamically display the new nested form on the user&#8217;s request.&lt;/p&gt;
+      &lt;p&gt;Eloy has a great &lt;a href=&quot;http://github.com/alloy/complex-form-examples/tree/nested_attributes&quot;&gt;example application&lt;/a&gt; setup on GitHub outlining how this works, and I&#8217;ll let you take a peek over there to see how to &lt;a href=&quot;http://github.com/alloy/complex-form-examples/blob/a234fde4419836f277d7e340657f1d8418911d68/app/views/projects/_form.html.erb#L40&quot;&gt;wire up your dynamic nested form additions&lt;/a&gt;.&lt;/p&gt;
+      &lt;p&gt;Eloy&#8217;s example app is also a great place to see how the whole thing works, end-to-end.  By far the best resource out there.&lt;/p&gt;
+      &lt;h3&gt;Conclusion&lt;/h3&gt;
+      &lt;p&gt;So there it is, Rails&#8217; most requested new feature in the flesh and blood.  I&#8217;m not sure if my experiences are indicative of everybody else&#8217;s, but this is a godsend for me.  Many thanks to all the folks involved with this functionality (if you don&#8217;t know who they are, check out the next section which links to a bunch of great resources).  A really great effort by the community.&lt;/p&gt;
+      &lt;h3&gt;Resources&lt;/h3&gt;
+      &lt;ul&gt;
+      	&lt;li&gt;&lt;a href=&quot;http://github.com/alloy/complex-form-examples/tree/nested_attributes&quot;&gt;Eloy Duran&#8217;s example nested model project&lt;/a&gt;&lt;/li&gt;
+      	&lt;li&gt;&lt;a href=&quot;http://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/1202-add-attributes-writer-method-for-an-association&quot;&gt;The Lighthouse ticket for this feature with some good discussions&lt;/a&gt;&lt;/li&gt;
+      	&lt;li&gt;&lt;a href=&quot;http://weblog.rubyonrails.org/2009/1/26/nested-model-forms&quot;&gt;The blog post on the official Rails blog&lt;/a&gt;&lt;/li&gt;
+      	&lt;li&gt;&lt;a href=&quot;http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5&quot;&gt;The discussion of the various incarnations of this feature on the mailing list&lt;/a&gt;&lt;/li&gt;
+      	&lt;li&gt;&lt;a href=&quot;http://railscasts.com/episodes/73&quot;&gt;Ryan Bates&#8217; Railscast on complex forms&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>HTTP Digest Authentication</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/01/30/what-s-new-in-edge-rails-http-digest-authentication" />
+    <updated>2009-01-30T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/01/30/what-s-new-in-edge-rails-http-digest-authentication</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is scheduled for: Rails v2.3&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;Long ago, in your mother&#8217;s version of rails, we got a &lt;a href=&quot;http://rwdaigle.github.com/edgerails/articles/2006/12/4/whats-new-in-edge-rails-new-http-authentication-plugin-and-a-plea-to-contribute&quot;&gt;http basic authentication&lt;/a&gt; plugin.  That functionality has since been rolled into Rails core, but it was always lacking &lt;span class=&quot;caps&quot;&gt;HTTP&lt;/span&gt; digest authentication.  Until &lt;a href=&quot;http://github.com/rails/rails/commit/306cc2b920203cfa51cee82d2fc452484efc72f8&quot;&gt;this commit&lt;/a&gt;, that is.&lt;/p&gt;
+      &lt;p&gt;For those that may now know the difference, basic authentication only base 64 encodes the authenticating username and password (making it easily decoded) whereas digest authentication sends an MD5 hash of your username and password.  To simplify, digest is more secure than basic.&lt;/p&gt;
+      &lt;p&gt;To request digest authentication in Rails, &lt;del&gt;you&#8217;ll need to be able to retrieve the cleartext password for a given user (so the framework can hash and compare it using the nonce it created specifically for that request)&lt;/del&gt;.  &lt;em&gt;This &lt;a href=&quot;http://github.com/rails/rails/commit/be7b64b35aac1c9e9063d1d8317f8b1be2a3411c&quot;&gt;commit&lt;/a&gt; now allows you to also use a specific hashed format of the password.&lt;/em&gt;  Here&#8217;s how this works if you have access to a cleartext password:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArticlesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;before_filter&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:digest_authenticate&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;digest_authenticate&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Given this username, return the cleartext password (or nil if not found)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;authenticate_or_request_with_http_digest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Articles Administration&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleartext_password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Most of us will want to do something with the result of the authentication and can do so with the boolean return value of @ authenticate_or_request_with_http_digest@:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArticlesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;before_filter&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:digest_authenticate&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;digest_authenticate&lt;/span&gt;
+      
+          &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authenticate_or_request_with_http_digest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Admin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleartext_password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# If authentication succeeds, log the user in.  If not, kick back out a failure&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# message as the response body&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;request_http_digest_authentication&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Admin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Authentication failed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;If you don&#8217;t want to store clear text passwords you can return an MD5 hash from the &lt;code&gt;authenticate_or_request_with_http_digest&lt;/code&gt; block as long as it&#8217;s in the format &lt;code&gt;username:realm:password&lt;/code&gt;.  You can get a password hash by using &lt;code&gt;Digest::MD5::hexdigest&lt;/code&gt;.&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;kp&quot;&gt;attr_accessor&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:password&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_presence_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:crypted_password&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;before_save&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:hash_password&lt;/span&gt;
+      
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hash_password&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password_changed?&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crypted_password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+              &lt;span class=&quot;no&quot;&gt;Digest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MD5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hexdigest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;UserRealm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;and then in your controller:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArticlesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;before_filter&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:digest_authenticate&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;digest_authenticate&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Just return the crypted (hashed) version of the password if it&#39;s in the supported&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# format.  Note that the realm here &quot;UserRealm&quot; should match the middle&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# argument of your password hash&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authenticate_or_request_with_http_digest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;UserRealm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crypted_password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+          &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;So there you have it, digest authentication in edge Rails.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Dynamic Scope Methods</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/29/what-s-new-in-edge-rails-dynamic-scope-methods" />
+    <updated>2008-12-29T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/29/what-s-new-in-edge-rails-dynamic-scope-methods</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is scheduled for: Rails v2.3/3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;For quite some time now you&#8217;ve been able to perform simple queries using dynamic &lt;code&gt;find_all_by_xx_and_yy&lt;/code&gt; methods:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_published_and_user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;SELECT * FROM articles WHERE published = 1 AND user_id = 1&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;These dynamic finders provide an easy way to quickly encapsulate non-reused query conditions (for commonly used query logic you should consider using &lt;a href=&quot;http://rwdaigle.github.com/edgerails/articles/2008/3/24/what-s-new-in-edge-rails-has-finder-functionality&quot;&gt;named scopes&lt;/a&gt;).  The downside, however, is that you can&#8217;t chain query conditions when using these dynamic finders.&lt;/p&gt;
+      &lt;p&gt;With the recent addition of &lt;a href=&quot;http://github.com/rails/rails/commit/66ee5890c5f21995b7fe0c486547f1287afe2b55&quot;&gt;dynamic scopes&lt;/a&gt;, however, you now have a way to both quickly specify query logic and chain further conditions.  The naming works in the same manner as dynamic finders and the chaining works in the same fashion as conventional named scopes:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scoped_by_published_and_user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:limit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;SELECT * FROM articles WHERE published = 1 AND user_id = 1 LIMIT 5&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Note how you can hang further chainable query methods off the dynamic scope here?  You could also have preceded the dynamic scope with another scope, or even another dynamic scope:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;no&quot;&gt;Article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scoped_by_published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scoped_by_user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;SELECT * FROM articles WHERE published = 1 AND user_id = 1&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;This is really just another tool to put in your toolbox based on the powerful named_scope functionality of ActiveRecord.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Merb!</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/23/what-s-new-in-edge-rails-merb" />
+    <updated>2008-12-23T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/23/what-s-new-in-edge-rails-merb</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is scheduled for: Rails v3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;Wow, from the bombshell department comes the news that &lt;a href=&quot;http://rubyonrails.org/merb&quot;&gt;Rails and Merb will be merging&lt;/a&gt; to form Rails 3.  It seems the Rails and Merb teams have acknowledged that there is good in both frameworks and that they can be combined into a singular web framework.&lt;/p&gt;
+      &lt;p&gt;To be honest I don&#8217;t love the idea of having less choice in Ruby web-framework world.  However, I do think this bodes well for Rails.  We can only hope innovation stays alive within the combined team (and that their perspectives only enhance each other and don&#8217;t outright conflict).&lt;/p&gt;
+      &lt;p&gt;&lt;em&gt;Read what &lt;a href=&quot;http://yehudakatz.com/2008/12/23/rails-and-merb-merge/&quot;&gt;Yehuda&lt;/a&gt;, now a Rails core team member, &lt;a href=&quot;http://brainspl.at/articles/2008/12/23/merb-is-rails&quot;&gt;Ezra&lt;/a&gt;, &lt;a href=&quot;http://splendificent.com/2008/12/the-merb-rails-merger-announcement-an-inside-opinion/&quot;&gt;Carl&lt;/a&gt; and &lt;a href=&quot;http://merbist.com/2008/12/23/rails-and-merb-merge/&quot;&gt;Matt&lt;/a&gt; have to say as well.&lt;/em&gt;&lt;/p&gt;
+      &lt;p&gt;Little &#8217;ole Rails is definitely growing up &#8211; lots of big stuff coming in Rails 3&#8230;&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Rails Metal</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/18/what-s-new-in-edge-rails-rails-metal" />
+    <updated>2008-12-18T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/18/what-s-new-in-edge-rails-rails-metal</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is scheduled for: Rails v2.3/3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;In what is clearly a move to make me irrelevant within the Rails community, news has broken about the &lt;a href=&quot;http://weblog.rubyonrails.org/2008/12/17/introducing-rails-metal&quot;&gt;new Rails metal&lt;/a&gt; feature before I had the time to do a proper write-up.  (And for the &lt;a href=&quot;http://rwdaigle.github.com/edgerails/articles/2008/12/11/what-s-new-in-edge-rails-application-generators&quot;&gt;second time&lt;/a&gt; in as many weeks, no less).  I need to get on my horse here, many apologies.&lt;/p&gt;
+      &lt;p&gt;So &lt;a href=&quot;http://github.com/rails/rails/commit/8c3a54366435eebc2c8aa63b63e1349ce74a7b38&quot;&gt;Rails Metal&lt;/a&gt; is a way to cut out the fat of the &lt;span class=&quot;caps&quot;&gt;MVC&lt;/span&gt; request processing stack (and the all the niceties, too) to get the quickest path to your application logic.  This is especially useful when you have a single action that you need to run as quickly as possible and can afford to throw away all the support Rails normally provides in exchange for a very fast response time.&lt;/p&gt;
+      &lt;p&gt;While I could throw out some examples here, I&#8217;ll let Jesse Newland of RailsMachine do the heavy lifting with his &lt;a href=&quot;http://soylentfoo.jnewland.com/articles/2008/12/16/rails-metal-a-micro-framework-with-the-power-of-rails-m&quot;&gt;great writeup&lt;/a&gt; (a little morsel &#8211; his tests have Metal running 25x faster than the comparable controller-based action).&lt;/p&gt;
+      &lt;p&gt;This is definitely an exciting feature to keep an eye on!&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Application Generators</title>
+    <link href="http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/11/what-s-new-in-edge-rails-application-generators" />
+    <updated>2008-12-11T00:00:00-05:00</updated>
+    <id>http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/12/11/what-s-new-in-edge-rails-application-generators</id>
+    <content type="html">
+      
+      &lt;hr/&gt;
+      &lt;p&gt;&lt;em&gt;This feature is scheduled for: Rails v2.3/3.0&lt;/em&gt;&lt;br /&gt;
+      &lt;hr/&gt;&lt;/p&gt;
+      &lt;p&gt;I&#8217;m way late to the party on &lt;a href=&quot;http://github.com/rails/rails/commit/e8cc4b116c460c524961a07da92da3f323854c15&quot;&gt;this one&lt;/a&gt;, but it&#8217;s such a great feature that the least I can do is provide some link love for Edge Rails&#8217; new &lt;a href=&quot;http://m.onkey.org/2008/12/4/rails-templates&quot;&gt;application template&lt;/a&gt; feature.&lt;/p&gt;
+      &lt;p&gt;In a nutshell, this lets you create a Rails app already bootstrapped with your choice of plugins, gems and other base info specified.  No longer do you need to manually download your preferred libraries at the start of every project &#8211; you can save your configuration off to any text/ruby file and kick off a new app with:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;rails blog -m ~/my_template.rb
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Or apply an app template to an existing app:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;rake rails:template &lt;span class=&quot;nv&quot;&gt;LOCATION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;http://mydomain.com/templates/start.rb
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Go read up on the details of this great new feature in &lt;a href=&quot;http://m.onkey.org/2008/12/4/rails-templates&quot;&gt;Pratik&#8217;s writeup covers&lt;/a&gt; (which is wholly based on the &lt;a href=&quot;http://github.com/jeremymcanally/rg/tree/master&quot;&gt;rg&lt;/a&gt; project by &lt;a href=&quot;http://omgbloglol.com/rejoice-rg-is-now-part-of-rail&quot;&gt;Jeremy McAnally&lt;/a&gt;).&lt;/p&gt;
+    </content>
+  </entry>
+</feed>

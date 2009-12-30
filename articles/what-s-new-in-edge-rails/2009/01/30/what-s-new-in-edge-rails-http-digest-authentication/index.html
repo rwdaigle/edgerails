@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: HTTP Digest Authentication</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>HTTP Digest Authentication</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature is scheduled for: Rails v2.3</em><br />&#x000A;<hr/></p>&#x000A;<p>Long ago, in your mother&#8217;s version of rails, we got a <a href="/articles/2006/12/4/whats-new-in-edge-rails-new-http-authentication-plugin-and-a-plea-to-contribute">http basic authentication</a> plugin.  That functionality has since been rolled into Rails core, but it was always lacking <span class="caps">HTTP</span> digest authentication.  Until <a href="http://github.com/rails/rails/commit/306cc2b920203cfa51cee82d2fc452484efc72f8">this commit</a>, that is.</p>&#x000A;<p>For those that may now know the difference, basic authentication only base 64 encodes the authenticating username and password (making it easily decoded) whereas digest authentication sends an MD5 hash of your username and password.  To simplify, digest is more secure than basic.</p>&#x000A;<p>To request digest authentication in Rails, <del>you&#8217;ll need to be able to retrieve the cleartext password for a given user (so the framework can hash and compare it using the nonce it created specifically for that request)</del>.  <em>This <a href="http://github.com/rails/rails/commit/be7b64b35aac1c9e9063d1d8317f8b1be2a3411c">commit</a> now allows you to also use a specific hashed format of the password.</em>  Here&#8217;s how this works if you have access to a cleartext password:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">ArticlesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="n">before_filter</span> <span class="ss">:digest_authenticate</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">digest_authenticate</span>&#x000A;&#x000A;    <span class="c1"># Given this username, return the cleartext password (or nil if not found)</span>&#x000A;    <span class="n">authenticate_or_request_with_http_digest</span><span class="p">(</span><span class="s2">&quot;Articles Administration&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="o">|</span>&#x000A;      <span class="no">User</span><span class="o">.</span><span class="n">find_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="n">cleartext_password</span><span class="p">)</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Most of us will want to do something with the result of the authentication and can do so with the boolean return value of @ authenticate_or_request_with_http_digest@:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">ArticlesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="n">before_filter</span> <span class="ss">:digest_authenticate</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">digest_authenticate</span>&#x000A;&#x000A;    <span class="n">success</span> <span class="o">=</span> <span class="n">authenticate_or_request_with_http_digest</span><span class="p">(</span><span class="s2">&quot;Admin&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="o">|</span>&#x000A;      <span class="p">(</span><span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">))</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="n">cleartext_password</span><span class="p">)</span>&#x000A;    <span class="k">end</span>&#x000A;&#x000A;    <span class="c1"># If authentication succeeds, log the user in.  If not, kick back out a failure</span>&#x000A;    <span class="c1"># message as the response body</span>&#x000A;    <span class="k">if</span> <span class="n">success</span>&#x000A;      <span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="vi">@user</span><span class="o">.</span><span class="n">id</span>&#x000A;    <span class="k">else</span>&#x000A;      <span class="n">request_http_digest_authentication</span><span class="p">(</span><span class="s2">&quot;Admin&quot;</span><span class="p">,</span> <span class="s2">&quot;Authentication failed&quot;</span><span class="p">)</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>If you don&#8217;t want to store clear text passwords you can return an MD5 hash from the <code>authenticate_or_request_with_http_digest</code> block as long as it&#8217;s in the format <code>username:realm:password</code>.  You can get a password hash by using <code>Digest::MD5::hexdigest</code>.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="kp">attr_accessor</span> <span class="ss">:password</span>&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:username</span><span class="p">,</span> <span class="ss">:crypted_password</span>&#x000A;  <span class="n">before_save</span> <span class="ss">:hash_password</span>&#x000A;&#x000A;  <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">hash_password</span>&#x000A;    <span class="k">if</span> <span class="n">password_changed?</span>&#x000A;      <span class="nb">self</span><span class="o">.</span><span class="n">crypted_password</span> <span class="o">=</span>&#x000A;        <span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">::</span><span class="n">hexdigest</span><span class="p">(</span><span class="o">[</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;UserRealm&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">))</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>and then in your controller:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">ArticlesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="n">before_filter</span> <span class="ss">:digest_authenticate</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">digest_authenticate</span>&#x000A;&#x000A;    <span class="c1"># Just return the crypted (hashed) version of the password if it&#39;s in the supported</span>&#x000A;    <span class="c1"># format.  Note that the realm here &quot;UserRealm&quot; should match the middle</span>&#x000A;    <span class="c1"># argument of your password hash</span>&#x000A;    <span class="n">success</span> <span class="o">=</span> <span class="n">authenticate_or_request_with_http_digest</span><span class="p">(</span><span class="s2">&quot;UserRealm&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="o">|</span>&#x000A;      <span class="p">(</span><span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">))</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="n">crypted_password</span><span class="p">)</span>&#x000A;    <span class="k">end</span>&#x000A;&#x000A;    <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>So there you have it, digest authentication in edge Rails.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              30 Jan, 2009
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">Cleaner RESTful Controllers w/ respond_with</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/01/30/what-s-new-in-edge-rails-http-digest-authentication";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

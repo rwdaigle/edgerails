@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: UTC-based Migration Versioning</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>UTC-based Migration Versioning</h2>
+              &#x000A;<p>Rails migrations are a somewhat contentious bunch.  On one hand they provide a consistent way of provisioning your database, and on the other hand they like to conflict with each other if there&#8217;s a heavy stream of development due to a simplistic naming convention.  <a href="http://dev.rubyonrails.org/changeset/9122">Just in</a> is a change that will name your migrations based on a more unique <span class="caps">UTC</span>-based timestamp instead of just a sequential ordering.</p>&#x000A;<p>When you go to create your next migration you&#8217;ll see something like this:</p>&#x000A;<div class="highlight"><pre>&gt; script/generate migration one&#x000A;      create  db/migrate/20080402122512_one.rb&#x000A;</pre>&#x000A;</div>&#x000A;<p>Instead of the migration file being named <code>001_one.rb</code> it now has a more unique prefix that will less likely conflict with another migration somebody else happened to check-in around the same time.</p>&#x000A;<p><em>Update:</em> When you do an <code>svn update</code> and get new migrations, even if they have a timestamp previous to a migration you&#8217;ve already added and run in your own environment, <code>rake db:migrate</code> will <a href="http://dev.rubyonrails.org/changeset/9244">intelligently apply all migrations</a> that have not yet run.  This eliminates the interleaved migrations issue that existed on the first rev of this feature (see comments).</p>&#x000A;<p>Another change that accompanies this functionality is the addition of <code>rake db:migrate:up</code> and <code>rake db:migrate:down</code> tasks, which will let you run the up and down operations of an individual migration (that may have been added on an svn merge or update):</p>&#x000A;<div class="highlight"><pre>&gt; rake db:migrate:up <span class="nv">VERSION</span><span class="o">=</span><span class="nv">20080402122523</span>&#x000A;<span class="o">==</span> 20080402122523 Two: <span class="nv">migrating</span> <span class="o">==============================================</span>&#x000A;-- create_table<span class="o">(</span>:two<span class="o">)</span>&#x000A;   -&gt; 0.0122s&#x000A;<span class="o">==</span> 20080402122523 Two: migrated <span class="o">(</span>0.0124s<span class="o">)</span> <span class="o">=====================================</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This functionality was previously available as the <a href="http://revolutiononrails.blogspot.com/2007/02/plugin-release-enhanced-rails.html">enhanced migrations plugin</a>, so if you&#8217;re on an older version of Rails you can still make your migrations less whiny.</p>&#x000A;<p>And if you&#8217;re just not lovin&#8217; this (as some of the comments seem to mildly indicate) you can always <a href="http://github.com/rails/rails/commit/bbab6391366f59189e84d2b8de2a63bea91a9851">revert back</a> to the sequential prefix naming style of migrations with this guy in the config block of your <code>environment.rb</code> file:</p>&#x000A;<div class="highlight"><pre><span class="n">config</span><span class="o">.</span><span class="n">active_record</span><span class="o">.</span><span class="n">timestamped_migrations</span> <span class="o">=</span> <span class="kp">false</span>&#x000A;</pre>&#x000A;</div>
+            </div>
+            <p class="pubdate">
+              Published:
+              02 Apr, 2008
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">The Ins and Outs of ActiveResource</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/04/02/what-s-new-in-edge-rails-utc-based-migration-versioning";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Better Exception Handling</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Better Exception Handling</h2>
+              &#x000A;<p>It&#8217;s a common pattern to redirect the user to, or render specific pages for different types of exceptions that are thrown in your application.  Prior to this <a href="http://dev.rubyonrails.org/changeset/7597">changeset</a> this usually involved overloading the <code>rescue_action_in_public</code> method of your controllers:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">PostsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;  <span class="k">def</span> <span class="nf">rescue_action_in_public</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span>&#x000A;    <span class="k">case</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span>&#x000A;      <span class="k">when</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotFound</span> <span class="k">then</span> <span class="n">render</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="s1">&#39;/bad_record&#39;</span>&#x000A;      <span class="k">when</span> <span class="no">NoMethodError</span> <span class="k">then</span> <span class="n">render</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="s1">&#39;/no_method&#39;</span>&#x000A;      <span class="k">else</span> <span class="n">render</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="s1">&#39;/error&#39;</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>It&#8217;s easy to see that this can quickly grow to be an ugly mass of a <code>case</code> or <code>if</code>/<code>else</code> statement.</p>&#x000A;<p>Now we&#8217;ve got a much cleaner way to map exceptions to handlers with the new <code>rescue_from</code> support.  <code>rescue_from</code> maps an exception type directly to a handler method name for a very concise and direct way of dealing with exceptions:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">PostsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># Declare exception to handler methods</span>&#x000A;  <span class="n">rescue_from</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotFound</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:bad_record</span>&#x000A;  <span class="n">rescue_from</span> <span class="no">NoMethodError</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="ss">:show_error</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">bad_record</span><span class="p">;</span> <span class="n">render</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="s1">&#39;/bad_record&#39;</span><span class="p">;</span> <span class="k">end</span>&#x000A;  <span class="k">def</span> <span class="nf">show_error</span><span class="p">(</span><span class="n">exception</span><span class="p">);</span> <span class="n">render</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">exception</span><span class="o">.</span><span class="n">message</span><span class="p">;</span> <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Note that the exception handler methods can be either no-arg methods or take the exception in question as an argument (as in <code>show_error</code> above).</p>&#x000A;<p><a href="http://dev.rubyonrails.org/changeset/7822">You can also</a> use a block or proc to specify exception handling in <code>rescue_from</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">PostsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># Declare exception to handler methods</span>&#x000A;  <span class="n">rescue_from</span><span class="p">(</span><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotFound</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">e</span><span class="o">|</span> <span class="n">render</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="s1">&#39;/bad_record&#39;</span> <span class="p">}</span>&#x000A;  <span class="n">rescue_from</span> <span class="no">NoMethodError</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="n">e</span><span class="o">|</span> <span class="n">render</span> <span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span> <span class="p">}</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>
+            </div>
+            <p class="pubdate">
+              Published:
+              24 Sep, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">Cleaner RESTful Controllers w/ respond_with</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/09/24/what-s-new-in-edge-rails-better-exception-handling";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

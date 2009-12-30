@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Cleaner RESTful Controllers w/ respond_with</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Cleaner RESTful Controllers w/ respond_with</h2>
+              &#x000A;<hr/>&#x000A;<p><em>This feature is schedule for: Rails v3.0</em><br />&#x000A;<hr/></p>&#x000A;<p><span class="caps">REST</span> is a first-class citizen in the Rails world, though most of the hard work is done at the routing level.  The controller stack has some niceties revolving around mime type handling with the <code>respond_to</code> facility but, to date, there&#8217;s not been a lot built into actionpack to handle the serving of resources.  The <a href="http://github.com/rails/rails/commit/09de34ca56598ae5d0302a14715b2a11b6cc9845">addition of <code>respond_with</code></a> (and <a href="http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4">this follow-up</a>) takes one step towards more robust RESTful support with an easy way to specify how resources are delivered.  Here&#8217;s how it works:</p>&#x000A;<h1>Basic Usage</h1>&#x000A;<p>In your controller you can specify what resource formats are supported with the class method <code>respond_*to*</code>.  Then, within your individual actions, you tell the controller the resource or resources to be delivered using <code>respond_*with*</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">index</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span><span class="p">,</span> <span class="ss">:location</span> <span class="o">=&gt;</span> <span class="n">users_url</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This will match each supported format with an appropriate response.  For instance, if the request is for <code>/users.xml</code> then the controller will look for a <code>/users/index.xml.erb</code> view template to render.  If such a view template doesn&#8217;t exist then it tries to directly render the resource in the <code>:xml</code> format by invoking <code>to_xml</code> (if it exists).  Lastly, if <code>respond_with</code> was invoked with a <code>:location</code> option the request will be redirected to that location (as in the case of the <code>create</code> action in the above example).</p>&#x000A;<p>So here&#8217;s the equivalent implementation without the use of <code>respond_with</code> (assuming no index view templates):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">index</span>&#x000A;    <span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span>&#x000A;    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">html</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">xml</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:xml</span> <span class="o">=&gt;</span> <span class="vi">@users</span> <span class="p">}</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">json</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="vi">@users</span> <span class="p">}</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="n">users_url</span> <span class="p">}</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">xml</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:xml</span> <span class="o">=&gt;</span> <span class="vi">@user</span> <span class="p">}</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">json</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="vi">@user</span> <span class="p">}</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;    &#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>You can see how much boilerplate response handling is now handled for you especially if it&#8217;s multiplied over the other default actions.  You can pass in <code>:status</code> and <code>:head</code> options to <code>respond_with</code> as well if you need to send these headers back on resources rendered directly (i.e. via <code>to_xml</code>):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">index</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:ok</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<h1>Per-Action Overriding</h1>&#x000A;<p>It&#8217;s also possible to override standard resource handling by passing in a block to <code>respond_with</code> specifying which formats to override for that action:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span>&#x000A;&#x000A;  <span class="c1"># Override html format since we want to redirect to a different page,</span>&#x000A;  <span class="c1"># not just serve back the new resource</span>&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="n">users_path</span> <span class="p">}</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<h1>:except And :only Options</h1>&#x000A;<p>You can also pass in <code>:except</code> and <code>:only</code> options to only support formats for specific actions (as you do with <code>before_filter</code>):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="ss">:index</span>&#x000A;  <span class="n">respond_to</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="ss">:show</span>&#x000A;  <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<h1>The :any Format</h1>&#x000A;<p>If you&#8217;re still want to use <code>respond_to</code> within your individual actions this update has also bundled the <code>:any</code> resource format that can be used as a wildcard match against any unspecified formats:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">index</span>&#x000A;&#x000A;    <span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span>&#x000A;&#x000A;    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">html</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span><span class="p">)</span> <span class="p">{</span> <span class="n">render</span> <span class="n">request</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">to_sym</span> <span class="o">=&gt;</span> <span class="vi">@users</span> <span class="p">}</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>So all in all this is a small, but meaningful, step towards robust controller-level <span class="caps">REST</span> support.  I should point out that the contributor of this patch is <a href="http://blog.plataformatec.com.br/">José Valim</a> who has authored the very robust <a href="http://github.com/josevalim/inherited_resources/tree/master">inherited_resources</a> framework that already has support for <code>respond_with</code>-like functionality and many more goodies.  If you&#8217;re on the search for a solid RESTful controller framework to accompany Rails&#8217; native RESTful routing support I would suggest you take a look at his fine work.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              06 Aug, 2009
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods">ActiveResource Gets Custom Methods</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

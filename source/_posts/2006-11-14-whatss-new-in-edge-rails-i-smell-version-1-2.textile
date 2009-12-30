@@ -1,8 +1,0 @@
----
-title: "I Smell Version 1.2..."
-author: "Ryan Daigle"
-categories:
-  - "what-s-new-in-edge-rails"
----
- 
-It's gotta be "right around the corner":http://dev.rubyonrails.org/changeset/5507, right?

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Shallow Routes</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Shallow Routes</h2>
+              &#x000A;<p>Rails&#8217; routing mechanism is pretty slick.  In a very intuitive way you&#8217;re able to describe the resources you want exposed at the <span class="caps">URL</span> level with this routing-<span class="caps">DSL</span>:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:users</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>&#x000A;  <span class="n">user</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span> <span class="k">do</span> <span class="o">|</span><span class="n">article</span><span class="o">|</span>&#x000A;    <span class="n">article</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:comments</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>However, while this configuration makes an article available at <code>/users/1/articles/1</code> and comments at @ /users/1/articles/1/comments/1@ there are often times when you want to bypass the full nested hierarchy and directly access the resource in question.  Now, with the <a href="http://github.com/rails/rails/commit/83c6ba18899a9f797d79726ca0078bdf618ec3d4"><code>shallow</code> route option</a>, you can.</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:shallow</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>&#x000A;  <span class="n">user</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span> <span class="k">do</span> <span class="o">|</span><span class="n">article</span><span class="o">|</span>&#x000A;    <span class="n">article</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:comments</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This configuration removes all nested member paths (like <code>/articles/1/comments/1</code>) and makes them directly accessible (as <code>/comments/1</code>).  Basically, routes are built only with the minimal amount of information that&#8217;s needed to uniquely identify the resource.</p>&#x000A;<div class="highlight"><pre><span class="n">user_articles_path</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#=&gt; &#39;/users/1/articles&#39;</span>&#x000A;<span class="n">article_path</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#=&gt; &#39;/articles/2&#39;</span>&#x000A;<span class="n">article_comments_path</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#=&gt; &#39;/articles/3/comments&#39;</span>&#x000A;<span class="n">comment_path</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="c1">#=&gt; &#39;/comments/4&#39;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>No longer do you need to wrestle with infinitely nested routes, the <code>:shallow</code> option automatically makes all routes as concise as possible.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              07 Sep, 2008
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/05/06/what-s-new-in-edge-rails-restful-routing-updates">RESTful Routing Updates</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2008/09/07/what-s-new-in-edge-rails-shallow-routes";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>

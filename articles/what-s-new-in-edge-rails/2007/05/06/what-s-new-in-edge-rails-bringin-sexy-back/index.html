@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Bringin' Sexy Back</title>
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="/atom.xml" rel="alternate" title="Edge Rails.info" type="application/atom+xml" />
+    <script type="text/javascript">
+      //<![CDATA[
+        var twitter_user = ""
+        var show_replies = false;
+        var tweet_count = 3;
+      //]]>
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript"></script>
+    <script src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript"></script>
+    <script src="/javascripts/octopress.js" type="text/javascript"></script>
+    <script src="/javascripts/twitter.js" type="text/javascript"></script>
+  </head>
+  <body id="">
+    <div id="header">
+      <div class="page_width">
+        <a class="title" href="/">Edge Rails.info</a>
+        <div id="search">
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <input name="cx" type="hidden" value="" />
+            <input name="ie" type="hidden" value="UTF-8" />
+            <input id="q" name="q" type="text" />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="nav">
+      <div class="page_width">
+        <ul>
+          <li class="alpha">
+            <a href="/">Blog</a>
+          </li>
+          <li class="omega">
+            <a href="/about.html">About</a>
+          </li>
+          <li class="subscribe">
+            <a href="/atom.xml">Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="page">
+      <div class="page_width">
+        <div id="main">
+          <div class="blog">
+            <div class="article">
+              <h2>Bringin' Sexy Back</h2>
+              &#x000A;<p>You know those <a href="http://errtheblog.com/post/2381">sexy migrations</a> you&#8217;ve been lusting over?  Yeah, well they&#8217;re <a href="http://dev.rubyonrails.org/changeset/6667">mainstream now</a>.  I won&#8217;t unnecessarily duplicate here what&#8217;s already been written about them &#8211; but the gist is that a sexy migrations inspired syntax is now part of Rails.</p>&#x000A;<p>You can now do:</p>&#x000A;<div class="highlight"><pre><span class="n">create_table</span> <span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="ss">:force</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span> &#x000A;  <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:group_id</span><span class="p">,</span> <span class="ss">:employer_id</span>&#x000A;  <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:first</span><span class="p">,</span> <span class="ss">:last</span>&#x000A;  <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>To get <code>integer</code> columns in <code>group_id</code> and <code>employer_id</code> and <code>string</code> columns in <code>first</code> and <code>last</code>.  <code>timestamps</code> gets you the <a href="http://rails.raaum.org/database-conventions.html#magic-columns">magic columns</a> <code>created_at</code> and <code>updated_at</code>.</p>&#x000A;<p>The list of supported column types are:</p>&#x000A;<ul>&#x000A;	<li><code>string</code></li>&#x000A;	<li><code>text</code></li>&#x000A;	<li><code>integer</code></li>&#x000A;	<li><code>float</code></li>&#x000A;	<li><code>decimal</code></li>&#x000A;	<li><code>datetime</code></li>&#x000A;	<li><code>timestamp</code></li>&#x000A;	<li><code>time</code></li>&#x000A;	<li><code>date</code></li>&#x000A;	<li><code>binary</code></li>&#x000A;	<li><code>boolean</code></li>&#x000A;</ul>&#x000A;<p>So spin that Barry White record and lay it down right, sexy&#8217;s back.</p>
+            </div>
+            <p class="pubdate">
+              Published:
+              06 May, 2007
+            </p>
+            <p class="related_articles">
+              <h2>Related Articles</h2>
+              <ul></ul>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering">Default RESTful Rendering</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes">Nested Object Forms</a>
+              </li>
+              <li>
+                <a href="/articles/what-s-new-in-edge-rails/2007/10/26/what-s-new-in-edge-rails-fixtures-just-got-a-whole-lot-easier">Fixtures Just Got a Whole Lot Easier</a>
+              </li>
+            </p>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              //<![CDATA[
+                var disqus_url = "http://rwdaigle.github.com/edgerails/articles/what-s-new-in-edge-rails/2007/05/06/what-s-new-in-edge-rails-bringin-sexy-back";
+              //]]>
+            </script>
+            <noscript>
+              <a href="http://edgerails.disqus.com/?url=ref">View the discussion thread</a>
+            </noscript>
+            <script src="http://disqus.com/forums/edgerails/embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="sidebar">
+          <h4>Twitter <a class="small" href="http://twitter.com/">@</a></h4>
+          <div id="twitter">
+            <ul id="twitter_status">
+              Status updating...
+            </ul>
+          </div>
+          <h4>My Delicious <a class="small" href="http://delicious.com/">more &rarr;</a></h4>
+          <div id="delicious">
+            <script src="http://feeds.delicious.com/v2/js/?title=&amp;count=3&amp;sort=date&amp;extended" type="text/javascript"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="page_width">
+        Copyright &copy; 2009 - Edge Rails.info -
+        <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+      </div>
+    </div>
+    <!-- /Disqus Comments code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <!-- /Google Analytics code -->
+    <script type="text/javascript">
+      //<![CDATA[
+        try {
+        var pageTracker = _gat._getTracker("");
+        pageTracker._trackPageview();
+        } catch(err) {}
+      //]]>
+    </script>
+  </body>
+</html>
