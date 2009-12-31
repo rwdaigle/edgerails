@@ -1,6 +1,6 @@
 require 'active_support'
 
-site_url  = "http://yoursite.com"   # deployed site url for sitemap.xml generator
+site_url  = "http:/edgerails.info"   # deployed site url for sitemap.xml generator
 port      = "4000"     # preview project port eg. http://localhost:4000
 site      = "site"     # compiled site directory
 source    = "source" # source file directory
