@@ -1,37 +1,59 @@
+=nav-selection(!name, !nav_selector = "#nav")
+  body.#{!name} #{!nav_selector} li.#{!name} a
+    color: #{!nav_color_here}
+ 
++nav-selection("articles")
++nav-selection("about")
++nav-selection("publish")
+
 #nav
-  +clearfix
-  position: relative
-  z-index: 1
-  padding: 6px 0
-  background:
-    color= !nav_bg
-    image: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#ddd), color-stop(0.3, #f4f4f4))
-    image: -moz-linear-gradient(left top, left bottom, from(#fcfcfc), to(#ddd), color-stop(0.3, #f4f4f4))
-  border:
-    top= "1px solid" !nav_border_top
-    bottom= "1px solid" !nav_border_bottom
+  padding: 0 15px
+  .page_width
+    width: #{!page_width - 30px}
+    +pie-clearfix
+    font-size: 90%
+    margin: 0 auto
+    position: relative
+    z-index: 1
+    padding: 6px 15px
+    +border-radius(4px)
+    background-color= !nav_bg
+    +v-gradient(lighten(!darkgray, 10), darken(!darkgray, 10))
   ul
     position: relative
-    +horizontal-list
+    +horizontal-list(0)
     margin: 0 auto
     overflow: visible
     li
+      +sans-font
       padding: 0 15px
       border-left= "1px solid" !nav_border_left
       border-right= "1px solid" !nav_border_right
-      &.alpha
+      &:first-child
         border-left: none
         padding-left: 0
-      &.omega
+      &.search, &.publish
         border-right: 0
       &.subscribe
-        position: absolute
-        left= !page_width - !sidebar_width - !sidebar_margin/2
-        border: none
+        padding-right: 10px
+        border-left: 0
+        float: right
         a
           display: inline-block
-          padding-left: 28px
-          background: url("/images/rss.png") left top no-repeat
+          +replace-text("rss.png")
+          width: 24px
+          height: 24px
+      &.search
+        float: right
+        padding: 0 0 0 12px
+        input
+          background: #141414 url(/images/search.png) no-repeat 5px center
+          border: 1px solid #404040
+          +border-radius(4px)
+          color: #ddd
+          font-size: 80%
+          padding: 3px 3px 3px 20px
+          width: 150px
       a
         display: inline-block
         color= !nav_color

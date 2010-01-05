@@ -1,13 +1,6 @@
 ---
 blog_title: Edge Rails.info
 
-twitter_user: 
-tweet_count: 3
-show_replies: false
-
-delicious_user: 
-delicious_count: 3
-
 full_url: http://edgerails.info
 disqus_short_name: edgerails
 
@@ -31,71 +24,68 @@ google_analytics_tracking_id: UA-77805-13
         var twitter_user = "#{page.twitter_user}"
         var show_replies = #{page.show_replies};
         var tweet_count = #{page.tweet_count};
-      %script(src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript")
-      %script(src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript")
-      %script(src="/javascripts/octopress.js" type="text/javascript")
       %script(src="/javascripts/twitter.js" type="text/javascript")
+    %script(src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js" type="text/javascript")
+    %script(src="/javascripts/mootools-1.2.4.2-more.js" type="text/javascript")
+    %script(src="/javascripts/octopress.js" type="text/javascript")
     - if page.respond_to? :google_analytics
       %script(src="http://www.google-analytics.com/ga.js" type="text/javascript")
-  %body(id="#{(page.respond_to?(:body_id) ? page.body_id : nil)}")
-    #header
-      .page_width
-        %a.title(href="/")=page.blog_title
-        - if page.respond_to? :google_custom_search_id
-          #search
-            %form(action="http://www.google.com/cse" id="cse-search-box")
-              %input(type="hidden" name="cx" value="#{page.google_custom_search_id}")
-              %input(type="hidden" name="ie" value="UTF-8")
-              %input#q(type="text" name="q")
-    #nav
-      .page_width
-        %ul
-          %li.alpha
-            %a(href="/") Blog
-          %li.omega
-            %a(href="/about.html") About
-          %li.subscribe
-            %a(href="/atom.xml") Subscribe
-    #page
-      .page_width
-        #main
-          - if page.respond_to? :date
-            .blog
-              .article
-                %h2= page.title
-                = preserve rp(content)
-              %p.pubdate
-                Published:
-                =page.date.strftime("%d %b, %Y")
-              %p.related_articles
-                %h2 Related Articles
-                %ul                
-                - for post in site.related_posts[0..2] do
-                  %li
-                    %a{:href => post.url}= post.title
-              - if page.respond_to? :disqus_short_name
-                #disqus_thread
-                :javascript
-                  var disqus_url = "#{page.full_url}#{page.url}";
-                %noscript
-                  %a(href="http://#{page.disqus_short_name}.disqus.com/?url=ref") View the discussion thread
-                %script(type="text/javascript" src="http://disqus.com/forums/#{page.disqus_short_name}/embed.js")
-          - else
-            = preserve rp(content)
-        #sidebar
-          - if page.respond_to? :twitter_user
-            %h4 Twitter <a class="small" href="http://twitter.com/#{page.twitter_user}">@#{page.twitter_user}</a>
-            #twitter
-              %ul#twitter_status
-                Status updating...
-          - if page.respond_to? :delicious_user
-            %h4 My Delicious <a class="small" href="http://delicious.com/#{page.delicious_user}">more &rarr;</a>
-            #delicious
-              %script(type="text/javascript" src="http://feeds.delicious.com/v2/js/#{page.delicious_user}?title=&count=#{page.delicious_count}&sort=date&extended")
+  %body(id="#{(page.respond_to?(:body_id) ? page.body_id : nil)}" class="#{(page.respond_to?(:nav) ? page.nav : nil)}")
+    #content
+      #header
+        .page_width
+          %a.title(href="/")=page.blog_title
+        %a#fork(href="/publishing") Fork, Contribute, & Publish
+      #nav
+        .page_width
+          %ul
+            %li.articles.first
+              %a(href="/") Articles
+            %li.about
+              %a(href="/about.html") About
+            %li.publish.last
+              %a(href="/publish.html") Publishing Guide
+            - if page.respond_to? :google_custom_search_id
+              %li.search
+                %form(action="http://www.google.com/cse" id="cse-search-box")
+                  %input(type="hidden" name="cx" value="#{page.google_custom_search_id}")
+                  %input(type="hidden" name="ie" value="UTF-8")
+                  %input#q(type="text" name="q")
+            %li.subscribe
+              %a(href="/atom.xml") Subscribe
+      #page
+        .page_width
+          #main
+            - if page.respond_to? :date
+              .blog
+                .article
+                  %h2= page.title
+                  = preserve rp(content)
+                %p.pubdate
+                  Published:
+                  =page.date.strftime("%d %b, %Y")
+                %p.related_articles
+                  %h2 Related Articles
+                  %ul                
+                  - for post in site.related_posts[0..2] do
+                    %li
+                      %a{:href => post.url}= post.title
+                - if page.respond_to? :disqus_short_name
+                  #disqus_thread
+                  :javascript
+                    var disqus_url = "#{page.full_url}#{page.url}";
+                  %noscript
+                    %a(href="http://#{page.disqus_short_name}.disqus.com/?url=ref") View the discussion thread
+                  %script(type="text/javascript" src="http://disqus.com/forums/#{page.disqus_short_name}/embed.js")
+            - else
+              = preserve rp(content)
+          #sidebar
+            Sidebar Stuff!
+      <div id="push"></div>
     #footer
       .page_width
-        Copyright &copy; #{Time.now.strftime('%Y')} - #{page.blog_title} -
-        %span.credit Powered by <a href="http://octopress.org">Octopress</a>
+        Copyright &copy; #{Time.now.strftime('%Y')} - #{page.blog_title}
+        %span.credit designed by <a href="http://brandonmathis.com/">Brandon Mathis</a> powered by <a href="http://octopress.org">Octopress</a>
     - if page.respond_to? :disqus_short_name
       //Disqus Comments code
       :javascript

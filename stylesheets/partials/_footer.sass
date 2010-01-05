@@ -1,13 +1,31 @@
+=sticky-footer(!footer_height, !root_selector = "#root", !root_footer_selector = "#root_footer", !footer_selector = "#footer")
+  html, body
+    height: 100%
+  #{!root_selector}
+    min-height: 100%
+    height: auto !important
+    height: 100%
+    margin-bottom= -!footer_height - 2px
+    #{!root_footer_selector}
+      height= !footer_height
+  #{!footer_selector}
+    clear: both
+    position: relative
+    height= !footer_height
+
 #footer
-  position: relative
-  z-index: 2
+  +sans-font
   font-size= !base_font_size_small
-  clear: both
-  padding= !base_font_size * 1.5 0
   color= !footer_color
-  +h-linear-gradient(darken(!body_bg, 25), !body_bg)
-  border-top= "14px solid" !footer_bg
+  background-color= !footer_bg
+  +v-gradient(lighten(!darkgray, 5), darken(!darkgray, 10), "color-stop(.3, #{!darkgray})")
+  border-top: 2px solid #{!header_border_top}
+  .page_width
+    padding= 12px 15px 0
   a
     color= #ddd
     &:hover
       color = #fff
+  .credit
+    float: right
++sticky-footer(48px, "#content", "#push", "#footer")

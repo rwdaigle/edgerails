@@ -1,8 +1,9 @@
 ---
 layout: default
-title: Blog Archives
+title: Archive of past Articles
+nav: archive
 ---
-%h2 Blog Archives
+%h2 Archives of past Articles
 
 - posts = site.posts.reverse.group_by { |p| p.date.strftime("%Y") }
 - posts.keys.each do |year|
