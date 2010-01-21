@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v3.0_
-<hr/>
+p(info). This feature is scheduled for: Rails v3.0
 
 Wow, from the bombshell department comes the news that "Rails and Merb will be merging":http://rubyonrails.org/merb to form Rails 3.  It seems the Rails and Merb teams have acknowledged that there is good in both frameworks and that they can be combined into a singular web framework.
 

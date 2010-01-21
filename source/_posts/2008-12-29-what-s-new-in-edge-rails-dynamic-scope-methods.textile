@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v2.3/3.0_
-<hr/>
+p(info). This feature is scheduled for: Rails v2.3/3.0
 
 For quite some time now you've been able to perform simple queries using dynamic @find_all_by_xx_and_yy@ methods:
 

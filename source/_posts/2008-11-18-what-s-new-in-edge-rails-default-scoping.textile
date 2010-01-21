@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v2.3/3.0_
-<hr/>
+p(info). This feature is scheduled for: Rails v2.3/3.0
 
 It's pretty common to want SQL queries against a particular table to always be sorted the same way, and is one of the reasons why I added the @ordered@ scope to the "utility scopes":https://github.com/yfactorial/utility_scopes/tree gem.  For instance, when dealing with collections of articles it is reasonable to expect that the default ordering be most recent first, i.e. @created_at DESC@.  Well now you can "specify default ordering, and other scopes, in edge rails":http://github.com/rails/rails/commit/32cb2345a54b9ab38461b2d4bb0dbd1706f2800e directly in your ActiveRecord model.
 

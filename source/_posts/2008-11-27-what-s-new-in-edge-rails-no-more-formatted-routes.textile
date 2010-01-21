@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v2.3/3.0_
-<hr/>
+p(info). This feature is scheduled for: Rails v2.3/3.0
 
 Parallel to the "addition of :except and :only":/articles/2008/11/13/what-s-new-in-edge-rails-except-and-only-routing-options options to Rails' routing comes the "removal of all those @formatted_xxx@ named routes":http://github.com/rails/rails/commit/fef6c32afe2276dffa0347e25808a86e7a101af1.  Turns out these routes "ate up a lot of memory":http://blog.hungrymachine.com/2008/11/11/how-to-save-100m-of-ram-per-mongrel-part-2 and served minimal purpose.
 

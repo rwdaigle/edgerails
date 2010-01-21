@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_I've updated this post to reflect the features added after RC1, so consider this to be a full list of major 2.2 features_
-<hr/>
+p(info). I've updated this post to reflect the features added after RC1, so consider this to be a full list of major 2.2 features
 
 Rails 2.2 (RC1) was just released, let's take a peek at some of the major new features (as determined by yours truly - feel free to pipe up with features that I've missed).
 

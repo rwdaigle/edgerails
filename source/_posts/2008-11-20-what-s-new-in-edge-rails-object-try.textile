@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v2.3/3.0_
-<hr/>
+p(info). This feature is scheduled for: Rails v2.3/3.0
 
 Those of you using "Chris Wanstrath's slick little @try@ trick":http://ozmm.org/posts/try.html will now have access to that functionality in Rails with this "ActiveSupport update":http://github.com/rails/rails/commit/51730792ca930a896361eb92354a42bc56903de1.
 

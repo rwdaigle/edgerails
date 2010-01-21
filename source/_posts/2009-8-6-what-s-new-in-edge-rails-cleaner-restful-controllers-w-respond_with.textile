@@ -5,13 +5,11 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is schedule for: Rails v3.0_
-<hr/>
+p(info). This feature is schedule for: Rails v3.0
 
 REST is a first-class citizen in the Rails world, though most of the hard work is done at the routing level.  The controller stack has some niceties revolving around mime type handling with the @respond_to@ facility but, to date, there's not been a lot built into actionpack to handle the serving of resources.  The "addition of @respond_with@":http://github.com/rails/rails/commit/09de34ca56598ae5d0302a14715b2a11b6cc9845 (and "this follow-up":http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4) takes one step towards more robust RESTful support with an easy way to specify how resources are delivered.  Here's how it works:
 
-h1. Basic Usage
+h3. Basic Usage
 
 In your controller you can specify what resource formats are supported with the class method @respond_*to*@.  Then, within your individual actions, you tell the controller the resource or resources to be delivered using @respond_*with*@:
 
@@ -78,7 +76,7 @@ end
 {% endhighlight %}
 </notextile>
 
-h1. Per-Action Overriding
+h3. Per-Action Overriding
 
 It's also possible to override standard resource handling by passing in a block to @respond_with@ specifying which formats to override for that action:
 
@@ -100,7 +98,7 @@ end
 {% endhighlight %}
 </notextile>
 
-h1. :except And :only Options
+h3. :except And :only Options
 
 You can also pass in @:except@ and @:only@ options to only support formats for specific actions (as you do with @before_filter@):
 
@@ -114,7 +112,7 @@ end
 {% endhighlight %}
 </notextile>
 
-h1. The :any Format
+h3. The :any Format
 
 If you're still want to use @respond_to@ within your individual actions this update has also bundled the @:any@ resource format that can be used as a wildcard match against any unspecified formats:
 

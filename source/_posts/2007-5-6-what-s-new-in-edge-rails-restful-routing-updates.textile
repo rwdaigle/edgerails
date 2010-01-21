@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-h1. has_many and has_one RESTful Routing
+h3. has_many and has_one RESTful Routing
 
 Until the day comes that Rails' routing can interrogate your domain model and properly translate the existing ActiveRecord associations into RESTful routes, we will have to settle for the same sugary-sweet declaration syntax.  Instead of nesting resources in your routing configuration to imply an association, "you can now ":http://dev.rubyonrails.org/changeset/6588 directly specify the routing association with @has_one@ and @has_many@:
 
@@ -29,7 +29,7 @@ end
 
 You can always drop back to the nested form to specify more detailed options, but for vanilla routes this gets you an intuitive way to specify resource relationships that are directly reflected in your routing.
 
-h1. Auto Routing Name Prefixing
+h3. Auto Routing Name Prefixing
 
 As part of the "same update":http://dev.rubyonrails.org/changeset/6588 you no longer have to specify a named prefix for nested resources (to avoid conflicts with other named routes) - now named prefixes are assumed for you based on the resource nesting.  For instance, this routing:
 

@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is schedule for: Rails v3.0_
-<hr/>
+p(info). This feature is schedule for: Rails v3.0
 
 I'm not sure if this was ever stated explicitly has a preferred practice or not, but for the longest time many of us have recognized that using migrations as a way to populate the database with a base configuration dataset is wrong.  Migrations are for manipulating the structure of your database, not for the data within it and certainly not for simple population tasks.
 

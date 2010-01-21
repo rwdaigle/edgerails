@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v2.3/3.0_
-<hr/>
+p(info). This feature is scheduled for: Rails v2.3/3.0
 
 In what is clearly a move to make me irrelevant within the Rails community, news has broken about the "new Rails metal":http://weblog.rubyonrails.org/2008/12/17/introducing-rails-metal feature before I had the time to do a proper write-up.  (And for the "second time":/articles/2008/12/11/what-s-new-in-edge-rails-application-generators in as many weeks, no less).  I need to get on my horse here, many apologies.
 

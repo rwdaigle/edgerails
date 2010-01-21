@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-h1. ActiveResource find Updates
+h3. ActiveResource find Updates
 
 The ActiveResource @find@ method just got a "little bit of tightening":http://dev.rubyonrails.org/changeset/6646 with a new @:from@ option.  This option basically replaces the ability to call a "custom method":/articles/2007/4/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods with a single argument to @find@ and makes @find@ a little less open-ended.
 
@@ -43,7 +43,7 @@ Post.find(:one, :from => "/categories/1/latest.xml")  #=> GET /categories/1/late
 
 So basically what's happened is that the first argument to @find@ has been tightened to allow either the resource id or the scope (@:all@, @:first@, @:one@) and any custom method or manual resource location has been moved to the @:from@ option.
 
-h1. ActiveResource Custom Headers
+h3. ActiveResource Custom Headers
 
 ActiveResource was also recently updated to include the ability to set "custom headers":http://dev.rubyonrails.org/changeset/6624 per resource.
 

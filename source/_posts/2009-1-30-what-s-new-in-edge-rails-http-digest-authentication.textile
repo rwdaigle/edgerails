@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v2.3_
-<hr/>
+p(info). This feature is scheduled for: Rails v2.3
 
 Long ago, in your mother's version of rails, we got a "http basic authentication":/articles/2006/12/4/whats-new-in-edge-rails-new-http-authentication-plugin-and-a-plea-to-contribute plugin.  That functionality has since been rolled into Rails core, but it was always lacking HTTP digest authentication.  Until "this commit":http://github.com/rails/rails/commit/306cc2b920203cfa51cee82d2fc452484efc72f8, that is.
 

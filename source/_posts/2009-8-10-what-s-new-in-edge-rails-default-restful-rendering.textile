@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is schedule for: Rails v3.0_
-<hr/>
+p(info). This feature is schedule for: Rails v3.0
 
 A few days ago I wrote about the new "@respond_with@ functionality":http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with of Rails 3.  It's basically a clean way to specify the resource to send back in response to a RESTful request.  This works wonders for successful @:xml@ and @:json@ requests where the default response is to send back the integerized form of the resource, but still presents a lot of cruft when handling user-invoked @:html@ requests (i.e. 'navigational' requests) and requests where error handling is required.  For instance, consider your standard @create@ action:
 
@@ -44,7 +42,7 @@ end
 
 Even with the heavy lifting of @respond_with@ you can see that there's still a lot of plumbing left for you to do - plumbing that is mostly the same for all RESTful requests.  Well "José":http://blog.plataformatec.com.br/ and the Rails team have a solution to this and have "introduced controller responders":http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4.
 
-h1. Controller Responders
+h3. Controller Responders
 
 Controller responders handle the chore of matching the HTTP request method and the resource format type to determine what type of response should be sent.  And since REST is so well-defined it's very easy to establish a default responder to handle the basics.
 
@@ -151,7 +149,7 @@ end
 
 Oh yeah, that's getting real lean.
 
-h1. Overriding Default Behavior
+h3. Overriding Default Behavior
 
 If you need to override the default behavior of a particular format you can do so by passing a block to @respond_with@ (as I wrote about in the "original article":http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with):
 
@@ -174,7 +172,7 @@ end
 {% endhighlight %}
 </notextile>
 
-h1. Nested Resources
+h3. Nested Resources
 
 It's quite common to operate on resources within a nested resource graph (though I prefer to go one level deep, at most).  For such cases you need to let @respond_with@ know of the object hierarchy (using the same parameters as "@polymorphic_url@":http://api.rubyonrails.org/classes/ActionController/PolymorphicRoutes.html#M000486):
 
@@ -201,7 +199,7 @@ end
 
 If you have a singleton resource within your resource graph just use a symbol instead of an actual object instance.  So to get @/admin/users/1@ you would invoke @respond_with(:admin, @user)@.
 
-h1. Custom Responders
+h3. Custom Responders
 
 While there's no facility to provide your own responder classes, it will no doubt be added shortly.  If you look at the "current responder class definition":http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L81, it's a very simple API essentially only requiring a @call@ method (more intuitively take a look at the "@:to_html@":http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L111 and "@:to_format@":hhttp://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L125 methods).
 

@@ -5,9 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-<hr/>
-_This feature is scheduled for: Rails v2.3_
-<hr/>
+p(info). This feature is scheduled for: Rails v2.3
 
 ActiveRecord got a little batch-help today with the addition of "ActiveRecord::Base#find_each and ActiveRecord::Base#find_in_batches":http://github.com/rails/rails/commit/d13623ca46c82120c398f4634e206422fc3ad7ea.  The former lets you iterate over all the records in cursor-like fashion (only retrieving a set number of records at a time to avoid cramming too much into memory):
 
