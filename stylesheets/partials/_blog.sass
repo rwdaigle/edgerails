@@ -1,7 +1,17 @@
 .blog
+  .article:first-child h2
+    border-top: 0
+  h2
+    border-top: 1px solid #{!article_border}
+    padding-top: .4em
+    margin-bottom: .5em
+  .title
+    color: #333
+    text-decoration: none
+    &:hover
+      text-decoration: underline
   .article
     padding= !base_font_size * 1.5 0 !base_font_size * 1.5
-    border-bottom= "1px solid" !article_border
     &:first-child
       padding-top: 0
   .footer
