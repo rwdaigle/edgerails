@@ -1,27 +1,62 @@
 .blog
-  .article:first-child h2
-    border-top: 0
+  .article
+    margin-top: 2.5em
+    border-bottom: 1px solid #{!article_border}
+    position: relative
+    padding-bottom: 1.5em
+    &:first-child
+      margin-top: 0
   h2
-    border-top: 1px solid #{!article_border}
-    padding-top: .4em
-    margin-bottom: .5em
+    padding-top: 0
+    margin-bottom: .1em
   .title
     color: #333
     text-decoration: none
     &:hover
       text-decoration: underline
-  .article
-    padding= !base_font_size * 1.5 0 !base_font_size * 1.5
-    &:first-child
-      padding-top: 0
   .footer
     padding-top= !base_font_size
 
 /* parts */
 
 p.info
-  border-top: 1px dashed #ddd
-  border-bottom: 1px dashed #ddd
+  position: absolute
+  left: 0
+  top: 0
   padding: 8px 0
   margin-bottom: 1em
   font-style: italic
+
+.meta
+  border-bottom: 1px dashed #ddd
+  text-transform: uppercase
+  color: #777
+  padding: 8px 0 5px
+  margin-bottom: 1.5em
+  font-size: 80%
+  letter-spacing: 1px
+
+span.version
+  border: 1px solid #{darken(#c42728, 25)}
+  border-top-color: #{darken(#c42728, 5)}
+  border-left-color: #{darken(#c42728, 12)}
+  border-right-color: #{darken(#c42728, 12)}
+  +v-gradient(lighten(#c42728, 20), darken(#c42728, 10), color_stop(.08, #c42728))
+  background-color: #{darken(#c42728, 5)}
+  +border-radius(6px)
+  +text-shadow(darken(#c42728, 25), 1px, 1px, 1px)
+  padding: 6px 8px
+  display: block
+  color: #fff
+  font-size: 80%
+  position: absolute
+  top: 8px
+  left: -60px
+  text-align: center
+  line-height: 1em
+  font-weight: bold
+  width: 30px
+  strong
+    text-transform: uppercase
+    display: block
+    font-size: 80%
