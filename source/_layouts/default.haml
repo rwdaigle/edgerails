@@ -60,10 +60,10 @@ google_analytics_tracking_id: UA-77805-13
               .blog
                 .article
                   %h2= page.title
+                  - if page.respond_to? :author
+                    .meta
+                      by: #{page.author} | posted: #{page.date.strftime("%B #{page.date.day.ordinalize}, %Y")}
                   = preserve rp(content)
-                %p.pubdate
-                  Published:
-                  =page.date.strftime("%d %b, %Y")
                 %p.related_articles
                   %h2 Related Articles
                   %ul                
