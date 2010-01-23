@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature is scheduled for: Rails v2.3/3.0
+span(version). *Rails* 2.3 or 3.0
 
 I'm way late to the party on "this one":http://github.com/rails/rails/commit/e8cc4b116c460c524961a07da92da3f323854c15, but it's such a great feature that the least I can do is provide some link love for Edge Rails' new "application template":http://m.onkey.org/2008/12/4/rails-templates feature.
 

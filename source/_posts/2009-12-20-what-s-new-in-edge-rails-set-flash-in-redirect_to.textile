@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature is schedule for: Rails v2.3 stable
+span(version). *Rails* 2.3
 
 "Rails' flash":http://api.rubyonrails.org/classes/ActionController/Flash.html is a convenient way of passing objects (though mostly used for message strings) across http redirects.  In fact, every time you set a flash parameter the very next step is often to perform your redirect w/ @redirect_to@:
 

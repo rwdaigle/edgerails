@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature is schedule for: Rails v3.0
+span(version). *Rails* 3.0
 
 A few days ago I wrote about the new "@respond_with@ functionality":http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with of Rails 3.  It's basically a clean way to specify the resource to send back in response to a RESTful request.  This works wonders for successful @:xml@ and @:json@ requests where the default response is to send back the integerized form of the resource, but still presents a lot of cruft when handling user-invoked @:html@ requests (i.e. 'navigational' requests) and requests where error handling is required.  For instance, consider your standard @create@ action:
 

@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature was released in Rails v2.2.1
+span(version). *Rails* 2.2.1
 
 We talked about the "new conditional GET support":/articles/2008/8/14/what-s-new-in-edge-rails-simpler-conditional-get-support-etags in rails a couple months ago. As some of the comments alluded, the feature was somewhat cumbersome to use - especially by Ruby standards.  Well, the feature has since been refined.  So, read the "original post":/articles/2008/8/14/what-s-new-in-edge-rails-simpler-conditional-get-support-etags to get the gist and come back here for the sugar.
 

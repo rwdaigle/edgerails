@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature is schedule for: Rails v3.0
+span(version). *Rails* 3.0
 
 ActiveRecord validations, ground zero for anybody learning about Rails, got a lil' bit of decoupling mojo today with the "introduction of validator classes":http://github.com/rails/rails/commit/22f339825329e2d4463a4130e9fa68baf9d27eb6.  Until today, the only options you had to define a custom validation was by overriding the "validate":http://api.rubyonrails.org/classes/ActiveRecord/Validations.html#M002158 method or by using "validates_each":http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002161, both of which pollute your models with gobs of validation logic.
 

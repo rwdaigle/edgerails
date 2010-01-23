@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature is scheduled for: Rails v2.3
+span(version). *Rails* 2.3
 
 We were all teased a few months ago about the possibility of finally "solving the nested model/complex forms problem in Rails":/articles/2008/7/19/what-s-new-in-edge-rails-nested-models, but were then cruelly notified that it wasn't "quite ready for prime time":http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5.  But our day has come - the "most requested feature":http://rails.uservoice.com/pages/rails3/suggestions/99641-nested-model-forms for Rails 2.3, the "ability to handle multiple models in a single form":http://github.com/rails/rails/commit/ec8f04584479aff895b0b511a7ba1e9d33f84067, is here.
 

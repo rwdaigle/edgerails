@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature was released in Rails v2.3.3
+span(version). *Rails* 2.3.3
 
 There are often times when you want an update made to one object to be reflected up the object graph as an update of an associated parent object.  For instance, if a new comment is created on an article, you may very well want to mark the article as being updated.  With the "new touch feature":http://github.com/rails/rails/commit/abb899c54e8777428b7a607774370ba29a5573bd of ActiveRecord, this is a whole lot easier.  Using our previous example, here's is how it works:
 

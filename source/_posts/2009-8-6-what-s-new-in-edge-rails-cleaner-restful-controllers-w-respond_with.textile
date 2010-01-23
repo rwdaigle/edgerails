@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature is schedule for: Rails v3.0
+span(version). *Rails* 3.0
 
 REST is a first-class citizen in the Rails world, though most of the hard work is done at the routing level.  The controller stack has some niceties revolving around mime type handling with the @respond_to@ facility but, to date, there's not been a lot built into actionpack to handle the serving of resources.  The "addition of @respond_with@":http://github.com/rails/rails/commit/09de34ca56598ae5d0302a14715b2a11b6cc9845 (and "this follow-up":http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4) takes one step towards more robust RESTful support with an easy way to specify how resources are delivered.  Here's how it works:
 

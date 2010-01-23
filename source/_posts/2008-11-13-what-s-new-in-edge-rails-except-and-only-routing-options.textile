@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature was released in: Rails v2.2.1
+span(version). *Rails* 2.2.1
 
 Just added to Edge Rails is the "ability to exclude and include the default generated routes":http://github.com/rails/rails/commit/44a3009ff068bf080de6764a8c884fbf0ceb920e in your mapping configuration.  Previously, @map.resources :articles@ would generate routes to all seven default actions on the @ArticlesController@ (index, create, new, edit, show, update, destroy).  You can now tell your routes configuration to only generate a subset of those actions, or to exclude a subset of those actions:
 

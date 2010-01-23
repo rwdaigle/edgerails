@@ -5,7 +5,7 @@ categories:
   - "what-s-new-in-edge-rails"
 ---
  
-p(info). This feature is scheduled for: Rails v2.3/3.0
+span(version). *Rails* 2.3 or 3.0
 
 Ever wonder why your @ArticlesController@ has to live in a file called @articles_controller.rb@ but that special @ApplicationController@ gets to hang out in @application.rb@?  Well "no more":http://github.com/rails/rails/commit/fcce1f17eaf9993b0210fe8e2a8117b61a1f0f69.. That snooty little controller will now live in @application_controller.rb@ and abide by the same naming restrictions that the rest of us do.
 
