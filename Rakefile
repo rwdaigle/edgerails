@@ -34,7 +34,7 @@ task :deploy => :deploy_rsync do
 end
 
 desc "generate website in output directory"
-task :default => [:generate_site, :generate_style] do
+task :generate => [:generate_site, :generate_style] do
   puts ">>> Site Generating Complete! <<<\n\n"
 end
 
@@ -127,13 +127,13 @@ task :watch do
 end
 
 desc "generate and deploy website via rsync"
-multitask :deploy_rsync => [:integrate, :default, :clean_debug] do
+multitask :deploy_rsync => [:integrate, :generate, :clean_debug] do
   puts ">>> Deploying website to #{site_url} <<<"
   ok_failed system("rsync -avz --delete #{site}/ #{ssh_user}:#{document_root}")
 end
 
 desc "generate and deploy website to github user pages"
-multitask :deploy_github => [:integrate, :default, :clean_debug] do
+multitask :deploy_github => [:integrate, :generate, :clean_debug] do
   puts ">>> Deploying #{deploy_branch} branch to Github Pages <<<"
   require 'git'
   repo = Git.open('.')
@@ -174,13 +174,13 @@ task :stop_serve do
 end
 
 desc "preview the site in a web browser"
-multitask :preview => [:default, :start_serve] do
+multitask :preview => [:generate, :start_serve] do
   system "open http://localhost:#{port}"
 end
 
 
 desc "Build an XML sitemap of all html files."
-task :sitemap => :default do
+task :sitemap => :generate do
   html_files = FileList.new("#{site}/**/*.html").map{|f| f[("#{site}".size)..-1]}.map do |f|
     if f.ends_with?("index.html")
       f[0..(-("index.html".size + 1))]
