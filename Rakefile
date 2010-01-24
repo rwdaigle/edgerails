@@ -195,7 +195,7 @@ task :sitemap => :generate do
       priority = case f
       when %r{^/$}
         1.0
-      when %r{^/blog}
+      when %r{^/articles}
         0.9
       else
         0.8
