@@ -1,0 +1,11 @@
+- if page.respond_to? :twitter_search
+
+  :javascript
+    var twitter_search = "#{page.twitter_search}";
+    var show_replies = #{page.show_replies};
+    var tweet_count = #{page.tweet_count};
+    
+  %h4 Twitter <a class="small" href="http://search.twitter.com/?q=#{page.twitter_search}">edge rails</a>
+  #twitter
+    %ul#twitter_status
+      Fetching tweets...
