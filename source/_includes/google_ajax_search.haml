@@ -1,0 +1,13 @@
+:javascript
+
+  google.load("search", "1");  
+  
+  function OnLoad() {
+    var searchControl = new google.search.SearchControl();
+    var webSearch = new google.search.WebSearch();
+    webSearch.setSiteRestriction('#{page.full_url}');
+    searchControl.addSearcher(webSearch);
+    searchControl.draw(document.getElementById("search"));
+  }
+  
+  google.setOnLoadCallback(OnLoad);

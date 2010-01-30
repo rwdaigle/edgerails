@@ -1,0 +1,26 @@
+- if page.respond_to? :twitter_search
+
+  :javascript
+    $(window).load(function() {
+      $('#tweets').twitterize('edgerails OR "edge rails"');
+    });
+
+  %h4
+    Twitter
+    %a.small{:href => "http://search.twitter.com/search?q=edgerails OR \"edge rails\""} edge rails
+  #tweets{:template => "#tweet_template"}Loading tweets...
+  %script#tweet_template{:type => "text/html"}
+    :plain
+      <% for ( var i = 0; i < results.length; i++ ) { %>
+        <% var tweet = results[i]; %>
+        <div class="tweet">
+          <a href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+          <%= tweet.text %>
+          <div class="meta">
+            About
+            <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+              <%= prettyDate(tweet.created_at) %>
+            </a>
+          </span>
+        </div>
+      <% } %>

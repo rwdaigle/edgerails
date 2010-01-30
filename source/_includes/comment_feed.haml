@@ -1,0 +1,28 @@
+:javascript
+  google.load("feeds", "1");
+
+  function initialize() {
+    var feed = new google.feeds.Feed("http://edgerails.disqus.com/comments.rss");
+    feed.load(function(result) {
+      if (!result.error) {
+        var container = document.getElementById("comment_feed_items");
+        container.innerHTML = '';
+        for (var i = 0; i < result.feed.entries.length; i++) {
+          var entry = result.feed.entries[i];
+          var li = document.createElement("li");
+          txt = document.createTextNode(entry.author + ' said ' + entry.contentSnippet + ' ');
+          link = document.createElement('a');
+          link.setAttribute('href', entry.link);
+          link.appendChild(document.createTextNode(entry.title));
+          li.appendChild(txt);
+          li.appendChild(link);
+          container.appendChild(li);
+        }
+      }
+    });
+  }
+  google.setOnLoadCallback(initialize);
+    
+%h4 Recent comments
+#comment_feed
+  %ul#comment_feed_items Fetching comments...
