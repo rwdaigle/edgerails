@@ -7,6 +7,6 @@ url: http://edgerails.info
 multiviews: true
 sass: false
 haml: true
-lsi: false
+lsi: true
 post_defaults:
   layout: default
