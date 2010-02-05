@@ -11,7 +11,7 @@ span(version). *Rails* 2.3
 
 <notextile>
 <div class="code_window">
-<em>Ruby &mdash; some_cool_file.rb</em>
+<em>Ruby - some_cool_file.rb</em>
 {% highlight ruby %}
 class UsersController < ApplicationController
   def create

@@ -7,14 +7,16 @@
     var $resultsEl = $($me.attr('results'));
     var cseId = $me.attr('cse');
     
-    $me.keypress(function() {
-      var query = $me.attr('value');
+    $me.submit(function() {
+      var query = $me.find('input.search_field').attr('value');
       $.googleSearch(query, {
         callback: function(searchResponse) {
+          $resultsEl.show();
           $resultsEl.applySearchResults(searchResponse);
         },
         urlParams: { cx: cseId }
       });
+      return false;
     });
   };
   

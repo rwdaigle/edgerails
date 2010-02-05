@@ -1,0 +1,25 @@
+- google_custom_search_id = "001155634542480541734:-pewsihppdg"
+
+:javascript
+  $(window).load(function() {
+    $('#google_search').enableSearch();
+  });
+  function hideSearchResults() {
+    $('#search_results').hide();
+  }
+
+%form#google_search{:results => '#search_results', :cse => google_custom_search_id}
+  %input.search_field{:type => :text, :size => 10}
+      
+#search_results.hidden{:template => '#search_template'}
+
+%script#search_template{:type => "text/html"}
+  :plain
+    <% for ( var i = 0; i < results.length; i++ ) { %>
+      <% var result = results[i]; %>
+      <div class="search_result">
+        <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+        <div class="small"><%= result.content %></div>
+      </div>
+    <% } %>
+    <a class="small" href="#" onClick="hideSearchResults(); return false;">close</a>
