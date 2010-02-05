@@ -1,7 +1,7 @@
 - if page.respond_to? :date
   - if site.related_posts.any?
     %h4 Related articles
-    %ul#related_posts
+    #related_posts
       - for post in site.related_posts[0..5] do
-        %li.related_post
+        .related_post
           %a{:href => post.url}= post.title
