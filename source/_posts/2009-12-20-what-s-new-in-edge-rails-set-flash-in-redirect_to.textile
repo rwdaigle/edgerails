@@ -10,8 +10,6 @@ span(version). *Rails* 2.3
 "Rails' flash":http://api.rubyonrails.org/classes/ActionController/Flash.html is a convenient way of passing objects (though mostly used for message strings) across http redirects.  In fact, every time you set a flash parameter the very next step is often to perform your redirect w/ @redirect_to@:
 
 <notextile>
-<div class="code_window">
-<em>Ruby - some_cool_file.rb</em>
 {% highlight ruby %}
 class UsersController < ApplicationController
   def create
@@ -21,7 +19,6 @@ class UsersController < ApplicationController
   end
 end
 {% endhighlight %}
-</div>
 </notextile>
 
 I know I hate to see two lines of code where one makes sense - in this case what you're saying is to "redirect to the new user page with the given notice message" - something that seems to make more sense as a singular command.
