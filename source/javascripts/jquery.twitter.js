@@ -9,7 +9,7 @@
     if(!tweets) {      
       $.getJSON(
         "http://search.twitter.com/search.json?callback=?",
-        { rpp: 10, page: 1, lang: 'en', q: query },
+        { rpp: 3, page: 1, lang: 'en', q: query },
         function(data) {
           storeTweets(data);
           $me.applyTweets(data);

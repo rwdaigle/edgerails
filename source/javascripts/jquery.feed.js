@@ -8,6 +8,7 @@
     
     if(!feedData) {
       var feed = new google.feeds.Feed($me.attr('feed'));
+      feed.setNumEntries(3);
       feed.load(function(result) {
         storeFeed(result);
         $me.applyFeed(result);
