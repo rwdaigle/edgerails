@@ -46,6 +46,9 @@ task :post, :filename do |t, args|
   open("#{source}/_posts/#{Time.now.strftime('%Y-%m-%d')}-#{args.filename.gsub(/[ _]/, '-').downcase}.markdown", 'w') do |post|
     post.puts "---"
     post.puts "title: \"#{args.filename.gsub(/[-_]/, ' ').titlecase}\""
+    post.puts "author: \"\""
+    post.puts "categories:"
+    post.puts "\t- \"what-s-new-in-edge-rails\""
     post.puts "---"
   end
 end
