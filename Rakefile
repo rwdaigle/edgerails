@@ -48,7 +48,7 @@ task :post, :filename do |t, args|
     post.puts "title: \"#{args.filename.gsub(/[-_]/, ' ').titlecase}\""
     post.puts "author: \"\""
     post.puts "categories:"
-    post.puts "\t- \"what-s-new-in-edge-rails\""
+    post.puts "  - \"what-s-new-in-edge-rails\""
     post.puts "---"
   end
 end
