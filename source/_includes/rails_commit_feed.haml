@@ -1,0 +1,13 @@
+%h4 Rails commits
+#rails_commit_feed.feed{:feed => "http://github.com/feeds/rails/commits/rails/master", :template => '#rails_commit_feed_template'}
+  Fetching Rails commits...
+%script#rails_commit_feed_template{:type => "text/html"}
+  :plain
+    <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+      <% var entry = feed.entries[i]; %>
+      <div class="entry">
+        <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+        <div class="meta" />
+      </div>
+    <% } %>
+  
