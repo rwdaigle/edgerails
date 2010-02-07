@@ -1,3 +1,5 @@
+- google_custom_search_id = "001155634542480541734:-pewsihppdg"
+
 .page_width
   %ul
     %li.articles.first
@@ -7,6 +9,7 @@
     %li.publish.last
       %a(href="/publish.html") Publishing Guide
     %li.search
-      = include "search.haml"
+      %form#google_search{:results => '#search_results', :cse => google_custom_search_id}
+        %input.search_field{:type => :text, :size => 10}
     %li.subscribe
       %a(href="http://feeds.feedburner.com/edgerails") Subscribe
