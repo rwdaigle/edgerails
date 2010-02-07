@@ -30,7 +30,11 @@ end
 
 ## if you're deploying with github, change the default deploy to deploy_github
 desc "default deploy task"
-task :deploy => :deploy_rsync do
+task :deploy => [:deploy_rsync] do
+end
+
+desc "Generate and deploy task"
+task :generate_deploy => [:integrate, :generate, :clean_debug, :deploy] do
 end
 
 desc "generate website in output directory"
@@ -130,13 +134,13 @@ task :watch do
 end
 
 desc "generate and deploy website via rsync"
-multitask :deploy_rsync => [:integrate, :generate, :clean_debug] do
+multitask :deploy_rsync do
   puts ">>> Deploying website to #{site_url} <<<"
   ok_failed system("rsync -avz --delete #{site}/ #{ssh_user}:#{document_root}")
 end
 
 desc "generate and deploy website to github user pages"
-multitask :deploy_github => [:integrate, :generate, :clean_debug] do
+multitask :deploy_github do
   puts ">>> Deploying #{deploy_branch} branch to Github Pages <<<"
   require 'git'
   repo = Git.open('.')
