@@ -15,13 +15,13 @@
     <% for ( var i = 0; i < results.length; i++ ) { %>
       <% var tweet = results[i]; %>
       <div class="tweet">
-        <a href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
-        <%= tweet.text %>
+        <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+        <p><%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %></p>
         <div class="meta">
           About
           <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
             <%= prettyDate(tweet.created_at) %>
           </a>
-        </span>
+        </div>
       </div>
     <% } %>
