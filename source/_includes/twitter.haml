@@ -1,7 +1,7 @@
 - twitter_search = "edgerails OR \"edge rails\""
 
 :javascript
-  $(window).load(function() {
+  $(document).ready(function() {
     $('#tweets').twitterize('#{twitter_search}');
   });
 
