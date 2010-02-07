@@ -5,13 +5,13 @@
   });
     
 %h4 Recent comments
-#comment_feed{:feed => "http://edgerails.disqus.com/comments.rss", :template => '#comment_feed_template'}
+#comment_feed.feed{:feed => "http://edgerails.disqus.com/comments.rss", :template => '#comment_feed_template'}
   Fetching comments...
 %script#comment_feed_template{:type => "text/html"}
   :plain
     <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
       <% var entry = feed.entries[i]; %>
-      <div class="comment">
+      <div class="entry">
         <%= entry.author %> said <%= entry.contentSnippet %>
         <div class="meta">
           <a href="<%= entry.link %>"><%= entry.title %></a>

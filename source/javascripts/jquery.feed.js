@@ -4,13 +4,13 @@
   $.fn.feedme = function() {
     
     var $me = $(this);
-    var feedData = getStoredFeed();
+    var feedData = getStoredFeed($me.cookieName());
     
     if(!feedData) {
       var feed = new google.feeds.Feed($me.attr('feed'));
       feed.setNumEntries(3);
       feed.load(function(result) {
-        storeFeed(result);
+        storeFeed(result, $me.cookieName());
         $me.applyFeed(result);
       });
     } else {
@@ -27,14 +27,19 @@
     });
   };
   
-  var COOKIE_NAME = '_comment_feed';
+  var COOKIE_NAME_SUFFIX = '_feed';
   
-  var storeFeed = function(feed) {
-    $.cookie(COOKIE_NAME, JSON.stringify(feed), { expires: 1 })
+  // Call back to process tweets and apply to template
+  $.fn.cookieName = function() {
+    return $(this).attr('id') + COOKIE_NAME_SUFFIX
   };
   
-  var getStoredFeed = function() {
-    cookieData = $.cookie(COOKIE_NAME);
+  var storeFeed = function(feed, cookieName) {
+    $.cookie(cookieName, JSON.stringify(feed), { expires: 1 })
+  };
+  
+  var getStoredFeed = function(cookieName) {
+    cookieData = $.cookie(cookieName);
     return cookieData ? JSON.parse(cookieData) : null;
   };
   

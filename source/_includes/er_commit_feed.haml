@@ -1,0 +1,19 @@
+:javascript
+  google.load("feeds", "1");
+  google.setOnLoadCallback(function() {
+    $('#er_commit_feed').feedme();
+  });
+    
+%h4 EdgeRails.info updates
+#er_commit_feed.feed{:feed => "http://github.com/feeds/rwdaigle/commits/edgerails/master", :template => '#er_commit_feed_template'}
+  Fetching EdgeRails.info updates...
+%script#er_commit_feed_template{:type => "text/html"}
+  :plain
+    <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+      <% var entry = feed.entries[i]; %>
+      <div class="entry">
+        <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+        <div class="meta" />
+      </div>
+    <% } %>
+  
