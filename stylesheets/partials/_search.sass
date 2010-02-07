@@ -1,20 +1,48 @@
-#search
-  position: absolute
-  left= !page_width + !sidebar_margin - !sidebar_width
-  top= 10%
-  form
-    background: url(/images/search_bg.png) no-repeat
-    padding: 0
-    height: 28px
-    width: 218px
-  #q
-    background: none
-    position: relative
-    top: 1px
-    width: 160px
-    margin-left: 30px
-    font-size: 15px
-    border: none
-    color: #aaa
-    &:focus
-      outline: none
+#search_results
+  .results
+    clear: both
+    background: #fafafa
+    border: 1px solid #eee
+    width: #{!page_width - 2}
+    margin: 0 auto
+    +border-bottom-radius
+    h5
+      font-size: 145%
+      padding: 10px 15px 0
+      margin: 0
+    ul
+      margin: 15px 10px 10px
+      padding: 5px 0
+      border-bottom: 1px solid #eee
+      border-top: 1px solid #eee
+      background: #fefefe
+    li
+      padding: 10px 0px 0
+      margin: 0 15px
+      border-top: 1px dashed #eee
+      list-style-type: none
+      &:first-child
+        border: none
+      a
+        font-size: 110%
+        display: inline-block
+      p
+        +sans-font
+        padding-bottom: 10px
+        font-size: 85%
+        margin: 0
+        line-height: 1.45em
+    em
+      display: inline-block
+      padding: 5px 15px 15px
+    #close_search
+      display: inline-block
+      padding: 2px 8px
+      background: #fcfcfc
+      border: 1px solid #eaeaea
+      margin: 10px
+      +border-radius
+      font-size: 85%
+      &:hover
+        background: #fff
+        border-color: #ddd
