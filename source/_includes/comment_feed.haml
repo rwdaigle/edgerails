@@ -1,9 +1,3 @@
-:javascript
-  google.load("feeds", "1");
-  google.setOnLoadCallback(function() {
-    $('#comment_feed').feedme();
-  });
-    
 %h4 Recent comments
 #comment_feed.feed{:feed => "http://edgerails.disqus.com/comments.rss", :template => '#comment_feed_template'}
   Fetching comments...

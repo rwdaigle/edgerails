@@ -1,9 +1,3 @@
-:javascript
-  google.load("feeds", "1");
-  google.setOnLoadCallback(function() {
-    $('#rails_commit_feed').feedme();
-  });
-    
 %h4 Rails commits
 #rails_commit_feed.feed{:feed => "http://github.com/feeds/rails/commits/rails/master", :template => '#rails_commit_feed_template'}
   Fetching Rails commits...

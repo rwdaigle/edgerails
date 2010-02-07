@@ -1,9 +1,3 @@
-:javascript
-  google.load("feeds", "1");
-  google.setOnLoadCallback(function() {
-    $('#er_commit_feed').feedme();
-  });
-    
 %h4 EdgeRails.info updates
 #er_commit_feed.feed{:feed => "http://github.com/feeds/rwdaigle/commits/edgerails/master", :template => '#er_commit_feed_template'}
   Fetching EdgeRails.info updates...

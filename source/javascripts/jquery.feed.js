@@ -3,19 +3,21 @@
   // Fetch the feed
   $.fn.feedme = function() {
     
-    var $me = $(this);
-    var feedData = getStoredFeed($me.cookieName());
+    $(this).each(function(index, el) {
+      var $me = $(el);
+      var feedData = getStoredFeed($me.cookieName());
     
-    if(!feedData) {
-      var feed = new google.feeds.Feed($me.attr('feed'));
-      feed.setNumEntries(3);
-      feed.load(function(result) {
-        storeFeed(result, $me.cookieName());
-        $me.applyFeed(result);
-      });
-    } else {
-      $me.applyFeed(feedData);
-    }
+      if(!feedData) {
+        var feed = new google.feeds.Feed($me.attr('feed'));
+        feed.setNumEntries(3);
+        feed.load(function(result) {
+          storeFeed(result, $me.cookieName());
+          $me.applyFeed(result);
+        });
+      } else {
+        $me.applyFeed(feedData);
+      }      
+    });
   };
   
   // Call back to process tweets and apply to template
