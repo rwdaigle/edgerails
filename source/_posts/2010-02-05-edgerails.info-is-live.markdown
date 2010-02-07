@@ -2,7 +2,7 @@
 title: "EdgeRails.Info Is Live"
 author: "Ryan Daigle"
 categories:
-  - "what-s-new-in-edge-rails"
+  - "announcements"
 ---
 
 As I mentioned back on my [personal site](http://ryandaigle.com/), the continuation and evolution of the What's New in Edge Rails series continues here as EdgeRails.info.  I've long wanted to give the Edge Rails series it's own dedicated site and have finally pulled my act together to get this party started.

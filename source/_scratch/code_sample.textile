@@ -1,0 +1,14 @@
+<notextile>
+<div class="code_window">
+<em>Ruby - some_cool_file.rb</em>
+{% highlight ruby %}
+class UsersController < ApplicationController
+  def create
+    @user = User.create(params[:user])
+    flash[:notice] = "The user was successfully created"
+    redirect_to user_path(@user)
+  end
+end
+{% endhighlight %}
+</div>
+</notextile>
