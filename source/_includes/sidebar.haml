@@ -2,6 +2,8 @@
   = include "ads.haml"
   = include "related_posts.haml"
   = include "comment_feed.haml"
-  = include "er_commit_feed.haml"
-  = include "rails_commit_feed.haml"
+  .group
+    %h4 Recent Commits
+    = include "rails_commit_feed.haml"
+    = include "er_commit_feed.haml"
   = include "twitter.haml"
