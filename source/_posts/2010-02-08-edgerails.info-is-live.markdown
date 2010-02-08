@@ -5,7 +5,7 @@ categories:
   - "announcements"
 ---
 
-As I mentioned back on my [personal site](http://ryandaigle.com/), the continuation and evolution of the What's New in Edge Rails series continues here as EdgeRails.info.  I've long wanted to give the Edge Rails series it's own dedicated site and have finally pulled my act together to get this party started.
+As I mentioned back on my [personal site](http://ryandaigle.com/articles/2010/2/8/what-s-new-in-edge-rails-moves-to-edgerails-info), the continuation and evolution of the What's New in Edge Rails series continues here as EdgeRails.info.  I've long wanted to give the Edge Rails series it's own dedicated site and have finally pulled my act together to get this party started.
 
 But, rather than just continue publishing my soliloquies under a new domain, I wanted to alter the direction and expand the site to accept direct input and contributions from the community.  I feel like this mirrors the growth of the Rails framework itself, growing from a single person into a much more community-driven effort.  Also, to be honest, it's a lot of work to keep up with the sometimes frenzied pace of contributions to the [edge rails branch](http://github.com/rails/rails) of the repository and far be it for me to not admit when I'm the one holding things up. (I.e., keeping up with the [firehouse that has been Rails 3](http://github.com/rails/rails/commits/master) has been an impossible task for me).  I also envision more than just play-by-plays of Rails commits - perhaps including some well-written tutorials, timely news etc...?
 
