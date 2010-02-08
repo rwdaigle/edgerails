@@ -12,12 +12,10 @@ google_ajax_api_key: ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxR
   = include "head.haml"
   %body(id="#{(page.respond_to?(:body_id) ? page.body_id : nil)}" class="#{(page.respond_to?(:nav) ? page.nav : nil)}")
   
-    #content
-      #header= include "header.haml"
-      #nav= include "navigation.haml"              
-      #search= include "search.haml"
-      #page= include "page.haml"
-      
+    #header= include "header.haml"
+    #nav= include "navigation.haml"              
+    #search= include "search.haml"
+    #page= include "page.haml"
     #footer= include "footer.haml"
         
     = include "disqus_hook.haml"        

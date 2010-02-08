@@ -1,16 +1,16 @@
 .page_width
-
   #main
-    - if page.respond_to? :date
-      .blog
-        .article
-          %h2= page.title
-          - if page.respond_to? :author
-            .meta
-              by: #{page.author} | posted: #{page.date.strftime("%B #{page.date.day.ordinalize}, %Y")}
-          = preserve rp(content)
-        #disqus_thread= include "disqus_thread.haml"
-    - else
-      = preserve rp(content)
+    .contents
+      - if page.respond_to? :date
+        .blog
+          .article
+            %h2= page.title
+            - if page.respond_to? :author
+              .meta
+                by: #{page.author} | posted: #{page.date.strftime("%B #{page.date.day.ordinalize}, %Y")}
+            = preserve rp(content)
+          #disqus_thread= include "disqus_thread.haml"
+      - else
+        = preserve rp(content)
       
   #sidebar= include "sidebar.haml"
