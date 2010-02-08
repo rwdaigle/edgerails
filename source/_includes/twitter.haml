@@ -5,23 +5,26 @@
     $('#tweets').twitterize('#{twitter_search}');
   });
 
-%h4
-  Edge rails tweets
-  %a.small{:href => "http://search.twitter.com/search?q=#{twitter_search}"} all
-#tweets{:template => "#tweet_template"}Loading tweets...
+#twitter.aside
+  %h4
+    Edge rails tweets
+    %span.small 
+      #{' - '}
+      %a{:href => "http://search.twitter.com/search?q=#{twitter_search}"} all
+  #tweets.twitter_feed{:template => "#tweet_template"}Loading tweets...
 
-%script#tweet_template{:type => "text/html"}
-  :plain
-    <% for ( var i = 0; i < results.length; i++ ) { %>
-      <% var tweet = results[i]; %>
-      <div class="tweet">
-        <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
-        <p><%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %></p>
-        <div class="meta">
-          About
-          <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
-            <%= prettyDate(tweet.created_at) %>
-          </a>
+  %script#tweet_template{:type => "text/html"}
+    :plain
+      <% for ( var i = 0; i < results.length; i++ ) { %>
+        <% var tweet = results[i]; %>
+        <div class="entry">
+          <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+          <p><%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %></p>
+          <div class="meta">
+            About
+            <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+              <%= prettyDate(tweet.created_at) %>
+            </a>
+          </div>
         </div>
-      </div>
-    <% } %>
+      <% } %>

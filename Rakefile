@@ -181,13 +181,13 @@ task :stop_serve do
 end
 
 desc "preview the site in a web browser"
-multitask :preview => [:generate, :start_serve] do
+multitask :preview => [:start_serve] do
   system "open http://localhost:#{port}"
 end
 
 
 desc "Build an XML sitemap of all html files."
-task :sitemap => :generate do
+task :sitemap do
   html_files = FileList.new("#{site}/**/*.html").map{|f| f[("#{site}".size)..-1]}.map do |f|
     if f.ends_with?("index.html")
       f[0..(-("index.html".size + 1))]
@@ -209,7 +209,7 @@ task :sitemap => :generate do
       end
       sitemap.puts %Q{  <url>}
       sitemap.puts %Q{    <loc>#{site_url}#{f}</loc>}
-      sitemap.puts %Q{    <lastmod>#{Time.now.to_s('%Y-%m-%d')}</lastmod>}
+      sitemap.puts %Q{    <lastmod>#{Time.now.strftime('%Y-%m-%d')}</lastmod>}
       sitemap.puts %Q{    <changefreq>weekly</changefreq>}
       sitemap.puts %Q{    <priority>#{priority}</priority>}
       sitemap.puts %Q{  </url>}

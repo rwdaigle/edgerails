@@ -1,15 +1,18 @@
-.feed
+.feed, .twitter_feed
   .entry
-    padding-bottom: 10px
+    padding-top: 10px
+    border-top: 1px dashed #ddd
+    margin-top: 6px
     p
       line-height: 1.45em
       padding-bottom: 6px
+    &:first-child
+      border: none
   .meta
     color= !light_text
     font-size: 90%
     display: block
-    padding: 2px 0 6px
-    border-bottom: 1px dashed #ddd
+    padding: 2px 0 0
     a
       color: inherit
       text-decoration: none

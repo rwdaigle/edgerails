@@ -7,18 +7,16 @@
 +nav-selection("publish")
 
 #nav
-  padding: 0 15px
+  //padding: 0 15px
   .page_width
-    width: #{!page_width - 30px}
     +pie-clearfix
     font-size: 90%
-    margin: 0 auto
+    //margin: 0 -15px
     position: relative
     z-index: 1
-    padding: 6px 15px
+    padding: 7px 15px 7px
     +border-radius(4px)
-    background-color= !nav_bg
-    +v-gradient(lighten(!darkgray, 10), darken(!darkgray, 10))
+    
   ul
     position: relative
     +horizontal-list(0)
@@ -40,9 +38,8 @@
         float: right
         a
           display: inline-block
-          +replace-text("rss.png")
-          width: 24px
-          height: 24px
+          background: #{image_url("rss.png")} no-repeat left center
+          padding-left: 26px
       &.search
         float: right
         padding: 0 0 0 12px
@@ -53,7 +50,10 @@
           color: #ddd
           font-size: 80%
           padding: 3px 3px 3px 20px
-          width: 150px
+          width: #{!sidebar_width - 168px}
+          position: relative
+          top: -1px
+          margin: 0
       a
         display: inline-block
         color= !nav_color

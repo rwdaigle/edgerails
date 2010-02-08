@@ -1,19 +1,27 @@
 #sidebar
-  float: left
-  width= !sidebar_width
-  margin-left= !sidebar_margin
-  font-size: 80%
-  line-height: 1.625em
-  margin-bottom: 35px
+  background: #fcfcfc
+  //border: 1px solid #eee
+  border-top: none
+  font-size: 85%
+  .aside
+    clear: both
+  .half
+    width: #{!sidebar_width/2 - 10}
+    float: left
+    clear: none
+  #ads
+    +clearfix  
   h4
-    margin: 20px 0 10px
-    &:first-child
-      margin-top: 10px
+    margin: 20px -16px 10px
+    padding: 12px 16px
+    background: #fff
+    border-bottom: 1px solid #e5e5e5
+    border-top: 1px solid #e5e5e5
     .small
       +sans-font
-      font-size: 50%
+      font-size: 70%
       
-#twitter, #delicious
+#delicious
   +border-radius
   background: #f8f8f8
   border: 1px solid #eee

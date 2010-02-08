@@ -1,17 +1,40 @@
-!page_width = 980px - 30px
-!main_width = 740px
-!page_pad = 30px
+//!page_width = 981px - 15px
+//!main_width = 720px
+!page_pad = 15px
 !sidebar_margin = 20px
-!sidebar_width = !page_width - !main_width - !sidebar_margin
+!sidebar_width = 275px
 !pad = 15px
 !default_border_radius = 4px
 
 html body
   background-color: !body_bg
   color= !body_color
+  max-width: 1260px
+  margin: 0 auto
+  background-image: url("/images/top.png")
+  background-repeat: repeat-x
+  background-position: 0 -30px
+  padding: 0 60px
   a
     color= !link_color
 
-.page_width
-  width= !page_width
-  margin: 0 auto
+#page, #nav, #footer, #header
+  min-width: 990px
+#page
+  .page_width
+    width: auto
+    padding-right: #{!sidebar_width}
+#main
+  padding-top: 20px
+  float: left
+  width: 100%
+  .contents
+    padding-right: 35px
+
+#sidebar
+  float: left
+  width: #{!sidebar_width - 2}
+  margin-right: -100%
+  padding: 20px 0 15px
+  .contents
+    padding: 0 15px
