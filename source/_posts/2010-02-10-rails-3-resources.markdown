@@ -18,7 +18,7 @@ Here are some good overview posts that will wet your appetite for the juicier te
 * [A Rails 3 retrospective](http://www.engineyard.com/blog/2010/rails-3-beta-is-out-a-retrospective/)
 * [His five favorite things about Rails 3](http://www.engineyard.com/blog/2009/my-five-favorite-things-about-rails-3/)
 
-[Jeremy McAnally](http://omgbloglol.com) has done a lot of work writing about Rails 3 (finally, dude, where ya been?) and has this writeup:
+[Jeremy McAnally](http://omgbloglol.com) has done a lot of work writing about Rails 3 (finally, dude, where ya been?) and has these writeups:
 
 * [An overview of the work done to bring Rails 3 to you](http://omgbloglol.com/post/344792822/the-path-to-rails-3-introduction)
 * [Greenfielding a new Rails 3 app](http://omgbloglol.com/post/371893012/the-path-to-rails-3-greenfielding-new-apps-with-the).
@@ -65,7 +65,7 @@ Even the black sheep of the family gets some attention now and then:
 
 ### Gem Bundler
 
-Rails 3 comes with a whole new way of specifying, loading and manage gem dependencies: the new [gem bundler](http://github.com/carlhuda/bundler) which was developed in parallel with the new version of Rails and replaces what you're used to seeing as a bunch of `config.gem` statements:
+Rails 3 comes with a whole new way of specifying, loading and managing gem dependencies: the new [gem bundler](http://github.com/carlhuda/bundler) which was developed in parallel with the new version of Rails and replaces what you're used to seeing as a bunch of `config.gem` statements:
 
 * [Mikel (you should now be on a first name basis with him by now) has a very complete rundown of the new bundler features](http://lindsaar.net/2010/2/6/bundle_me_some_rails)
 * [Yehuda, one of the bundler project committers, gives a nice narrative of the bundler features](http://yehudakatz.com/2010/02/01/bundler-0-9-heading-toward-1-0/)
@@ -91,19 +91,19 @@ A whole lot of effort was put into making the internal API of Rails much cleaner
 
 * [Yehuda gives you the lowdown on the official rails blog](http://weblog.rubyonrails.org/2010/2/9/plugin-authors-toward-a-better-future)
 * [Yehuda gives you the behind the scenes take on plugins](http://www.engineyard.com/blog/2010/rails-and-merb-merge-plugin-api-part-3-of-6/)
-* [Nicolas Mérouze shows you plugin developers out there how to upgrade your goodies](http://boldr.net/upgrade-plugins-gems-rails-3/)
+* [Nicolas Merouze shows you plugin developers out there how to upgrade your goodies](http://boldr.net/upgrade-plugins-gems-rails-3/)
 * [EngineYard has set up a plugins listing site to publicize which are (and are not) Rails 3 compatible](http://www.railsplugins.org/)
 
 ### Upgrading
 
 Whew!  If you've gotten to this point you may be wondering how to stitch this all together and make your now crusty Rails 2.3 app a good looking Rails 3 stud?  Thankfully, you're not alone.
 
-[Jeremy McAnally] has been busting his hump to bring you the latest on upgrading:
+Jeremy McAnally has been busting his hump to bring you the latest on upgrading:
 
 * [How to approach the upgrade](http://omgbloglol.com/post/353978923/the-path-to-rails-3-approaching-the-upgrade)
 * [A plugin to help you on your way](http://omgbloglol.com/post/364624593/rails-upgrade-is-now-an-official-plugin)
 
-And everybody's [favorite screencaster](http://peepcode.com) [live codes an upgrade](http://blog.peepcode.com/tutorials/2010/live-coding-rails-3-upgrade)
+And everybody's [favorite screencaster](http://peepcode.com) [live codes an upgrade](http://blog.peepcode.com/tutorials/2010/live-coding-rails-3-upgrade).
 
 Rails 3 represents a huge amount of work, both in internal and external improvements.  A big congrats to the whole team and to the community for providing such great content about these changes.
 
