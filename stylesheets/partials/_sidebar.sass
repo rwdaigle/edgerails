@@ -2,15 +2,26 @@
   background: #fcfcfc
   //border: 1px solid #eee
   border-top: none
-  font-size: 85%
+  font-size: 82%
+  line-height: 1.45em
   .aside
     clear: both
-  .half
-    width: #{!sidebar_width/2 - 10}
-    float: left
-    clear: none
-  #ads
-    +clearfix  
+  .group
+    +pie-clearfix
+    .aside
+      width: #{!sidebar_width/2 - 32}
+      float: left
+      clear: none
+      border-right: 1px solid #eee
+      padding-right: 15px
+      &:last-child
+        padding-left: 15px
+        border: none
+        padding-right: 0
+  #ads.group
+    +clearfix
+    .aside
+      border: none
   h4
     margin: 20px -16px 10px
     padding: 12px 16px

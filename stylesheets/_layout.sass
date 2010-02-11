@@ -1,8 +1,6 @@
-//!page_width = 981px - 15px
-//!main_width = 720px
 !page_pad = 15px
 !sidebar_margin = 20px
-!sidebar_width = 275px
+!sidebar_width = 350px
 !pad = 15px
 !default_border_radius = 4px
 
@@ -16,7 +14,11 @@ html body
   background-position: 0 -30px
   padding: 0 60px
   a
-    color= !link_color
+    color: #{!link_color}
+    &:hover, &:focus
+      color: #{saturate(darken(!link_color, 15), 20)}
+    &:visited
+      color: #{darken(adjust_hue(!link_color, 70), 10)}
 
 #page, #nav, #footer, #header
   min-width: 990px
