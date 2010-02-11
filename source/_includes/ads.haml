@@ -1,5 +1,5 @@
-#ads.aside
-  .ad.half
+#ads.group
+  .aside
     .small
       #adzerk
         #adzerk_ad_div
@@ -7,6 +7,13 @@
         #adzerk_by
           %a(href='http://rubyrow.net')
             Ads from Ruby Row
+  .aside
+    %a#brandon_ad(href="http://brandonmathis.com/") <span style="display: none">Brandon Mathis - Design Enthusiast</span>
+    :javascript
+      var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+      choice = Math.floor((2)*Math.random());
+      
+      $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
 -#
   %a(href="http://rubyrow.net/redirect/0/345/311/70/d1a5d83c5b2a486fb7c7d944cf71b503")
     %img(src="http://static2.rubyrow.net/Advertisers/345.gif" alt="" title="" width="120" height="90")
