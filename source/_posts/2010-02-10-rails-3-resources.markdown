@@ -7,7 +7,7 @@ categories:
  
 <span class="version">**Rails** 3.0</span>
 
-While we get some [momentum back](/articles/what-s-new-in-edge-rails/2010/02/05/edgerails.info-is-live/) here at EdgeRails.info I thought it'd be a good time to spotlight all the other great posts out there regarding [new features in Rails 3](http://weblog.rubyonrails.org/2010/2/5/rails-3-0-beta-release).  There are a lot of changes, both internally and externally, so buckle up:
+While we get some [momentum back](/articles/announcements/2010/02/08/edgerails.info-is-live/) here at EdgeRails.info I thought it'd be a good time to spotlight all the other great posts out there regarding [new features in Rails 3](http://weblog.rubyonrails.org/2010/2/5/rails-3-0-beta-release).  There are a lot of changes, both internally and externally, so buckle up:
 
 ### Overviews
 
