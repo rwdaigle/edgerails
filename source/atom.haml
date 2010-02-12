@@ -1,7 +1,6 @@
 ---
 layout: nil
 author: Ryan Daigle
-email: ryan.daigle@gmail.com
 blog_title: Edge Rails.info
 full_url: http://edgerails.info
 ---
@@ -12,15 +11,12 @@ full_url: http://edgerails.info
   %link(href="#{page.full_url}")
   %updated= Time.now.xmlschema
   %id=page.full_url
-  %author
-    %name= page.author
-    %email= page.email
   - site.posts.reverse[0..10].each do |post|
     %entry
       %title= rp(post.title)
       %link(href="#{page.full_url}#{post.url}")
       %author
-        %name= post.data['author']
+        %name= post.data['author'] || page.author
       %updated=post.date.xmlschema
       %id= "#{page.full_url}#{post.id}"
       %content(type="html")
