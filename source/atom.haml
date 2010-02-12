@@ -15,10 +15,12 @@ full_url: http://edgerails.info
   %author
     %name= page.author
     %email= page.email
-  - site.posts.reverse[0..14].each do |post|
+  - site.posts.reverse[0..10].each do |post|
     %entry
       %title= rp(post.title)
       %link(href="#{page.full_url}#{post.url}")
+      %author
+        %name= post.data['author']
       %updated=post.date.xmlschema
       %id= "#{page.full_url}#{post.id}"
       %content(type="html")
