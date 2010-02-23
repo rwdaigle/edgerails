@@ -28,14 +28,29 @@ p.info
   margin-bottom: 1em
   font-style: italic
 .blog
+  code
+    padding: 0
+    margin: 0
+    line-height: 1.25em
   .notice
+    font-size: 95%
     background: #fff9d8
-    border: 1px solid #{darken(#fff9d8, 15)}
-    padding: 8px 15px
+    border: 1px solid #{darken(#fff9d8, 20)}
+    padding: 8px 15px 12px
     margin: .5em 0 0
     display: block
-    font-size: 95%
-    line-height: 1.4em
+    line-height: 1.25em
+    &.source
+      font-size: 100%
+      +serif-font
+      margin-top: 0
+      padding: 15px
+    &.alert
+      border-color: #f1938c
+      background: #{lighten(#f1938c, 20)}
+    &.resources, &.source
+      border-color: #{darken(#d5e9f6, 10)}
+      background: #{lighten(#d5e9f6, 5)}
   p.notice
     margin-bottom: 1.35
   .meta

@@ -7,7 +7,7 @@ categories:
 
 <span class="version">**Rails** 3.0</span>
 
-<span class="source notice">
+<span class="notice source">
   The source for the examples contained in this article are located at: [http://github.com/rwdaigle/edgerails-support/tree/master/the-skinny-on-scopes-formerly-named-scope/](http://github.com/rwdaigle/edgerails-support/tree/master/the-skinny-on-scopes-formerly-named-scope/)
 </span>
 
@@ -262,7 +262,7 @@ Post.titled_luda.build
 {% endhighlight %}
 </div>
 
-<span notice='alert'>
+<span class="notice alert">
   In order to use the creation/builder methods on a scope, the scope should directly define attribute equality using a `where` relation and the hash form of the attribute values, as was done above.  Specifying `where("title = 'Luda'")` would not have propagated the attribute values to newly constructed instances.
 </span>
 
@@ -338,9 +338,9 @@ Also, you do have more than just `where_values` that can be accessed - here are 
 
 This post somewhat glosses over the new query interface for ActiveRecord in Rails 3 to get to the meat of using scopes.  However, none of the scoped yumminess could have happened without the slick new underpinnings of ActiveRecord.  So, if you're still a little confused about all this, definitely read some more about ActiveRecord before jumping into scopes.  Once you do have that foundation, however, you will use scopes on a very regular basis.
 
-<span notice='notice resources'>
+<span class="notice resources">
   The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:
-  
+</span>
+
   * [Pratik's 'Active Record Query Interface 3.0' article](http://m.onkey.org/2010/1/22/active-record-query-interface)
   * [Railscast 202: Active Record Queries in Rails 3](http://railscasts.com/episodes/202-active-record-queries-in-rails-3)
-</span>
