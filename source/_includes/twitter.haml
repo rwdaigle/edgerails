@@ -1,8 +1,10 @@
 - twitter_search = "edgerails OR \"edge rails\""
+- edgerailsinfo_user = "edgerailsinfo"
 
 :javascript
   $(document).ready(function() {
-    $('#tweets').twitterize('#{twitter_search}');
+    $('#edgerails_tweets').twitterize('#{twitter_search}', null);
+    $('#edgerailsinfo_tweets').twitterize(null, '#{edgerailsinfo_user}');
   });
 
 #twitter.aside
@@ -10,21 +12,29 @@
     Edge rails tweets
     %span.small 
       #{' - '}
-      %a{:href => "http://search.twitter.com/search?q=#{twitter_search}"} all
-  #tweets.twitter_feed{:template => "#tweet_template"}Loading tweets...
+      %a{:href => "http://search.twitter.com/search?q=#{twitter_search}"} &gt;&gt;
+  #edgerails_tweets.twitter_feed{:template => "#tweets_template", :search_url => ""}Loading tweets about edgerails...
 
-  %script#tweet_template{:type => "text/html"}
-    :plain
-      <% for ( var i = 0; i < results.length; i++ ) { %>
-        <% var tweet = results[i]; %>
-        <div class="entry">
-          <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
-          <p><%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %></p>
-          <div class="meta">
-            About
-            <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
-              <%= prettyDate(tweet.created_at) %>
-            </a>
-          </div>
+#twitter.aside
+  %h4
+    EdgeRails.info tweets
+    %span.small 
+      #{' - '}
+      %a{:href => "http://search.twitter.com/search?from=#{edgerailsinfo_user}"} &gt;&gt;
+  #edgerailsinfo_tweets.twitter_feed{:template => "#tweets_template"}Loading tweets about edgerails...
+
+%script#tweets_template{:type => "text/html"}
+  :plain
+    <% for ( var i = 0; i < results.length; i++ ) { %>
+      <% var tweet = results[i]; %>
+      <div class="entry">
+        <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+        <p><%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %></p>
+        <div class="meta">
+          About
+          <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+            <%= prettyDate(tweet.created_at) %>
+          </a>
         </div>
-      <% } %>
+      </div>
+    <% } %>
