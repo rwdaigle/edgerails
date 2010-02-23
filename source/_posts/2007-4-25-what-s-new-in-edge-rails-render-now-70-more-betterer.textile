@@ -1,0 +1,36 @@
+---
+title: "render Now 70% More Betterer"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+If you're anything like me, one of the things that really spins your propeller hat is trying to reduce your code into the least amount of lines possible, while still being completely legible.  If you're not like me, well, ya should be.
+
+To that end, calls to @render@ "now have":http://dev.rubyonrails.org/changeset/6572 some "new possibilities":http://dev.rubyonrails.org/changeset/6574.  The first is the ability to specify the @Location@ header value inline with the @render@ call.  This is often used when building RESTful services - when an item is created the URI of that new item needs to be sent back in the @Location@ response header:
+
+<notextile>
+{% highlight ruby %}
+@contact = Contact.create(params[:contact])
+respond_to do |wants|
+  wants.xml { render :xml => @contact.to_xml, :status => :created,
+                     :location => contact_url(@contact) }
+end
+{% endhighlight %}
+</notextile>
+
+Compare this to what you had to do before, which was manually set the location header prior to calling render:
+
+<notextile>
+{% highlight ruby %}response.headers["Location"] = contact_url(@contact){% endhighlight %}
+</notextile>
+
+And to compress our render line a little bit more, the @to_xml@ conversion on your model is a bit redundant right?  I mean, we're already telling it to @render :xml@, shouldn't it know how to convert the model to render as xml?  Yeah, it should, and it does now:
+
+<notextile>
+{% highlight ruby %}
+render :xml => @contact, :status => :created, :location => contact_url(@contact)
+{% endhighlight %}
+</notextile>
+
+See how we lost the unnecessary @to_xml@ there?  If your model supports @to_xml@ (which all ActiveRecord models do), @render :xml@ will automatically convert it to xml.  Ka-boo-ya, 7 characters gone.

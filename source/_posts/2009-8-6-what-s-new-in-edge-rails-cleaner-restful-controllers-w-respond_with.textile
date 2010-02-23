@@ -1,0 +1,136 @@
+---
+title: "Cleaner RESTful Controllers w/ respond_with"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+span(version). *Rails* 3.0
+
+REST is a first-class citizen in the Rails world, though most of the hard work is done at the routing level.  The controller stack has some niceties revolving around mime type handling with the @respond_to@ facility but, to date, there's not been a lot built into actionpack to handle the serving of resources.  The "addition of @respond_with@":http://github.com/rails/rails/commit/09de34ca56598ae5d0302a14715b2a11b6cc9845 (and "this follow-up":http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4) takes one step towards more robust RESTful support with an easy way to specify how resources are delivered.  Here's how it works:
+
+h3. Basic Usage
+
+In your controller you can specify what resource formats are supported with the class method @respond_*to*@.  Then, within your individual actions, you tell the controller the resource or resources to be delivered using @respond_*with*@:
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  respond_to :html, :xml, :json
+
+  def index
+    respond_with(@users = User.all)
+  end
+
+  def create
+    @user = User.create(params[:user])
+    respond_with(@user, :location => users_url)
+  end
+end
+{% endhighlight %}
+</notextile>
+
+This will match each supported format with an appropriate response.  For instance, if the request is for @/users.xml@ then the controller will look for a @/users/index.xml.erb@ view template to render.  If such a view template doesn't exist then it tries to directly render the resource in the @:xml@ format by invoking @to_xml@ (if it exists).  Lastly, if @respond_with@ was invoked with a @:location@ option the request will be redirected to that location (as in the case of the @create@ action in the above example).
+
+So here's the equivalent implementation without the use of @respond_with@ (assuming no index view templates):
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  def index
+    @users = User.all
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @users }
+      format.json { render :json => @users }
+    end
+  end
+
+  def create
+    @user = User.create(params[:user])
+    respond_to do |format|
+      format.html { redirect_to users_url }
+      format.xml { render :xml => @user }
+      format.json { render :json => @user }
+    end
+  end
+    
+end
+{% endhighlight %}
+</notextile>
+
+You can see how much boilerplate response handling is now handled for you especially if it's multiplied over the other default actions.  You can pass in @:status@ and @:head@ options to @respond_with@ as well if you need to send these headers back on resources rendered directly (i.e. via @to_xml@):
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  respond_to :html, :xml, :json
+
+  def index
+    respond_with(@users = User.all, :status => :ok)
+  end
+end
+{% endhighlight %}
+</notextile>
+
+h3. Per-Action Overriding
+
+It's also possible to override standard resource handling by passing in a block to @respond_with@ specifying which formats to override for that action:
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  respond_to :html, :xml, :json
+
+  # Override html format since we want to redirect to a different page,
+  # not just serve back the new resource
+  def create
+    @user = User.create(params[:user])
+    respond_with(@user) do |format|
+      format.html { redirect_to users_path }
+    end
+  end
+end
+{% endhighlight %}
+</notextile>
+
+h3. :except And :only Options
+
+You can also pass in @:except@ and @:only@ options to only support formats for specific actions (as you do with @before_filter@):
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+  respond_to :html, :only => :index
+  respond_to :xml, :json, :except => :show
+  ...
+end
+{% endhighlight %}
+</notextile>
+
+h3. The :any Format
+
+If you're still want to use @respond_to@ within your individual actions this update has also bundled the @:any@ resource format that can be used as a wildcard match against any unspecified formats:
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  def index
+
+    @users = User.all
+
+    respond_to do |format|
+      format.html
+      format.any(:xml, :json) { render request.format.to_sym => @users }
+    end
+  end
+end
+{% endhighlight %}
+</notextile>
+
+So all in all this is a small, but meaningful, step towards robust controller-level REST support.  I should point out that the contributor of this patch is "José Valim":http://blog.plataformatec.com.br/ who has authored the very robust "inherited_resources":http://github.com/josevalim/inherited_resources/tree/master framework that already has support for @respond_with@-like functionality and many more goodies.  If you're on the search for a solid RESTful controller framework to accompany Rails' native RESTful routing support I would suggest you take a look at his fine work.

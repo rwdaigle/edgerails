@@ -1,17 +1,17 @@
 (function($) {
   
   // Fetch the tweets
-  $.fn.twitterize = function(query, from_user) {
+  $.fn.twitterize = function(query) {
     
     var $me = $(this);
-    var tweets = getStoredTweets($me.cookieName());
+    var tweets = getStoredTweets();
     
     if(!tweets) {      
       $.getJSON(
         "http://search.twitter.com/search.json?callback=?",
-        { rpp: 5, page: 1, lang: 'en', q: query, from: from_user },
+        { rpp: 3, page: 1, lang: 'en', q: query },
         function(data) {
-          storeTweets(data, $me.cookieName());
+          storeTweets(data);
           $me.applyTweets(data);
         }
       );
@@ -29,24 +29,15 @@
     });
   };
   
-  var COOKIE_NAME_SUFFIX = '_tweets';
+  var COOKIE_NAME = '_tweets';
   
-  // Call back to process tweets and apply to template
-  $.fn.cookieName = function() {
-    return $(this).attr('id') + COOKIE_NAME_SUFFIX;
+  var storeTweets = function(tweets) {
+    $.cookie(COOKIE_NAME, JSON.stringify(tweets), { expires: 1 })
   };
   
-  var storeTweets = function(tweets, cookieName) {
-    $.cookie(cookieName, serializeTweets(tweets), { expires: 1 })
-  };
-  
-  var getStoredTweets = function(cookieName) {
-    cookieData = $.cookie(cookieName);
+  var getStoredTweets = function() {
+    cookieData = $.cookie(COOKIE_NAME);
     return cookieData ? JSON.parse(cookieData) : null;
   };
-  
-  var serializeTweets = function(tweets) {
-    return JSON.stringify(tweets, ['results', 'from_user', 'text', 'id', 'created_at'])
-  }
   
 }) (jQuery);

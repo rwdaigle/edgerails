@@ -1,0 +1,14 @@
+---
+title: "find_or_initialize_by_..."
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Parallel to the @find_or_create_by_X@ method that will find the requested model if it exists or create it and return it if it doesn't is the new "find_or_initialize_by_X":http://dev.rubyonrails.org/changeset/4473 which will find the requested model or create, but not save it, if it doesn't exist.
+
+The associated unit tests show us that an object initialized by this method is not yet saved to the database whereas the _create_ version is:
+
+@assert Company.find_or_initialize_by_name("38signals").new_record? @
+
+@assert !Company.find_or_create_by_name("38signals").new_record?@

@@ -1,4 +1,3 @@
-gem 'activesupport', "~> 2.3.2"
 require 'active_support'
 
 domain = "edgerails.info"
@@ -50,8 +49,8 @@ task :post, :filename do |t, args|
   #system "touch #{source}/_posts/#{Time.now.strftime('%Y-%m-%d_%H-%M')}-#{args.filename}.markdown"
   open("#{source}/_posts/#{Time.now.strftime('%Y-%m-%d')}-#{args.filename.gsub(/[ _]/, '-').downcase}.markdown", 'w') do |post|
     post.puts "---"
-    post.puts "title: \"#{args.filename.gsub(/[-_]/, ' ').titleize}\""
-    post.puts "author: \"Ryan Daigle\""
+    post.puts "title: \"#{args.filename.gsub(/[-_]/, ' ').titlecase}\""
+    post.puts "author: \"\""
     post.puts "categories:"
     post.puts "  - \"what-s-new-in-edge-rails\""
     post.puts "---"

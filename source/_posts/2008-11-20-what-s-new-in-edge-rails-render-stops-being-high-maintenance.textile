@@ -1,0 +1,42 @@
+---
+title: "render Stops Being High-Maintenance"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+span(version). *Rails* 2.3 or 3.0
+
+@render@ is one of those oft-used view-helper methods that always seems to be a little cumbersome.  The most common use is to render a partial within another view:
+
+<notextile>
+{% highlight ruby %}
+render :partial => 'articles/article', :locals => { :article => @article }
+{% endhighlight %}
+</notextile>
+
+But this is a lot of work for a simple operation, and "now it becomes much simpler":http://github.com/rails/rails/commit/130fe74d17404e5c06353526c7b20beb4019cb69.  Now the default is to assume that a partial is requested (in the past render a @:file@ was the default) and that the final hash argument is the locals hash.  Here is the above functionality using the new syntax:
+
+<notextile>
+{% highlight ruby %}
+# Render the 'article' partial with an article local variable
+render 'articles/article', :article => @article
+
+# Or even better (same as above)
+render @article
+
+# And for collections, same as:
+# render :partial => 'articles/article', :collection => @articles
+render @articles
+{% endhighlight %}
+</notextile>
+
+If you've got some old @render@ calls hanging around that aren't using partials you'll have to specify the @:file@ option now:
+
+<notextile>
+{% highlight ruby %}
+render :file => 'original'
+{% endhighlight %}
+</notextile>
+
+Hassle free partial rendering.  Yay.

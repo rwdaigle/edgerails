@@ -1,0 +1,36 @@
+---
+title: "ActionMailer::Base.server_settings Deprecated"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Configuring your action mailer settings just got a little tweak that you're going to want to pay attention to, especially if you're running off edge.  Instead of using @ActionMailer::Base.server_settings@ you're going to want to use @ActionMailer::Base.smtp_settings@.  The syntax remains the same, it's just a name change:
+
+<notextile>
+{% highlight ruby %}
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+	:address		=> "smtp.mymailserver.com",
+	:authentication	=> :login,
+	:user_name		=> "me",
+	:password		=> "password"
+}
+{% endhighlight %}
+</notextile>
+
+In the "@1-2-stable@":http://dev.rubyonrails.org/changeset/6094 rails branch the use of @server_settings@ has been deprecated, while over in "@edge@":http://dev.rubyonrails.org/changeset/6095 it's been renamed outright and you'll need to update your usage.
+
+Also in the same update is the ability to specify your sendmail executable location and command line arguments options with the new @ActionMailer::Base.sendmail_settings@ (if you're using sendmail):
+
+<notextile>
+{% highlight ruby %}
+ActionMailer::Base.delivery_method = :sendmail
+ActionMailer::Base.sendmail_settings = { 
+  :location       => '/usr/sbin/sendmail', 
+  :arguments      => '-i -t'
+} 
+{% endhighlight %}
+</notextile>
+
+See the "ActionMailer::Base":http://api.rubyonrails.org/classes/ActionMailer/Base.html api for further option details.

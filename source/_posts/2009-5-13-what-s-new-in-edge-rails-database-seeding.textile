@@ -1,0 +1,30 @@
+---
+title: "Database Seeding"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+span(version). *Rails* 2.3
+
+I'm not sure if this was ever stated explicitly has a preferred practice or not, but for the longest time many of us have recognized that using migrations as a way to populate the database with a base configuration dataset is wrong.  Migrations are for manipulating the structure of your database, not for the data within it and certainly not for simple population tasks.
+
+Well, this practice now has a formal support in Rails with the addition of the "database seeding":http://github.com/rails/rails/commit/4932f7b38f72104819022abca0c952ba6f9888cb feature.  Quite simply this is a rake task that sucks in the data specified in a @db/seeds.rb@.  Here are the details:
+
+h3. Specify Seed Data
+
+Add or open the @db/seeds.rb@ file and put in model creation statements (or any ruby code) for the data you need to be present in order for your application to run.  I.e. configuration and default data (and nothing more):
+
+<notextile>
+{% highlight ruby %}
+[:admin, :user].each { |r| Role.create(:name => r) }
+User.create(:login => 'admin', :role => Role.find_by_name('admin'))
+{% endhighlight %}
+</notextile>
+
+h3. Load the Data
+
+Once that is in place you can run one of two rake tasks that will populate the database with this data:
+@rake db:seed@ which will only populate the db with this data and @rake db:setup@ which will create the db, load the schema and then load the seed data.  This is the task you'll want to use if you're starting in a fresh environment.
+
+So, quit overloading your migrations with seed data and use this new facility.  But, don't go overboard and use @seeds.rb@ for test or staging datasets - it should only be used for the base data that is necessary for your app to run.

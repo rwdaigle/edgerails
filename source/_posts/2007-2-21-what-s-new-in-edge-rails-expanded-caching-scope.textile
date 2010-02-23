@@ -1,0 +1,37 @@
+---
+title: "Expanded Caching Scope"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Last week I pointed out the new "ActiveRecord caching feature":/articles/2007/2/7/what-s-new-in-edge-rails-activerecord-explicit-caching that lets you cache all ActiveRecord calls on a specific model:
+
+<notextile>
+{% highlight ruby %}
+User.cache do
+  me = User.find(1)   # DB hit
+  again = User.find(1)   # Cache hit
+end
+{% endhighlight %}
+</notextile>
+
+That's great, but it only works on the model for which the @cache@ block is applied.  If you have a block of code that accesses multiple model classes, you'd have to either nest several @cache@ blocks _or_ "this new top-level cache statement":http://dev.rubyonrails.org/changeset/6179 :
+
+<notextile>
+{% highlight ruby %}
+ActiveRecord::Base.cache do
+
+  # DB hits
+  me = User.find(1)
+  companies = Company.find(:all)
+
+  # Cache hits
+  me = User.find(1)
+  companies = Company.find(:all)
+
+end
+{% endhighlight %}
+</notextile>
+
+and all queries to any active record models within the block will be cached.

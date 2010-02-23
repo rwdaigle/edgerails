@@ -1,0 +1,26 @@
+---
+title: "Using Collections of Records as the \"IN\" SQL Condition"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+It's currently somewhat difficult to use the @IN@ SQL condition within ActiveRecord's finder methods - most solutions I've seen involve building your own SQL string or popping back out to the object level and performing more queries than necessary to get around this limitation.  Changesets "4391":http://dev.rubyonrails.org/changeset/4391, "4387":http://dev.rubyonrails.org/changeset/4387 and "4390":http://dev.rubyonrails.org/changeset/4390 let you now pass in a collection of ActiveRecord objects as a parameter to the SQL condition that will be expanded to a comma-seperated list of ids.
+
+So, if you have a collection of @posts@ and want to get all comments for those posts, this finder call:
+
+@comments = Comment.find(:all, :conditions => ['post_id IN (?)', posts])@
+
+Will result in this SQL:
+
+@SELECT * FROM COMMENTS WHERE POST_ID IN (1, 2, 3, ..)@
+
+Ya jive?  You're now able to pass in a collection of records to your SQL finder methods that will be automatically expanded into a comma-seperated list of ids.  This makes it much easier to use the @IN (?)@ SQL condition within ActiveRecord.
+
+Parallel to this functionality is the addition of the @Array.to_s(:db)@ method which does basically the same thing, converts an array of ActiveRecord objects into a comma-seperated list of ids (this is what "changeset 4387":http://dev.rubyonrails.org/changeset/4387 adds).  This addition makes the following identical to the @Comment.find(...)@ call mentioned earlier:
+
+@comments = Comment.find(:all, :conditions => ['post_id IN (?)', posts.to_s(:db)])@
+
+Surprisingly, the implementation of the expansion of an ActiveRecord array does not utilize @Array.to_s(:db)@...
+
+<a href="http://technorati.com/tag/rubyonrails">rubyonrails</a>, <a href="http://technorati.com/tag/rails">rails</a>

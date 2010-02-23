@@ -1,0 +1,33 @@
+---
+title: "Cookie Based Sessions are the New Default"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Edge rails now has "cookie-based session stores enabled by default":http://dev.rubyonrails.org/changeset/6184 instead of the file based session store that was the previous default.  Why the change?  Mostly performance, it seems.  Cookie-based sessions are just faster to retrieve and process than hitting the file-system on every request.  Plus, I would imagine they scale considerably better as they're persisted on the client side and have no server-side persistence requirements.
+
+The caveat?  Cookies are generally limited to 4K in size.  While not an issue for most (proper) usage of the session, this could be a legitimate limit for some scenarios.  If your app abuses the session so, you'll need to decide on a different session store.  Your other options are, of course:
+
+* "ActiveRecordStore":http://dev.rubyonrails.org/browser/trunk/actionpack/lib/action_controller/session/active_record_store.rb
+* "SQLSessionStore":http://railsexpress.de/blog/articles/2005/12/19/roll-your-own-sql-session-store
+* "DRBStore":http://dev.rubyonrails.org/browser/trunk/actionpack/lib/action_controller/session/drb_store.rb
+* "MemCacheStore":http://dev.rubyonrails.org/browser/trunk/actionpack/lib/action_controller/session/mem_cache_store.rb
+
+h3. Resources
+
+* "Err the Blog":http://errtheblog.com/ has a "great Rails session-rundown":http://errtheblog.com/post/24 that discusses all your options.
+* "Scott Baron":http://scott.elitists.net/ has a "good, if not slightly dated session store performance comparison":http://scott.elitists.net/sessions.html where you can make an informed decision about what best meets your session needs.
+
+_Update: Feb, 22nd 2007_
+
+To get your brand new cookie-based session up and running, make sure this bit is in your @environment.rb@:
+
+<notextile>
+{% highlight ruby %}
+config.action_controller.session = { 
+  :session_key => '_my_app_session', 
+  :secret      => 'some_really_long_and_hashed_key' 
+}
+{% endhighlight %}
+</notextile>

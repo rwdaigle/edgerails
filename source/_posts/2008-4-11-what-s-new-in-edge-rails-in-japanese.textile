@@ -1,0 +1,8 @@
+---
+title: "What's New in Edge Rails - In Japanese!"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Not to be outdone by his neighbor to the "west":http://ryandaigle.com/articles/2008/1/8/what-s-new-in-edge-rails-in-chinese, "Kenji Kobayashi":http://blog.poqu.org/ is maintaining "japanese translations of the What's New in Edge Rails series":http://blog.poqu.org/category/edge-rails/.  Thanks for spreading the news, Kenji!

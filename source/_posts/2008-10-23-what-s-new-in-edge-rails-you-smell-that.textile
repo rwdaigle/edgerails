@@ -1,0 +1,8 @@
+---
+title: "You Smell That?"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+... smells like "Rails v2.2":http://github.com/rails/rails/commit/57c31a380e0136607f3ce6ee568730ec1539e163 is right around the corner...

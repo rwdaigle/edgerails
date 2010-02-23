@@ -1,0 +1,206 @@
+---
+title: "Default RESTful Rendering"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+span(version). *Rails* 3.0
+
+A few days ago I wrote about the new "@respond_with@ functionality":http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with of Rails 3.  It's basically a clean way to specify the resource to send back in response to a RESTful request.  This works wonders for successful @:xml@ and @:json@ requests where the default response is to send back the integerized form of the resource, but still presents a lot of cruft when handling user-invoked @:html@ requests (i.e. 'navigational' requests) and requests where error handling is required.  For instance, consider your standard @create@ action:
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  respond_to :html, :xml, :json
+
+  def create
+
+    @user = User.new(params[:user])
+
+    # Have to always override the html format to properly
+    # handle the redirect
+    if @user.save
+      flash[:notice] = "User was created successfully."
+      respond_with(@user, :status => :created, :location => @user) do |format|
+        format.html { redirect_to @user }
+      end
+
+    # Have to send back the errors collection if they exist for xml, json and
+    # redirect back to new for html.
+    else
+      respond_with(@user.errors, :status => :unprocessable_entity) do |format|
+        format.html { render :action => :new }
+      end
+    end
+
+  end
+end
+{% endhighlight %}
+</notextile>
+
+Even with the heavy lifting of @respond_with@ you can see that there's still a lot of plumbing left for you to do - plumbing that is mostly the same for all RESTful requests.  Well "José":http://blog.plataformatec.com.br/ and the Rails team have a solution to this and have "introduced controller responders":http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4.
+
+h3. Controller Responders
+
+Controller responders handle the chore of matching the HTTP request method and the resource format type to determine what type of response should be sent.  And since REST is so well-defined it's very easy to establish a default responder to handle the basics.
+
+Here's what a controller utilizing responder support (now baked into @respond_with@) looks like:
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  respond_to :html, :xml, :json
+
+  def index
+    respond_with(@users = User.all)
+  end
+
+  def new
+    respond_with(@user = User.new)
+  end
+
+  def create
+    respond_with(@user = User.create(params[:user]))
+  end
+
+  def edit
+    respond_with(@user = User.find(params[:id]))
+  end
+
+  def update
+    @user = User.find(params[:id])
+    @user.update_attributes(params[:user])
+    respond_with(@user)
+  end
+end
+{% endhighlight %}
+</notextile>
+
+The built-in responder performs the following logic for each action:
+
+* If the @:html@ format was requested:
+** If it was a @GET@ request, invoke @render@ (which will display the view template for the current action)
+** If it was a @POST@ request and the resource has validation errors, @render@ @:new@ (so the user can fix their errors)
+** If it was a @PUT@ request and the resource has validation errors, @render@ @:edit@ (so the user can fix their errors)
+** Else, redirect to the resource location (i.e. @user_url@)
+* If another format was requested, (i.e. @:xml@ or @:json@)
+** If it was a @GET@ request, invoke the @:to_format@ method on the resource and send that back
+** If the resource has validation errors, send back the errors in the requested format with the @:unprocessable_entity@ status code
+** If it was a @POST@ request, invoke the @:to_format@ method on the resource and send that back with the @:created@ status and the @:location@ of the new created resource
+** Else, send back the @:ok@ response with no body
+
+Wading through this logic tree you can see that the default logic for each RESTful action is appropriately handled, letting your controller actions focus exclusively on resource retrieval and modification.  And with that cruft out of the way your controllers will start to look even more similar - I suspect we'll be seeing a solution for this coming around the bend shortly as well...?
+
+So, just to recap the basics, here are a few action implementations side by side (the first being before responders and the latter being after):
+
+<notextile>
+{% highlight ruby %}
+# Old
+def index
+  @users = User.all
+  respond_to do |format|
+    format.html
+    format.xml { render :xml => @users }
+    format.json { render :json => @users }
+  end
+end
+
+# New
+def index
+  respond_with(@users = User.all)
+end
+{% endhighlight %}
+</notextile>
+
+<notextile>
+{% highlight ruby %}
+# Old
+def create
+  @user = User.new(params[:user])
+  if @user.save
+    flash[:notice] = "User successfully created"
+    respond_to do |format|
+      format.html { redirect_to @user }
+      format.xml { render :xml => @user, :status => :created,
+        :location => user_url(@user) }
+      format.json { render :json => @users, :status => :created,
+        :location => user_url(@user) }
+    end
+  else
+    respond_to do |format|
+      format.html { render :new }
+      format.xml { render :xml => @user.errors, :status => :unprocessable_entity }
+      format.json { render :json => @user.errors, :status => :unprocessable_entity }
+    end
+  end
+end
+
+# New
+def create
+  @user = User.new(params[:user])
+  flash[:notice] = "User successfully created" if @user.save
+  respond_with(@user)
+end
+{% endhighlight %}
+</notextile>
+
+Oh yeah, that's getting real lean.
+
+h3. Overriding Default Behavior
+
+If you need to override the default behavior of a particular format you can do so by passing a block to @respond_with@ (as I wrote about in the "original article":http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with):
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  respond_to :html, :xml, :json
+
+  # Override html format since we want to redirect to the collections page
+  # instead of the user page.
+  def create
+    @user = User.new(params[:user])
+    flash[:notice] = "User successfully created" if @user.save
+    respond_with(@user) do |format|
+      format.html { redirect_to users_url }
+    end
+  end
+end
+{% endhighlight %}
+</notextile>
+
+h3. Nested Resources
+
+It's quite common to operate on resources within a nested resource graph (though I prefer to go one level deep, at most).  For such cases you need to let @respond_with@ know of the object hierarchy (using the same parameters as "@polymorphic_url@":http://api.rubyonrails.org/classes/ActionController/PolymorphicRoutes.html#M000486):
+
+<notextile>
+{% highlight ruby %}
+class UsersController < ApplicationController::Base
+
+  respond_to :html, :xml, :json
+
+  # In this case, users exist within a company
+  def create
+    @company = Company.find(params[:company_id])
+    @user = @company.users.build(params[:user])
+    flash[:notice] = "User successfully created" if @user.save
+
+    # Ensure that the new user location is nested within @company,
+    # for html format (/companies/1/users/2.html) as well as
+    # resource formats (/companies/1/users/2)
+    respond_with(@company, @user)
+  end
+end
+{% endhighlight %}
+</notextile>
+
+If you have a singleton resource within your resource graph just use a symbol instead of an actual object instance.  So to get @/admin/users/1@ you would invoke @respond_with(:admin, @user)@.
+
+h3. Custom Responders
+
+While there's no facility to provide your own responder classes, it will no doubt be added shortly.  If you look at the "current responder class definition":http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L81, it's a very simple API essentially only requiring a @call@ method (more intuitively take a look at the "@:to_html@":http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L111 and "@:to_format@":hhttp://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L125 methods).
+
+Stay tuned here for further refinements to this very handy functionality - you're going to see a lot more tightening in the coming weeks.

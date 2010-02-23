@@ -1,0 +1,10 @@
+---
+title: "Rails 2.0 Preview Release is Here"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+The Rails 2.0 preview release is here.  "Go get ya some":http://dev.rubyonrails.org/browser/tags/rel_2-0-0_PR
+
+@svn co http://svn.rubyonrails.org/rails/tags/rel_2-0-0_PR@

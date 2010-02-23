@@ -1,0 +1,38 @@
+---
+title: "Bringin' Sexy Back"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+You know those "sexy migrations":http://errtheblog.com/post/2381 you've been lusting over?  Yeah, well they're "mainstream now":http://dev.rubyonrails.org/changeset/6667.  I won't unnecessarily duplicate here what's already been written about them - but the gist is that a sexy migrations inspired syntax is now part of Rails.
+
+You can now do:
+
+<notextile>
+{% highlight ruby %}
+create_table "users", :force => true do |t| 
+  t.integer :group_id, :employer_id
+  t.string :first, :last
+  t.timestamps
+end
+{% endhighlight %}
+</notextile>
+
+To get @integer@ columns in @group_id@ and @employer_id@ and @string@ columns in @first@ and @last@.  @timestamps@ gets you the "magic columns":http://rails.raaum.org/database-conventions.html#magic-columns @created_at@ and @updated_at@.
+
+The list of supported column types are:
+
+* @string@
+* @text@
+* @integer@
+* @float@
+* @decimal@
+* @datetime@
+* @timestamp@
+* @time@
+* @date@
+* @binary@
+* @boolean@
+
+So spin that Barry White record and lay it down right, sexy's back.

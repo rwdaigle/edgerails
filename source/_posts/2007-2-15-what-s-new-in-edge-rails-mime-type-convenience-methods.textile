@@ -1,0 +1,52 @@
+---
+title: "Mime::Type Convenience Methods"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Everybody loves the goodness of "respond_to":http://weblog.jamisbuck.org/2006/3/27/web-services-rails-style, which encapsulates the mime type of the request into a nice little structure, but there are other places where querying against the request mime-type is useful.  For instance, applying different filter behaviors depending on the request type is often useful.  Starting "today":http://dev.rubyonrails.org/changeset/6152 you now have a convenient way of doing so with the new @request.format.html?@, @request.format.xml?@ etc... convenience methods.
+
+<notextile>
+{% highlight ruby %}
+class MyController < ApplicationController
+
+  # Toggle authentication method based on request type
+  before_filter do |c|
+    c.use_session_auth if c.request.format.html?
+    c.use_token_auth if c.request.format.xml?
+  end
+
+end
+{% endhighlight %}
+</notextile>
+
+Or you can use these methods to provide a clean way of turning sessions off (from the "changeset":http://dev.rubyonrails.org/changeset/6152 example):
+
+<notextile>
+{% highlight ruby %}
+class MyController < ApplicationController
+
+  # Turn off sessions for all non-html requests
+  sessions :off, :if => Proc.new { |request| not request.format.html? }
+
+end
+{% endhighlight %}
+</notextile>
+
+All in all a tidy way to get at that pesky but deterministic request mime-type.  These aren't just limited to the stock recognized mime-types, they can also be used for any mime-types you've registered yourself:
+
+<notextile>
+{% highlight ruby %}
+
+# Because I think we all agree I deserve my own mime-type
+Mime::Type.register "text/ryan", :ryan
+
+class MyController < ApplicationController
+
+  # Turn off sessions for all ryan requests
+  sessions :off, :if => Proc.new { |request| request.format.ryan? }
+
+end
+{% endhighlight %}
+</notextile>

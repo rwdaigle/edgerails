@@ -1,0 +1,12 @@
+---
+title: ".rhtml and .rxml to Die a Slow and Painful Death"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+In a "bout of semantic house cleaning":http://dev.rubyonrails.org/changeset/6178 it's been revealed that the @.rhtml@ and @.rxml@ file extensions will be deprecated in favor of @.erb@ and @.builder@, respectively.
+
+Why such a change - well, @.rhtml@ files are not strictly html files.  They are generic embedded ruby files that can be used for email templates, csv files, vcards etc...  @.erb@ is just a more generic, accurate extension for the file type.  The same goes for @.rxml@ - it can be used for more than just xml files.  Think of all the rss feeds you've written with rxml files.  Now you can stop being tied down by the limited @.rxml@ file extension and can start using @.builder@.
+
+Don't worry about your existing app breaking though, the 'old' extensions won't be fully deprecated until Rails 3.0.  ...  whenever that might be.

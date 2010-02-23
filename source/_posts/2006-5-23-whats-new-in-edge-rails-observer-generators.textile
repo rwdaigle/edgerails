@@ -1,0 +1,61 @@
+---
+title: "Observer Generators"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+I like to keep a close eye on the changes being committed to edge Rails as it's a great learning experience - and thought I might as well post a summary of them as they roll in.  This will definitely not be an exhaustive effort - just something as I see fit or have the time.  So here goes the first one:
+
+h3. "Rails Changeset 4365; Add generator files...":http://dev.rubyonrails.org/changeset/4365
+
+This changeset simply adds the files necessary to use the @script/generator@ utility to auto-create observer stubs.  What's an "observer":http://api.rubyonrails.com/classes/ActiveRecord/Observer.html you ask?  It's a way to monitor lifecycle events of a model object outside of the model itself and let's you avoid cluttering the model class with logic that's not core to the model.
+
+So how does one use this new observer generator?  Observe:
+
+<pre>
+<code>
+ruby script/generate observer User
+</code>
+</pre>
+
+Yeah, that's really it.  This will create two files for you, the observer class itself at @app/models/user_observer.rb@:
+
+<pre>
+<code>
+class UserObserver < ActiveRecord::Observer
+end
+</code>
+</pre>
+
+and the unit test at @test/unit/user_observer_test.rb@:
+
+<pre>
+<code>
+require File.dirname(__FILE__) + '/../test_helper'
+
+class UserObserverTest < Test::Unit::TestCase
+  fixtures :users
+
+  # Replace this with your real tests.
+  def test_truth
+    assert true
+  end
+end
+</code>
+</pre>
+
+You can then edit the observer class with the appropriate callback methods:
+
+<pre>
+<code>
+class UserObserver < ActiveRecord::Observer
+  def after_save(comment)
+    # Do something great
+  end</code>
+end
+</pre>
+
+On a side note, I feel like the generator utility has been getting a bad rap recently from people that frown upon auto-generation of code.  Fair enough, but think of them more as best practices templates and learning tools rather than some sort of coding robot.  They're really great tools for seeing how things should be done, and how things are expected to be done.  If you don't want to use them, don't - but if you're not quite sure how to go about creating an observer, or controller, or model they're of great help.
+
+So there you have it - the new observer generator functionality in edge Rails.

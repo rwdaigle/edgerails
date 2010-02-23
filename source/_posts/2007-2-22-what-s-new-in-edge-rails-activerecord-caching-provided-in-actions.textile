@@ -1,0 +1,10 @@
+---
+title: "ActiveRecord Caching Provided in Actions"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+The flavor du jour in edge rails is definitely caching (see "here":/articles/2007/2/7/what-s-new-in-edge-rails-activerecord-explicit-caching and "here":/articles/2007/2/21/what-s-new-in-edge-rails-expanded-caching-scope).  Some of yas commented on how it seemed kind of hackish to add these caching statements in the view, or even as a filter around your controller actions.  Well, "now ActiveRecord caching is enabled by default":http://dev.rubyonrails.org/changeset/6189 for all your controller actions.
+
+What I don't yet see is an easy way to disable this caching in your actions.  Is there even a case where you want to disable this?  Just thinking out loud here...

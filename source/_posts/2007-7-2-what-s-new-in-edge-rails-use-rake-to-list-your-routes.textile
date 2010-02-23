@@ -1,0 +1,38 @@
+---
+title: "Use Rake to List Your Routes"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+While you've always been able to manually take a "peek at what routes":http://snipplr.com/view/2415/list-of-all-of-the-routes-you-have-defined/ are defined in your application, this dollop of usefulness has "now found its way into a rake task":http://dev.rubyonrails.org/changeset/7149.
+
+Just run
+
+<notextile>
+{% highlight ruby %}
+rake routes
+{% endhighlight %}
+</notextile>
+
+and voila, all routes defined will be spit out in a tidy columnar form with the following columns:
+
+@route name, HTTP method, route path, route requirements@
+
+As an example, here is what my output looks like:
+
+<notextile>
+{% highlight bash %}
+   all_articles GET  /articles;all/      {:action=>"all", :controller=>"articles"}
+search_articles GET  /articles;search/   {:action=>"search", :controller=>"articles"}
+{% endhighlight %}
+</notextile>
+
+For those of us not riding edge, it's pretty easy to get access to this task in your app:
+<notextile>
+{% highlight bash %}
+curl http://svn.rubyonrails.org/rails/trunk/railties/lib/tasks/routes.rake > lib/tasks/routes.rake
+{% endhighlight %}
+</notextile>
+
+This is particularly useful in RESTful implementations as there's lot of routing magic happening for you under the covers.  Now you have the means to take a harmless peek under said covers.

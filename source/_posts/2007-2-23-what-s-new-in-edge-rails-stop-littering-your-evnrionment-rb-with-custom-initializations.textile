@@ -1,0 +1,51 @@
+---
+title: "Stop Littering In Your Environment File"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Rails got a nice little bit of "organizational mojo":http://dev.rubyonrails.org/changeset/6212 today.  I'm sure we all have litterings of various configs at the bottom or our @environment.rb@ files, like inflections, mail configs etc...  Here's the bottom of one of my projects' environment files:
+
+<notextile>
+{% highlight ruby %}
+# Mail
+ActionMailer::Base.delivery_method = :sendmail
+...
+
+# Exception notification
+ExceptionNotifier.exception_recipients = %w(ryan@me.com)
+...
+
+# Various engine configs
+...
+
+# Custom date formats
+ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(:concise => "%d.%b.%y")
+..
+{% endhighlight %}
+</notextile>
+
+Pretty ugly after the structure and conciseness of the @Rails::Initializer@ block, huh?  Well now you can place your little bits of initialization code in a @config/initializers/@ directory and they will get pulled in and loaded after the @Rails::Initializer@ runs.
+
+So now instead of polluting your environment file you can create a single file for each initialization task:
+
+@config/initializers/mail.rb@:
+<notextile>
+{% highlight ruby %}
+ActionMailer::Base.delivery_method = :sendmail
+ActionMailer::Base.default_charset = "utf-8"
+{% endhighlight %}
+</notextile>
+
+@config/initializers/date_formats.rb@:
+<notextile>
+{% highlight ruby %}
+ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(:concise => "%d.%b.%y")
+ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(:medium => "%b %e, %Y")
+{% endhighlight %}
+</notextile>
+
+Now go clean your environment file, filthy lil' runts.
+
+_It should be noted that these initialization files are loaded at startup for all environments, it is not a place to put environment-specific (dev, test, prod etc...) configs_

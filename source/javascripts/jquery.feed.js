@@ -9,7 +9,7 @@
     
       if(!feedData) {
         var feed = new google.feeds.Feed($me.attr('feed'));
-        feed.setNumEntries(5);
+        feed.setNumEntries(3);
         feed.load(function(result) {
           storeFeed(result, $me.cookieName());
           $me.applyFeed(result);
@@ -37,12 +37,8 @@
   };
   
   var storeFeed = function(feed, cookieName) {
-    $.cookie(cookieName, serializeFeed(feed), { expires: 1 })
+    $.cookie(cookieName, JSON.stringify(feed), { expires: 1 })
   };
-  
-  var serializeFeed = function(feed) {
-    return JSON.stringify(feed, ['feed', 'entries', 'title', 'link', 'contentSnippet'])
-  }
   
   var getStoredFeed = function(cookieName) {
     cookieData = $.cookie(cookieName);

@@ -1,0 +1,26 @@
+---
+title: "Object.try"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+span(version). *Rails* 2.3 or 3.0
+
+Those of you using "Chris Wanstrath's slick little @try@ trick":http://ozmm.org/posts/try.html will now have access to that functionality in Rails with this "ActiveSupport update":http://github.com/rails/rails/commit/51730792ca930a896361eb92354a42bc56903de1.
+
+Basically, @try@ lets you attempt to invoke a method on an object without worrying about a NoMethodError being raised.  If the method doesn't exist, or if the target object @nil@, then @nil@ will be returned without exceptions:
+
+<notextile>
+{% highlight ruby %}
+# No exceptions when receiver is nil
+nil.try(:destroy) #=> nil
+
+# Useful when chaining potential nil items
+User.admins.first.try(:address).try(:reset)
+{% endhighlight %}
+</notextile>
+
+Just a small little bit of syntactical candy pulled in from the community.
+
+_Update:_ You can now also use this trick for "methods with arguments":http://github.com/rails/rails/commit/823b623fe2de8846c37aa13250010809ac940b57

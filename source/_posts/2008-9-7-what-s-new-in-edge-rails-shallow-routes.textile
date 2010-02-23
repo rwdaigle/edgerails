@@ -1,0 +1,43 @@
+---
+title: "Shallow Routes"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Rails' routing mechanism is pretty slick.  In a very intuitive way you're able to describe the resources you want exposed at the URL level with this routing-DSL:
+
+<notextile>
+{% highlight ruby %}
+map.resources :users do |user|
+  user.resources :articles do |article|
+    article.resources :comments
+  end
+end
+{% endhighlight %}
+</notextile>
+
+However, while this configuration makes an article available at @/users/1/articles/1@ and comments at @ /users/1/articles/1/comments/1@ there are often times when you want to bypass the full nested hierarchy and directly access the resource in question.  Now, with the "@shallow@ route option":http://github.com/rails/rails/commit/83c6ba18899a9f797d79726ca0078bdf618ec3d4, you can.
+
+<notextile>
+{% highlight ruby %}
+map.resources :users, :shallow => true do |user|
+  user.resources :articles do |article|
+    article.resources :comments
+  end
+end
+{% endhighlight %}
+</notextile>
+
+This configuration removes all nested member paths (like @/articles/1/comments/1@) and makes them directly accessible (as @/comments/1@).  Basically, routes are built only with the minimal amount of information that's needed to uniquely identify the resource.
+
+<notextile>
+{% highlight ruby %}
+user_articles_path(1) #=> '/users/1/articles'
+article_path(2) #=> '/articles/2'
+article_comments_path(3) #=> '/articles/3/comments'
+comment_path(4) #=> '/comments/4'
+{% endhighlight %}
+</notextile>
+
+No longer do you need to wrestle with infinitely nested routes, the @:shallow@ option automatically makes all routes as concise as possible.

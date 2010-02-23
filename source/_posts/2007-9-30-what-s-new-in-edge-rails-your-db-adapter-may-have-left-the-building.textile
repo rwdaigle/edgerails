@@ -1,0 +1,19 @@
+---
+title: "Your DB Adapter May Have Left the Building"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+If your Rails app happens to be running against anything but a MySQL, PostgreSQL or SQLite database and you're on Edge Rails (or are headed to Rails 2.0) then you're going to need to make sure you have the correct gems installed on your machine.  As "of now":http://dev.rubyonrails.org/changeset/7689 the database adapters for these databases have been pulled out of the core Rails distribution and are available as gems.  One of these should work for you if you rely on one of the affected databases:
+
+<notextile>
+{% highlight ruby %}
+gem install activerecord-oracle-adapter
+gem install activerecord-sqlserver-adapter
+gem install activerecord-firebird-adapter
+gem install activerecord-frontbase-adapter
+gem install activerecord-openbase-adapter
+gem install activerecord-sybase-adapter
+{% endhighlight %}
+</notextile>

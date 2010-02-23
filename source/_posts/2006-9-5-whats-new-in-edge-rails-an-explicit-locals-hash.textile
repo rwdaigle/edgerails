@@ -1,0 +1,49 @@
+---
+title: "An Explicit Locals Hash"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+_In what is amounting to my most useless post yet - this feature has been reverted according to "Bob":http://i.nfectio.us/ ._
+
+With "Rails components":http://manuals.rubyonrails.com/read/book/14 being "shunned":http://glu.ttono.us/articles/2006/08/30/guide-things-you-shouldnt-be-doing-in-rails throughout the Rails world we are often left to use a set of view partials to abstract out commonly used display functionality.  Sometimes this necessitates the use of variables (called 'locals') that may or may not be relevant in all view scenarios.  For instance, if I have a partial that I use to display form text fields there may be a @size@ parameter I want to pass in to limit the field's size:
+
+<pre>
+<code>
+# my_form.rhtml
+<%= render :partial => 'text_field', :locals => {:size => 5} %>
+
+# _text_field.rhtml
+<input type="text" size="<%= size %>" />
+</code>
+</pre>
+
+If I want the @size@ parameter to be optional however, I could try to do this with a default value of @5@:
+
+<pre>
+<code>
+# _text_field.rhtml
+<input type="text" size="<%= size ? size : "5" %>" />
+</code>
+</pre>
+
+However, this fails if no size parameter is passed to the partial as @size@ hasn't been defined yet.  With "this update":http://dev.rubyonrails.org/changeset/4997, however, you can query an explicit locals hash to determine the existance of a local variable:
+
+<pre>
+<code>
+# _text_field.rhtml
+<input type="text" size="<%= locals[:size] ? size : "5" %>" />
+</code>
+</pre>
+
+Not a huge update, but if you're using partials extensively (which I suspect most are) you've no doubt run into this issue.
+
+_And as "Bojan":http://source.mihelac.org/ has pointed out you could also use the nifty @defined?@ method_
+
+<pre>
+<code>
+# _text_field.rhtml
+<input type="text" size="<%= defined?(size) ? size : "5" %>" />
+</code>
+</pre>

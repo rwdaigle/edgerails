@@ -1,0 +1,38 @@
+---
+title: "A Better Way to Access Your Helpers"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+If you've any sort of organizational sense to you at all chances are you've got quite a few helpers tucked in your @app/helpers@ directory (not the stock ones that go one-to-one with your controllers, but other custom ones you've written to handle various other common tasks).  If so, your application controller probably also has quite a few @helper@ statements to make them available:
+
+<notextile>
+{% highlight ruby %}
+class ApplicationController < ActionController::Base
+
+  # Our many helpers that need to be available throughout the app
+  [:formatting, :highlighting, :i18n].each { |h| helper h }
+
+  ...
+end
+{% endhighlight %}
+</notextile>
+
+We've now got a "convenient way to bulk include our helpers":http://dev.rubyonrails.org/changeset/6221.
+
+<notextile>
+{% highlight ruby %}
+class ApplicationController < ActionController::Base
+
+  # Make all helpers in app/helpers/**/ available
+  helper :all
+
+  ...
+end
+{% endhighlight %}
+</notextile>
+
+_Update: Feb. 26th: I previously thought you *had* to have helper sub-directories to get them properly loaded, but DHH has corrected me.  Any and all helpers in your helper directories will get pulled in_
+
+And to top things off this is now the "default behavior":http://dev.rubyonrails.org/changeset/6222 - meaning that all helpers in your @helpers@ directory are automatically included for you.  (Hey - you wanted opinionated software)

@@ -1,0 +1,18 @@
+---
+title: "Logging Gets a Little Snappier"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+Edge Rails "just got":http://dev.rubyonrails.org/changeset/7626 a "new, buffered logger":http://dev.rubyonrails.org/browser/trunk/activesupport/lib/active_support/buffered_logger.rb that will, apparently, make logging in Rails a little snappier.
+
+This new logger is now the default, though you can change it back to the original logger in your @environment.rb@ with:
+
+<notextile>
+{% highlight ruby %}
+config.logger = Logger.new('/path/to/log', Logger::DEBUG)
+{% endhighlight %}
+</notextile>
+
+Though I'm not sure why you'd want to do that...

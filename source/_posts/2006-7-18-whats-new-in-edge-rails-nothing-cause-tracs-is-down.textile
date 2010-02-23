@@ -1,0 +1,12 @@
+---
+title: "Nothing, Cause Tracs is Down"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+The "Rails Tracs":http://dev.rubyonrails.org/ is down, thus eliminating your sole purpose for coming to this site.
+
+_Sound of crickets chirping_
+
+It's been down for quite a few days now - here's hoping it'll be back up shortly.

@@ -1,0 +1,73 @@
+---
+title: "Explicit Deprecation"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+After a bit of a hiatus (due to little reportable action on the source tree), a  deprecation tidbit was "just committed":http://dev.rubyonrails.org/changeset/4623.  What's this little nugget do?  The ActiveSupport library now provides the ability to explicitly state what methods are deprecated - which will pump out a warning message when that method is called.  This is a nice way of not breaking your codebase by removing deprecated methods, while still letting others know that they're marked for future removal.
+
+Here's how it works - simply include the deprecation module in the class that has a deprecated method (in this example a User model object) - and mark the method symbol as deprecated:
+
+<typo:code lang="ruby">
+require 'active_support/deprecation'
+
+class User < ActiveRecord::Base
+
+  # The method to deprecate
+  def permitted?(role)
+    roles.include?(role)
+  end
+
+  # Formally deprecate it!
+  deprecate :permitted?
+
+end
+
+# This method will execute as normal - except now there's a warning
+# message printed to your log file or to standard out:
+
+User.new.permitted?('ADMIN') #=> false
+
+# "Your application calls User##permitted?, which is now deprecated.
+# Please see the API documents at http://api.rubyonrails.org/ for more information."
+</typo:code>
+
+You can also denote deprecation of methods baseed on runtime conditions as well (useful when a method with certain arguments have been deprecated, but the method as a whole is still valid)
+
+<pre>
+<code>
+require 'active_support/deprecation'
+
+class User < ActiveRecord::Base
+  
+  # Single arg method is now deprecated
+  def to_s(format)
+    if format
+      ActiveSupport::Deprecation.issue_warning("to_s with a " + 
+      "format is now deprecated, please use the no-arg call.")
+      # ...
+    end
+    #...
+  end  
+end
+
+# This method will execute as normal - except now there's a warning
+# message printed to your log file or to standard out:
+
+User.new.to_s(:long) #=> "Ryan William Daigle"
+
+# "to_s with a format is now deprecated, please use the no-arg call."
+# Please see the API documents at http://api.rubyonrails.org/ for more information."
+
+# However, this method will not have a deprecation warning:
+
+User.new.to_s #=> "Ryan Daigle"
+</code>
+</pre>
+
+It may not seem like much - but the ability to warn developers that a method is on the path to deprecation can save a lot of pain by making it more apparent which called methods are deprecated and not relying on developers to do their own homework.
+
+We hate homework.
+
+tags: <a rel="tag" href="http://technorati.com/tag/rails">rails</a>, <a rel="tag" href="http://technorati.com/tag/rubyonrails">rubyonrails</a>

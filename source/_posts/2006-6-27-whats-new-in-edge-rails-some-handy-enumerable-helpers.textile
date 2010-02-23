@@ -1,0 +1,45 @@
+---
+title: "Some Handy Enumerable helpers"
+author: "Ryan Daigle"
+categories:
+  - "what-s-new-in-edge-rails"
+---
+ 
+@Enumerable@ has received a few "handy ":http://dev.rubyonrails.org/changeset/4491 little "extensions":http://dev.rubyonrails.org/changeset/4489 in edge Rails.  The first is the ability to sum the contents of the enumerable:
+
+@orders.sum { |o| o.total * discount }@
+
+or
+
+@orders.sum(&:total)@
+
+For those interested in the implemention, it's pretty straight forward:
+<pre>
+<code>
+def sum
+  inject(0) { |sum, element| sum + yield(element) }
+end
+</code>
+</pre>
+
+And next we have @index_by@ which will convert an enumerable to a hash keyed on the given block.  This is definitely best explained with an example.  Suppose we have an array of City objects that we want to convert to a hash based on the city names:
+<pre>
+<code>
+hash = cities.index_by(&:name)
+hash #=> ["New York" => <City ...>, "London" => <City ...>]
+</code>
+</pre>
+
+We now have a hash of cities keyed on the citys' names.
+
+For those that aren't familiar with the @&:symbol@ syntax used as a parameter to these methods - it's just a way to form a block that says _get the value of the this symbol on the passed in object_.
+
+So in the case of:
+
+@orders.sum(&:total)@
+
+what we're really saying is:
+
+@orders.sum { |o| o.total }@
+
+It's just a nice shortcut to access the value of a single property.
