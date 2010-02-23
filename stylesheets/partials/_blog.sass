@@ -32,19 +32,19 @@ p.info
     padding: 0
     margin: 0
     line-height: 1.25em
+    font-family: "Courier New"
+    font-size: 90%
   .notice
-    font-size: 95%
+    font-size: 90%
+    +serif-font
+    padding: 15px 15px 15px 25px
     background: #fff9d8
     border: 1px solid #{darken(#fff9d8, 20)}
-    padding: 8px 15px 12px
     margin: .5em 0 0
     display: block
     line-height: 1.25em
     &.source
-      font-size: 100%
-      +serif-font
       margin-top: 0
-      padding: 15px
     &.alert
       border-color: #f1938c
       background: #{lighten(#f1938c, 20)}
@@ -53,6 +53,9 @@ p.info
       background: #{lighten(#d5e9f6, 5)}
   p.notice
     margin-bottom: 1.35
+  div.notice
+    margin-bottom: 1.5em
+    padding: 15px 15px 0px 25px
   .meta
     border-bottom: 1px dashed #ddd
     text-transform: uppercase

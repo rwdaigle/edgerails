@@ -105,7 +105,7 @@ class Post < ActiveRecord::Base
     # in the future)
     def search(q)
       [:title, :body].inject(scoped) do |combined_scope, attr|
-        combined_scope.where(["posts.#{attr} LIKE ?", "%#{sanitize_sql(q)}%"])
+        combined_scope.where("posts.#{attr} LIKE ?", "%#{sanitize_sql(q)}%")
       end
     end
   end
@@ -178,13 +178,11 @@ end
 {% endhighlight %}
 </div>
 
-<span class="notice">
-  It's a good practice to always refer to the `table_name.column_name` when building scopes versus just the `column_name` itself (i.e.: `posts.published_at` vs. just `published_at` in the example above).  This allows for unambiguous column references - especially important when building cross-model scopes where columns from more than one table are joined.
-  
-  To be extra-flexible you can always invoke `table_name` in place of the hard-coded table name, though. to confess, this is a step I rarely take the time to implement myself:
-  
-  `where("#{table_name}.published_at IS NOT NULL")`
-</span>
+<div class="notice">
+  <p>It's a good practice to always refer to the full <code>table_name.column_name</code> when building scopes versus just the <code>column_name</code> itself (i.e.: <code>posts.published_at</code> vs. just <code>published_at</code> in the example above).  This allows for unambiguous column references - especially important when building cross-model scopes where columns from more than one table are joined.</p>
+
+  <p>To be extra-flexible you can always invoke <code>table_name</code> in place of the hard-coded table name, though. to confess, this is a step I rarely take the time to implement myself: <code>where("#{table_name}.published_at IS NOT NULL")</code></p>
+</div>
 
 Since we've got the full arsenal of ActiveRelation operators at our disposal in scopes, we can do some joins and group bys.  And you can still chain these complex queries - something where the old `named_scope` crapped the bed:
 
@@ -251,7 +249,7 @@ end
 {% endhighlight %}
 </div>
 
-We can use this scope to directly `build`|`new`|`create`|`create!` instances:
+We can use this scope to directly build instances (as well as create, new, create! etc...):
 
 <div class="code_window">
 <em>Ruby - irb session</em>
@@ -262,9 +260,12 @@ Post.titled_luda.build
 {% endhighlight %}
 </div>
 
-<span class="notice alert">
-  In order to use the creation/builder methods on a scope, the scope should directly define attribute equality using a `where` relation and the hash form of the attribute values, as was done above.  Specifying `where("title = 'Luda'")` would not have propagated the attribute values to newly constructed instances.
-</span>
+
+<div class="notice alert">
+  <p>In order to use the creation/builder methods on a scope, the scope should directly define attribute equality using a `where` relation and the hash form of the attribute values, as was done above.</p>
+  
+  <p>Specifying <code>where("title = 'Luda'")</code> would not have propagated the attribute values to newly constructed instances.</p>
+</div>
 
 Scopes really can be thought of now as named packages of _both_ query and construction logic.  Very powerful.
 
@@ -338,9 +339,11 @@ Also, you do have more than just `where_values` that can be accessed - here are 
 
 This post somewhat glosses over the new query interface for ActiveRecord in Rails 3 to get to the meat of using scopes.  However, none of the scoped yumminess could have happened without the slick new underpinnings of ActiveRecord.  So, if you're still a little confused about all this, definitely read some more about ActiveRecord before jumping into scopes.  Once you do have that foundation, however, you will use scopes on a very regular basis.
 
-<span class="notice resources">
-  The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:
-</span>
+<div class="notice resources">
+  <p>The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:</p>
 
-  * [Pratik's 'Active Record Query Interface 3.0' article](http://m.onkey.org/2010/1/22/active-record-query-interface)
-  * [Railscast 202: Active Record Queries in Rails 3](http://railscasts.com/episodes/202-active-record-queries-in-rails-3)
+  <ul>
+    <li><a href="http://m.onkey.org/2010/1/22/active-record-query-interface">Pratik's 'Active Record Query Interface 3.0' article</a></li>
+    <li><a href="http://railscasts.com/episodes/202-active-record-queries-in-rails-3">Railscast 202: Active Record Queries in Rails 3</a></li>
+  </ul>
+</div>
