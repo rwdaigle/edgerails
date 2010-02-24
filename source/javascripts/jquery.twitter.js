@@ -1,17 +1,18 @@
 (function($) {
   
   // Fetch the tweets
-  $.fn.twitterize = function(query) {
+  $.fn.twitterize = function(searchOptions) {
     
     var $me = $(this);
-    var tweets = getStoredTweets();
+    var tweets = getStoredTweets($me.cookieName());
+    var defaultSearchOptions = { rpp: 5, page: 1, lang: 'en' };
     
     if(!tweets) {      
       $.getJSON(
         "http://search.twitter.com/search.json?callback=?",
-        { rpp: 3, page: 1, lang: 'en', q: query },
+        $.extend(defaultSearchOptions, searchOptions),
         function(data) {
-          storeTweets(data);
+          storeTweets(data, $me.cookieName());
           $me.applyTweets(data);
         }
       );
@@ -29,15 +30,23 @@
     });
   };
   
-  var COOKIE_NAME = '_tweets';
+  var COOKIE_NAME_SUFFIX = '_tweets';
   
-  var storeTweets = function(tweets) {
-    $.cookie(COOKIE_NAME, JSON.stringify(tweets), { expires: 1 })
+  $.fn.cookieName = function() {
+    return $(this).attr('id') + COOKIE_NAME_SUFFIX;
   };
   
-  var getStoredTweets = function() {
-    cookieData = $.cookie(COOKIE_NAME);
+  var storeTweets = function(tweets, cookieName) {
+    $.cookie(cookieName, serializeTweets(tweets), { expires: 1 });
+  }
+  
+  var getStoredTweets = function(cookieName) {
+    cookieData = $.cookie(cookieName);
     return cookieData ? JSON.parse(cookieData) : null;
   };
+  
+  var serializeTweets = function(tweets) {
+    return JSON.stringify(tweets, ['results', 'from_user', 'text', 'id', 'created_at']);
+  }
   
 }) (jQuery);
