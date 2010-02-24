@@ -31,7 +31,7 @@ class Post < ActiveRecord::Base
       ["posts.published_at IS NOT NULL AND posts.published_at <= ?", Time.zone.now]
     }
   }  
-  scope :recent, :order => "posts.published_at DESC"
+  named_scope :recent, :order => "posts.published_at DESC"
 end
 {% endhighlight %}
 </div>
@@ -105,7 +105,7 @@ class Post < ActiveRecord::Base
     # in the future)
     def search(q)
       [:title, :body].inject(scoped) do |combined_scope, attr|
-        combined_scope.where("posts.#{attr} LIKE ?", "%#{sanitize_sql(q)}%")
+        combined_scope.where("posts.#{attr} LIKE ?", "%#{q}%")
       end
     end
   end
@@ -124,7 +124,7 @@ class Post < ActiveRecord::Base
     
     # The less-slick but, perhaps, more obvious version
     def search(q)
-      query = "%#{sanitize_sql(q)}%"
+      query = "%#{q}%"
       where("posts.title LIKE ?", query).where("posts.body LIKE ?", query)
     end
   end
@@ -178,13 +178,33 @@ end
 {% endhighlight %}
 </div>
 
+Also, as [Steffen pointed out in the comments](/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/#comment-36265313), ActiveRelation is smart enough to know how to do a join based on an association definition, allowing us to collapse the joins relations from SQL strings to an association reference:
+
+<div class="code_window">
+<em>Ruby - user.rb</em>
+{% highlight ruby %}
+class User < ActiveRecord::Base
+  
+  # Get all users that have published a post
+  scope :published, lambda {
+    joins(:posts).              # No need to write your own SQL
+    where("posts.published_at IS NOT NULL AND posts.published_at <= ?", Time.zone.now).
+    group("users.id")
+  }
+  
+  # Get all users that have commented on a post
+  scope :commented, joins(:comments).group("users.id") # Just reference :comments
+end
+{% endhighlight %}
+</div>
+
 <div class="notice">
   <p>It's a good practice to always refer to the full <code>table_name.column_name</code> when building scopes versus just the <code>column_name</code> itself (i.e.: <code>posts.published_at</code> vs. just <code>published_at</code> in the example above).  This allows for unambiguous column references - especially important when building cross-model scopes where columns from more than one table are joined.</p>
 
   <p>To be extra-flexible you can always invoke <code>table_name</code> in place of the hard-coded table name, though. to confess, this is a step I rarely take the time to implement myself: <code>where("#{table_name}.published_at IS NOT NULL")</code></p>
 </div>
 
-Since we've got the full arsenal of ActiveRelation operators at our disposal in scopes, we can do some joins and group bys.  And you can still chain these complex queries - something where the old `named_scope` crapped the bed:
+Since we've got the full arsenal of ActiveRelation operators at our disposal in scopes, we can do joins and group bys within scopes that will be safely chained in complex queries - something where the old `named_scope` crapped the bed:
 
 <div class="code_window">
 <em>Ruby - irb session</em>
