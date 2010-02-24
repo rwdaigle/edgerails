@@ -313,7 +313,7 @@ And:
 class User < ActiveRecord::Base
   
   scope :published, lambda {
-    joins("join posts on posts.author_id = users.id").
+    joins(:posts).
     where("posts.published_at IS NOT NULL AND posts.published_at <= ?", Time.zone.now).
     group("users.id")
   }
@@ -333,7 +333,7 @@ Let's look at how we can use `scope#where_values` to refer to the query logic of
 class User < ActiveRecord::Base
   
   scope :published, lambda {
-    joins("join posts on posts.author_id = users.id").
+    joins(:posts).
     where(Post.published.where_values).   # Stick this in your pipe
     group("users.id")
   }
