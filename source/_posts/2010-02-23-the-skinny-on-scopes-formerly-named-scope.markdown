@@ -289,6 +289,7 @@ Post.titled_luda.build
 
 Scopes really can be thought of now as named packages of _both_ query and construction logic.  Very powerful.
 
+<a name="crazytown"></a>
 ### Crazy Town
 
 One thing that's always bugged me is how the logic for what makes a `Post` published is split between scopes in both the `Post` class and the `User` class.  To refresh our collective memories:
@@ -323,9 +324,7 @@ end
 
 Most good developers will immediately cringe at the duplication of the `where("posts.published_at IS NOT NULL AND posts.published_at <= ?", Time.zone.now)` relation.
 
-Since I am holding the Rails core team true to their word that if a method is public, consider it part of the public API, here's a little method that will let you keep the query logic for a class with that, and only that, class: `where_values`
-
-Let's look at how we can use `scope#where_values` to refer to the query logic of the `Post.published` scope from within our `User.published` scope:
+Thanks to a [tip by Railscast's Ryan Bates](http://disq.us/d0y5l), there's a pretty slick way to refer to, and combine, scope logic: the [merge method, aliased as '&'](http://github.com/rails/rails/blob/24cc9e5b4f9b729f02d2e0b56265032d08933a41/activerecord/lib/active_record/relation/spawn_methods.rb#L7). Let's look at how we can use `scope#&` to refer to the query logic of the `Post.published` scope from within our `User.published` scope:
 
 <div class="code_window">
 <em>Ruby - user.rb</em>
@@ -333,27 +332,26 @@ Let's look at how we can use `scope#where_values` to refer to the query logic of
 class User < ActiveRecord::Base
   
   scope :published, lambda {
-    joins(:posts).
-    where(Post.published.where_values).   # Stick this in your pipe
-    group("users.id")
+    joins(:posts).group("users.id") & Post.published
   }
 end
 {% endhighlight %}
 </div>
 
-If this feels a little brittle to you, it's probably because I suspect the relation/scope class wasn't meant to be inspected so.  However, this is a real-world scenario I've run into many times and I'd love a sanctioned way to share scope logic between classes, should any of the Railsorati poop on this.
+Just so we're clear what happens when you merge relations/scopes with the `&` operator, let's look at the resulting SQL:
 
-Also, you do have more than just `where_values` that can be accessed - here are the others:
+<div class="code_window">
+<em>Ruby - irb session</em>
+{% highlight ruby %}
+User.published.to_sql
+  #=> SELECT users.* FROM "users"
+  #   INNER JOIN "posts" ON "posts"."author_id" = "users"."id"
+  #   WHERE (posts.published_at IS NOT NULL AND posts.published_at <= '2010-02-27 02:55:45.063181')
+  #   GROUP BY users.id
+{% endhighlight %}
+</div>
 
-* `joins_values`
-* `order_clause`
-* `includes_values`
-* `having_values`
-* `eager_load_values`
-* `lock_value`
-* `select_values`
-* `from_value`
-* `create_with_value`
+Notice how the conditions defined within `Post.published` are merged into the `joins` and `group` relations of the `User.published` scope?  Very nice. And merging works with all the mergeable relations, not just `where` conditions we used here.
 
 ### Summary
 
