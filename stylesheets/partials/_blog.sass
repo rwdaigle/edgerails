@@ -2,23 +2,23 @@
   padding-bottom: 15px
   .article
     margin-top: 2.5em
-    border-bottom: 1px solid #{!article_border}
+    border-bottom: 1px solid #{$article_border}
     position: relative
     padding-bottom: 1.5em
     &:first-child
       margin-top: 0
   h2
     padding-top: 0
-    margin-bottom: .1em
+    margin-bottom: 0.1em
   .title
-    color: #333
+    color: #333333
     text-decoration: none
     &:hover
       text-decoration: underline
   .footer
-    padding-top= !base_font_size
+    padding-top: $base_font_size
 
-/* parts */
+/* parts
 
 p.info
   position: absolute
@@ -27,6 +27,7 @@ p.info
   padding: 8px 0
   margin-bottom: 1em
   font-style: italic
+
 .blog
   code
     padding: 0
@@ -40,7 +41,7 @@ p.info
     padding: 15px 15px 15px 25px
     background: #fff9d8
     border: 1px solid #{darken(#fff9d8, 20)}
-    margin: .5em 0 0
+    margin: 0.5em 0 0
     display: block
     line-height: 1.25em
     &.source
@@ -57,9 +58,9 @@ p.info
     margin-bottom: 1.5em
     padding: 15px 15px 0px 25px
   .meta
-    border-bottom: 1px dashed #ddd
+    border-bottom: 1px dashed #dddddd
     text-transform: uppercase
-    color: #777
+    color: #777777
     padding: 8px 0 5px
     margin-bottom: 1.5em
     font-size: 80%
@@ -77,7 +78,7 @@ span.version
   +text-shadow(darken(#c42728, 25), 1px, 1px, 1px)
   padding: 6px 8px
   display: block
-  color: #fff
+  color: white
   font-size: 80%
   position: absolute
   top: 6px

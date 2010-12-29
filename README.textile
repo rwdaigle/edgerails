@@ -1,0 +1,30 @@
+h1. EdgeRails.info
+
+By Ryan Daigle and many other contributors
+
+EdgeRails.info is a community site for keeping up with the latest features, changes and additions to the Ruby on Rails framework. What is contained in this repository is the source to the site (live at http://edgerails.info) that can be generated with Jekyll.
+
+h2. How to Make an Article Contribution
+
+h3. Install Source & Jekyll
+
+* Checkout the source: git clone git@github.com:rwdaigle/edgerails.git
+* Install dependencies: bundle install
+* Make sure you can generate the site: bundle exec rake generate
+
+h3. Write Article
+
+* Create new article template in the source/_posts directory: bundle exec rake post['my new post title']
+* Use existing articles as guide for proper CSS etc... and write your article
+
+h3. Regenerate the Site
+
+To ensure your article is being generated properly you will need to regenerate the site (perhaps several times)
+
+* Run: bundle exec rake generate
+* To view the site in the browser: bundle exec rake preview
+
+The site takes a VERY long time to regenerate given the number of articles. To reduce this when working on only a single article you can isolate the article you're working on (which will move all other articles to a temp directory).
+
+* To isolate a single article run: bundle exec rake isolate['my new post title']
+* When you're done editing the article and regenerating (but before committing), move the existing articles back into place: bundle exec rake integrate

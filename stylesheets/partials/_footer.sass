@@ -1,30 +1,30 @@
-=sticky-footer(!footer_height, !root_selector = "#root", !root_footer_selector = "#root_footer", !footer_selector = "#footer")
+=sticky-footer($footer_height, $root_selector: unquote("#root"), $root_footer_selector: unquote("#root_footer"), $footer_selector: unquote("#footer"))
   html, body
     height: 100%
-  #{!root_selector}
+  #{$root_selector}
     min-height: 100%
     height: auto !important
     height: 100%
-    margin-bottom= -!footer_height - 2px
-    #{!root_footer_selector}
-      height= !footer_height
-  #{!footer_selector}
+    margin-bottom: -$footer_height - 2px
+    #{$root_footer_selector}
+      height: $footer_height
+  #{$footer_selector}
     clear: both
     position: relative
-    height= !footer_height
+    height: $footer_height
 
 #footer
   +sans-font
-  font-size= !base_font_size_small
-  color= !footer_color
-  background-color= !footer_bg
-  +v-gradient(lighten(!darkgray, 5), darken(!darkgray, 10), "color-stop(.3, #{!darkgray})")
-  border-top: 2px solid #{!header_border_top}
+  font-size: $base_font_size_small
+  color: $footer_color
+  background-color: $footer_bg
+  +v-gradient(lighten($darkgray, 5), darken($darkgray, 10), unquote("color-stop(.3, #{$darkgray})"))
+  border-top: 2px solid #{$header_border_top}
   .page_width
-    padding= 12px 15px 10px
+    padding: 12px 15px 10px
   a
-    color= #ddd
+    color: #dddddd
     &:hover
-      color = #fff
+      color: white
   .credit
     float: right
