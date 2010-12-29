@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Simply RESTful Support - And How to Use It</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>Simply RESTful Support - And How to Use It</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: August 1st, 2006
+                </div>
+                &#x000A;<p><em>See here from some <a href="/articles/2007/3/29/what-s-new-in-edge-rails-restful-routes-get-a-new-custom-delimiter">syntactical changes</a> that occurred after this post was published</em></p>&#x000A;<p>Though I&#8217;ve been <a href="http://www.jvoorhis.com/articles/2006/07/31/whats-new-in-edge-rails-restful-routes">beaten to the punch</a> on this one, it&#8217;s still worth a mention.  Edge rails <a href="http://dev.rubyonrails.org/changeset/4637">now has</a> native support for the <a href="http://dev.rubyonrails.org/browser/plugins/simply_restful">simply resful plugin</a> functionality (though the implementation is not backwards-compatible as it now uses pluralized naming conventions in its mappings).</p>&#x000A;<p>This addition continues the Rails march towards <span class="caps">REST</span>-vana and allows for easy declaration of <span class="caps">REST</span>-able controller methods.  Where as edge Rails&#8217;s new <a href="/articles/2006/06/30/whats-new-in-edge-rails-activeresource-is-here">Active Resource library</a> provides the client-side part of the <span class="caps">REST</span> equation, simply RESTful provides the server-side handling of <span class="caps">REST</span>-based requests.</p>&#x000A;<h3>Basic Usage</h3>&#x000A;<p>The way it works is that you get a new <code>map.resources</code> method to use in your <code>routes.rb</code> config file that specifies which resource you want to RESTize.  For example, assuming I have a standard <code>users_controller</code> I would add the following to my routes:</p>&#x000A;<p><code>map.resources :users</code></p>&#x000A;<p>Yeah, that&#8217;s it.  And with that declaration, here are the requests that are mapped for me (all to the <code>users</code> controller):<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;GET: /users =&gt; [:action =&gt; 'index']&#x000A;GET: /users.xml =&gt; [:action =&gt; 'index', :format =&gt; 'xml']&#x000A;GET: /users/1 =&gt; [:action =&gt; 'show', :id =&gt; 1]&#x000A;GET: /users/1;edit =&gt; [:action =&gt; 'edit', :id =&gt; 1]&#x000A;GET: /users/1.xml =&gt; [:action =&gt; 'show', :id =&gt; 1, :format =&gt; 'xml']</p>&#x000A;<p><span class="caps">POST</span>: /users =&gt; [:action =&gt; &#8216;create&#8217;]<br />&#x000A;<span class="caps">PUT</span>: /users/1 =&gt; [:action =&gt; &#8216;update&#8217;, :id =&gt; 1]<br />&#x000A;<span class="caps">DELETE</span>: /users/1 =&gt; [:action =&gt; &#8216;destroy&#8217;, :id =&gt; 1]<br />&#x000A;</code><br />&#x000A;</pre></p>&#x000A;<p>Note that in true <span class="caps">REST</span> form, this one <span class="caps">URL</span>: <code>/users/1</code> serves four different actions depending on request method (<code>GET =&gt; show, POST =&gt; create</code>, etc&#8230;).  Beauty in simplicity&#8230;</p>&#x000A;<p>It should be noted that Rails has to cheat to emulate the various <span class="caps">HTTP</span> request methods as most browsers don&#8217;t support sending <code>PUT</code> or <code>DELETE</code> requests.  Rails does this by using the <code>_method</code> parameter in the various <a href="/articles/2006/05/30/whats-new-in-edge-rails-restful-method-support-in-link-helpers"><code>link_to</code> helper methods</a></p>&#x000A;<h3>Advanced Usage</h3>&#x000A;<p>So <span class="caps">REST</span> is great for calling simple <span class="caps">CRUD</span> actions, but how do you invoke other actions while not stepping outside the friendly confines of the <span class="caps">REST</span> world?  As was hinted at in the edit mapping above, you use the &#8216;<code>;</code>&#8217; delimiter to denote a different action &#8211; along with telling <code>map.resources</code> what <span class="caps">HTTP</span> methods to use for the non-standard actions.</p>&#x000A;<pre>&#x000A;<code>&#x000A;# Provided as default resource mappings&#x000A;GET: /users/1;edit =&gt; [:action =&gt; 'edit', :id =&gt; 1]&#x000A;GET: /users/1.xml;edit =&gt; [:action =&gt; 'edit', :id =&gt; 1, :format =&gt; 'xml']&#x000A;&#x000A;# Update routes to handle non-standard CRUD actions&#x000A;# This one says that a GET on 'filter' is accessing the collection&#x000A;map.resources :users, :collection =&gt; { :filter =&gt; :get }&#x000A;&#x000A;GET: /users;filter =&gt; [:action =&gt; 'filter']&#x000A;GET: /users;filter?active=true =&gt; [:action =&gt; 'filter', :active =&gt; 'true']&#x000A;&#x000A;# And this says that a POST to 'deactivate' is accessing a member item&#x000A;# (i.e. a single item)&#x000A;map.resources :users, :member =&gt; { :deactivate =&gt; :post }&#x000A;&#x000A;POST: /users/1;deactivate =&gt; [:action =&gt; 'deactivate', :id =&gt; 1]&#x000A;&#x000A;# Get funky and allow a PUT to 'new;admin'&#x000A;map.resources :users, :new =&gt; { :admin =&gt; :put }&#x000A;&#x000A;PUT: /users/new;admin =&gt; [:action =&gt; 'admin']&#x000A;</code>&#x000A;</pre>&#x000A;<p>Hopefully this makes it pretty clear how you can layer your application functionality on top of this new RESTful routing.  And for those looking for a real wow factor&#8230;</p>&#x000A;<h3>Wow Usage (i.e. Nested &amp; Prefixed Routes)</h3>&#x000A;<p>&#8230;you can also specify path prefixes to your routes for trully spectacular routes:</p>&#x000A;<pre>&#x000A;<code>&#x000A;# Give my user routes a prefix by group&#x000A;map.resources :users, :path_prefix =&gt; "/groups/:group_id"&#x000A;&#x000A;GET: /groups/13/users/1 =&gt; [:controller =&gt; 'users', :action =&gt; 'show',&#x000A;        :group_id =&gt; 13, :id =&gt; 1]&#x000A;</code>&#x000A;</pre>&#x000A;<p>Another way you can achieve this nested routing is by nesting the resource mappings themselves</p>&#x000A;<pre>&#x000A;<code>&#x000A;# Make both groups and users RESTable, with users as nested resources of groups&#x000A;map.resources :groups do |group|&#x000A;  group.resources :users&#x000A;end&#x000A;&#x000A;GET: /groups/13/users/1 =&gt; [:controller =&gt; 'users', :action =&gt; 'show',&#x000A;      :group_id =&gt; 13, :id =&gt; 1]&#x000A;GET: /users/1 =&gt; [:controller =&gt; 'users', :action =&gt; 'show', :id =&gt; 1]&#x000A;GET: /groups/1 =&gt; [:controller =&gt; 'groups', :action =&gt; 'show', :id =&gt; 1]&#x000A;</code>&#x000A;</pre>&#x000A;<h3>Tidbits</h3>&#x000A;<p>With each resource mapping you specify, you also get a handy <a href="http://wiki.rubyonrails.org/rails/pages/NamedRoutes">named route</a>.  So with:</p>&#x000A;<p><code>map.resources :users, :collection =&gt; { :filter =&gt; :get }</code></p>&#x000A;<p>You get a <code>filter_users_url</code> helper method:</p>&#x000A;<p><code>filter_users_url #=&gt; "/users;filter"</code></p>&#x000A;<p>Don&#8217;t like the default naming?  Fine, add your own prefix to the generated url name:</p>&#x000A;<p>@map.resources :users, :collection =&gt; { :filter =&gt; :get }, :name_prefix =&gt; &#8216;my_&#8217; @</p>&#x000A;<p>Now:</p>&#x000A;<p><code>my_filter_users_url #=&gt; "/users;filter"</code></p>&#x000A;<p>I think I&#8217;m in love.</p>&#x000A;<p><br/></p>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>

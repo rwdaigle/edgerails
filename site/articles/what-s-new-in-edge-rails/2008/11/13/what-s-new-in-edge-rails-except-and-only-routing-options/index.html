@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: :except and :only Routing Options</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>:except and :only Routing Options</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: November 13th, 2008
+                </div>
+                &#x000A;<span class="version"><strong>Rails</strong> 2.2.1</span><p>Just added to Edge Rails is the <a href="http://github.com/rails/rails/commit/44a3009ff068bf080de6764a8c884fbf0ceb920e">ability to exclude and include the default generated routes</a> in your mapping configuration.  Previously, <code>map.resources :articles</code> would generate routes to all seven default actions on the <code>ArticlesController</code> (index, create, new, edit, show, update, destroy).  You can now tell your routes configuration to only generate a subset of those actions, or to exclude a subset of those actions:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Only generate the :index route of articles</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="ss">:index</span>&#x000A;&#x000A;<span class="c1"># Generate all but the destroy route of articles</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="ss">:destroy</span>&#x000A;&#x000A;<span class="c1"># Only generate the non-modifying routes of articles</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:index</span><span class="p">,</span> <span class="ss">:show</span><span class="o">]</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Note that you can use the <code>:all</code> and <code>:none</code> values to denote all or none of the default routes.</p>&#x000A;<div class="highlight"><pre><span class="c1"># Don&#39;t generate any default article routes, just the approve route</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:except</span> <span class="o">=&gt;</span> <span class="ss">:all</span><span class="p">,</span> <span class="ss">:member</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:approve</span> <span class="o">=&gt;</span> <span class="ss">:put</span> <span class="p">}</span>&#x000A;&#x000A;<span class="c1"># Same</span>&#x000A;<span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span><span class="p">,</span> <span class="ss">:only</span> <span class="o">=&gt;</span> <span class="ss">:none</span><span class="p">,</span> <span class="ss">:member</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:approve</span> <span class="o">=&gt;</span> <span class="ss">:put</span> <span class="p">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>The motivation behind this feature is that <a href="http://blog.hungrymachine.com/2008/11/8/how-to-save-100m-of-ram-per-mongrel">complex routing consumes a lot of memory</a>.  So eliminating unnecessary and unused routes can significantly reduce your memory consumption.  The holy grail of this, however, will be when you can <a href="http://blog.hungrymachine.com/2008/11/11/how-to-save-100m-of-ram-per-mongrel-part-2">specify which routes should be formatted</a> (<code>json</code>, <code>xml</code> etc&#8230;) as this is essentially doubling the number of default routes when very rarely does every call need to be <span class="caps">API</span>-accessible.</p>&#x000A;<p><em>The original implementation included inheritance of these options, but that has <a href="http://github.com/rails/rails/commit/80747e9db16ec60eb0d95b510baf051612ec0768">been reverted</a>.  So no more inheritance, you need to specify <code>:except</code> and <code>:only</code> at each resource-level.</em></p>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2008/11/13/what-s-new-in-edge-rails-except-and-only-routing-options";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>

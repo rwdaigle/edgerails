@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: The Skinny on Scopes (Formerly named_scope)</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>The Skinny on Scopes (Formerly named_scope)</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: February 23rd, 2010
+                </div>
+                <p><span class="version"><strong>Rails</strong> 3.0</span></p>&#x000A;&#x000A;<p><span class="notice source">&#x000A;  The source for the examples contained in this article are located at: <a href="http://github.com/rwdaigle/edgerails-support/tree/master/the-skinny-on-scopes-formerly-named-scope/">http://github.com/rwdaigle/edgerails-support/tree/master/the-skinny-on-scopes-formerly-named-scope/</a>&#x000A;</span></p>&#x000A;&#x000A;<p>I remember my heart fluttering with a boyish crush the first time I saw <a href="http://magicscalingsprinkles.wordpress.com/">Nick Kallen</a>&#8217;s has_finder functionality <a href="/articles/what-s-new-in-edge-rails/2008/03/24/what-s-new-in-edge-rails-has-finder-functionality/">make it into Rails in the form of <code>named_scope</code></a>. <code>named_scope</code> quickly made its way into my toolset as a great way to encapsulate reusable, chainable bits of query logic.  While it had its downsides (namely its lack of first-class chain support for the likes of <code>:joins</code> and <code>:include</code>) it redefined how I thought about structuring my model logic.  Once you taste the chainable goodness of <code>named_scope</code> you never go back.</p>&#x000A;&#x000A;<p>So here we are with Rails 3 completely refactoring the internals of ActiveRecord - what&#8217;s up with our beloved <code>named_scope</code>?  Well, the simple answer is that it&#8217;s been renamed to <code>scope</code> and you can use it just as you&#8217;re used to &#8230; but that&#8217;s taking the easy way out.  Let&#8217;s see what else we can do with <code>scope</code> in Rails 3.</p>&#x000A;&#x000A;<h3>Basic Usage</h3>&#x000A;&#x000A;<p>Let&#8217;s assume a standard <code>Post</code> model with <code>published_at</code> datetime field along with <code>title</code> and <code>body</code> (to follow along in code, see the <a href="http://github.com/rwdaigle/edgerails-support/tree/master/20100221_skinny_on_scopes/">accompanying project in github</a>).</p>&#x000A;&#x000A;<p>In Rails 2.x here&#8217;s how we&#8217;d have to define the self-explanatory <code>published</code> and <code>recent</code> named scopes:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - post.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">named_scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span> &#x000A;    <span class="p">{</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span>&#x000A;      <span class="o">[</span><span class="s2">&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span><span class="o">]</span>&#x000A;    <span class="p">}</span>&#x000A;  <span class="p">}</span>  &#x000A;  <span class="n">named_scope</span> <span class="ss">:recent</span><span class="p">,</span> <span class="ss">:order</span> <span class="o">=&gt;</span> <span class="s2">&quot;posts.published_at DESC&quot;</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p><span class="notice">&#x000A;  The reason we need to use a <code>lambda</code> here is that it delays the evaluation of the <code>Time.zone.now</code> argument to when the scope is actually invoked.  Without the <code>lambda</code> the time that would be used in the query logic would be the time that the class was first evaluated, not the scope itself.&#x000A;</span></p>&#x000A;&#x000A;<p>With Rails 3 the bulk of ActiveRecord is now based on the <a href="http://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation.rb">Relation</a> class.  Think of relation as named_scope on steroids, weaving chainable query logic into the very fabric of ActiveRecord.</p>&#x000A;&#x000A;<p>You can see how to use the individual <code>where</code>, <code>order</code> etc&#8230; commands of <code>Relation</code> on <a href="http://m.onkey.org/2010/1/22/active-record-query-interface">Pratik&#8217;s great writeup of the new query interface</a> as well in <a href="http://railscasts.com/episodes/202-active-record-queries-in-rails-3">this Railscast</a>.  Understanding these are important as the new <code>scope</code> is built upon them.</p>&#x000A;&#x000A;<p>Let&#8217;s see how - here&#8217;s how the two named scopes from our previous <code>Post</code> example will look in Rails 3:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - post.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span> &#x000A;    <span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>&#x000A;  <span class="p">}</span>  &#x000A;  <span class="n">scope</span> <span class="ss">:recent</span><span class="p">,</span> <span class="n">order</span><span class="p">(</span><span class="s2">&quot;posts.published_at DESC&quot;</span><span class="p">)</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>While the bulk of the logic is the same - the SQL string portions - you start to see how scopes use the new query interface directly to create reusable query logic versus constructing an options hash as was done in Rails 2.  This really is our first glimpse of how much more flexible the new query interface allows our scopes to be.  No longer are they a slightly different construct than your normal query methods.  They are now <em>built upon</em> the very same query methods that you would use were you to execute a query directly.  This consistency is now prevalent all throughout ActiveRecord.</p>&#x000A;&#x000A;<p>And there&#8217;s more&#8230;</p>&#x000A;&#x000A;<h3>Scope Reusability</h3>&#x000A;&#x000A;<p>Suppose we want to update our <code>recent</code> scope to only include published posts.  We&#8217;ve already defined what <code>published</code> means and shouldn&#8217;t have to redefine it to create a new scope.  Well, you can also chain scopes within scope definitions themselves as we&#8217;ll do here with the new <code>recent</code> and <code>published_since</code> scopes.</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - post.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="n">scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span> &#x000A;    <span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>&#x000A;  <span class="p">}</span>&#x000A;  <span class="n">scope</span> <span class="ss">:published_since</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">ago</span><span class="o">|</span>&#x000A;    <span class="n">published</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.published_at &gt;= ?&quot;</span><span class="p">,</span> <span class="n">ago</span><span class="p">)</span>&#x000A;  <span class="p">}</span>&#x000A;  &#x000A;  <span class="n">scope</span> <span class="ss">:recent</span><span class="p">,</span> <span class="n">published</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s2">&quot;posts.published_at DESC&quot;</span><span class="p">)</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Ok, now we&#8217;re getting warmed up.</p>&#x000A;&#x000A;<h3>Dynamic Scope Construction</h3>&#x000A;&#x000A;<p>I&#8217;ve been in love with the <a href="http://github.com/rails/rails/blob/17f336e2f00f419a41eb7effb817bd7ad3e84f0d/activerecord/lib/active_record/named_scope.rb#L3"><code>scoped</code> the anonymous named_scope constructor</a> in Rails 2.3 for sometime now, using it to create dynamic and chainable scopes on an as-needed basis.  One use-case you see a lot for this type of functionality is for creating a <code>search</code> method that you can still append other query manipulations onto.</p>&#x000A;&#x000A;<p>For instance, to search our posts we can create this method which will return a scope for your caller to further filter (notice the use of <code>scoped</code> to start the chain off with an innocuous scope upon which others can be appended):</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - post.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>&#x000A;    &#x000A;    <span class="c1"># Search the title and body fields for the given string.</span>&#x000A;    <span class="c1"># Start with an empty scope and build on it for each attr.</span>&#x000A;    <span class="c1"># (Allows for easy extraction of searchable fields definition</span>&#x000A;    <span class="c1"># in the future)</span>&#x000A;    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>&#x000A;      <span class="o">[</span><span class="ss">:title</span><span class="p">,</span> <span class="ss">:body</span><span class="o">].</span><span class="n">inject</span><span class="p">(</span><span class="n">scoped</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">combined_scope</span><span class="p">,</span> <span class="kp">attr</span><span class="o">|</span>&#x000A;        <span class="n">combined_scope</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.</span><span class="si">#{</span><span class="kp">attr</span><span class="si">}</span><span class="s2"> LIKE ?&quot;</span><span class="p">,</span> <span class="s2">&quot;%</span><span class="si">#{</span><span class="n">q</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>&#x000A;      <span class="k">end</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>The use of <code>inject</code> here somewhat obfuscates the intent of the method if you&#8217;re not used to looking at such iterations - here&#8217;s an easier to follow version with the searchable fields more hard coded (which actually doesn&#8217;t even use an anonymous scope to get bootstrapped):</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - post.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>&#x000A;    &#x000A;    <span class="c1"># The less-slick but, perhaps, more obvious version</span>&#x000A;    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>&#x000A;      <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;%</span><span class="si">#{</span><span class="n">q</span><span class="si">}</span><span class="s2">%&quot;</span>&#x000A;      <span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.title LIKE ?&quot;</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.body LIKE ?&quot;</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Since we&#8217;re building upon the chainable goodness of then new query interface (think of scopes now as named bundles of the new ActiveRelation construct), we can do the following with the <code>search</code> method:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - irb session</em>&#x000A;<div class="highlight"><pre><span class="c1"># What&#39;s in the db, titles ~= publish date</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:title</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;1 week from now&quot;, &quot;Now&quot;, &quot;1 week ago&quot;, &quot;2 weeks ago&quot;]</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:title</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;Now&quot;, &quot;1 week ago&quot;, &quot;2 weeks ago&quot;]</span>&#x000A;&#x000A;<span class="c1"># Search combinations</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:title</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;1 week from now&quot;, &quot;1 week ago&quot;]</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:title</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;1 week ago&quot;]</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">published_since</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:title</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;Now&quot;, &quot;1 week ago&quot;]</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="s1">&#39;created_at DESC&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:title</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;2 weeks ago&quot;, &quot;1 week ago&quot;]</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>You can imagine a scenario where more complex query-string support could be built, all using anonymous scopes.</p>&#x000A;&#x000A;<p>Feels great, huh?  It also feels a lot like the <a href="http://rubygems.org/gems/utility_scopes"><code>utility_scopes</code> gem</a> I <a href="http://ryandaigle.com/articles/2008/8/20/named-scope-it-s-not-just-for-conditions-ya-know">released awhile ago</a> which was my attempt to package up the chainable goodness of named_scope for common query operations.  Rest-assured, there&#8217;s a much smoother implementation under the covers here in Rails 3 than just some hacks on top of <code>named_scope</code></p>&#x000A;&#x000A;<h3>Cross-Model Scopes</h3>&#x000A;&#x000A;<p>Scopes are great for operating solely on the columns of a singular class&#8217;s table, but they can also be used to package cross-model queries (i.e. any SQL that would require a <code>join</code>).  Let&#8217;s add in users (who can author and comment on posts) to the mix and write some scopes on <code>User</code> that will fetch only users that have authored published posts as well as users that have commented on a post:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - user.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">has_many</span> <span class="ss">:posts</span><span class="p">,</span> <span class="ss">:foreign_key</span> <span class="o">=&gt;</span> <span class="ss">:author_id</span>&#x000A;  <span class="n">has_many</span> <span class="ss">:comments</span>&#x000A;  &#x000A;  <span class="c1"># Get all users that have published a post</span>&#x000A;  <span class="n">scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span>&#x000A;    <span class="n">joins</span><span class="p">(</span><span class="s2">&quot;join posts on posts.author_id = users.id&quot;</span><span class="p">)</span><span class="o">.</span>&#x000A;    <span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span><span class="o">.</span>&#x000A;    <span class="n">group</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">)</span>&#x000A;  <span class="p">}</span>&#x000A;  &#x000A;  <span class="c1"># Get all users that have commented on a post</span>&#x000A;  <span class="n">scope</span> <span class="ss">:commented</span><span class="p">,</span> <span class="n">joins</span><span class="p">(</span><span class="s2">&quot;join comments on comments.user_id = users.id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">)</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Also, as <a href="/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/#comment-36265313">Steffen pointed out in the comments</a>, ActiveRelation is smart enough to know how to do a join based on an association definition, allowing us to collapse the joins relations from SQL strings to an association reference:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - user.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="c1"># Get all users that have published a post</span>&#x000A;  <span class="n">scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span>&#x000A;    <span class="n">joins</span><span class="p">(</span><span class="ss">:posts</span><span class="p">)</span><span class="o">.</span>              <span class="c1"># No need to write your own SQL</span>&#x000A;    <span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span><span class="o">.</span>&#x000A;    <span class="n">group</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">)</span>&#x000A;  <span class="p">}</span>&#x000A;  &#x000A;  <span class="c1"># Get all users that have commented on a post</span>&#x000A;  <span class="n">scope</span> <span class="ss">:commented</span><span class="p">,</span> <span class="n">joins</span><span class="p">(</span><span class="ss">:comments</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">)</span> <span class="c1"># Just reference :comments</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;&#x000A;&#x000A;<div class="notice">&#x000A;  <p>It&#8217;s a good practice to always refer to the full <code>table_name.column_name</code> when building scopes versus just the <code>column_name</code> itself (i.e.: <code>posts.published_at</code> vs. just <code>published_at</code> in the example above).  This allows for unambiguous column references - especially important when building cross-model scopes where columns from more than one table are joined.</p>&#x000A;&#x000A;  <p>To be extra-flexible you can always invoke <code>table_name</code> in place of the hard-coded table name, though. to confess, this is a step I rarely take the time to implement myself: <code>where("#{table_name}.published_at IS NOT NULL")</code></p>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Since we&#8217;ve got the full arsenal of ActiveRelation operators at our disposal in scopes, we can do joins and group bys within scopes that will be safely chained in complex queries - something where the old <code>named_scope</code> crapped the bed:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - irb session</em>&#x000A;<div class="highlight"><pre><span class="c1"># Get all users that have a post published</span>&#x000A;<span class="no">User</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:username</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;tim&quot;, &quot;dave&quot;]</span>&#x000A;<span class="no">User</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">to_sql</span>&#x000A;  <span class="c1">#=&gt; SELECT &quot;users&quot;.* FROM &quot;users&quot; join posts on posts.author_id = users.id</span>&#x000A;  <span class="c1">#   WHERE (posts.published_at IS NOT NULL AND posts.published_at &lt;= &#39;2010-02-22 21:33:00.892308&#39;)</span>&#x000A;  <span class="c1">#   GROUP BY users.id</span>&#x000A;  &#x000A;<span class="c1"># Get all users that have commented on a post</span>&#x000A;<span class="no">User</span><span class="o">.</span><span class="n">commented</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:username</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;ryan&quot;, &quot;john&quot;, &quot;tim&quot;, &quot;dave&quot;]</span>&#x000A;<span class="no">User</span><span class="o">.</span><span class="n">commented</span><span class="o">.</span><span class="n">to_sql</span>&#x000A;  <span class="c1">#=&gt; SELECT &quot;users&quot;.* FROM &quot;users&quot; join comments on comments.user_id = users.id</span>&#x000A;  <span class="c1">#   GROUP BY users.id</span>&#x000A;  &#x000A;<span class="c1"># Combine them to get all authors that have also commented</span>&#x000A;<span class="no">User</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">commented</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:username</span><span class="p">)</span> <span class="c1">#=&gt; [&quot;tim&quot;, &quot;dave&quot;]</span>&#x000A;<span class="no">User</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">commented</span><span class="o">.</span><span class="n">to_sql</span>&#x000A;  <span class="c1">#=&gt; SELECT &quot;users&quot;.* FROM &quot;users&quot;</span>&#x000A;  <span class="c1">#   join posts on posts.author_id = users.id</span>&#x000A;  <span class="c1">#   join comments on comments.user_id = users.id</span>&#x000A;  <span class="c1">#   WHERE (posts.published_at IS NOT NULL AND posts.published_at &lt;= &#39;2010-02-22 21:33:00.892308&#39;)</span>&#x000A;  <span class="c1">#   GROUP BY users.id</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p><span class="notice">&#x000A;  As I&#8217;ve done here, use <code>scope#to_sql</code> to peek at what SQL the scope will execute.  Very useful for debugging purposes.&#x000A;</span></p>&#x000A;&#x000A;<h3>Scope-based Model CRUD</h3>&#x000A;&#x000A;<p>Since ActiveRelation lets you invoke all the builder/update/destroy methods on a relation that you&#8217;re used to using directly against your models, that power is also available at the end of a scope/scope-chain.  Let&#8217;s play around with our post scopes and use them to do more than just query:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - irb session</em>&#x000A;<div class="highlight"><pre><span class="c1"># Increment the views_count for all published posts</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:views_count</span><span class="p">)</span> <span class="c1">#=&gt; [59, 71, 42]</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">update_all</span><span class="p">(</span><span class="s2">&quot;views_count = views_count + 1&quot;</span><span class="p">)</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:views_count</span><span class="p">)</span> <span class="c1">#=&gt; [60, 72, 43]</span>&#x000A;&#x000A;<span class="c1"># Nobody cares about unpublished posts</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">unpublished</span><span class="o">.</span><span class="n">size</span> <span class="c1">#=&gt; 1</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">unpublished</span><span class="o">.</span><span class="n">destroy_all</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">unpublished</span><span class="o">.</span><span class="n">size</span> <span class="c1">#=&gt; 0</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>You can also create a new model from existing scopes - suppose we have a (very contrived) scoped that gets only posts of certain title:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - post.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="c1"># Ludacris</span>&#x000A;  <span class="n">scope</span> <span class="ss">:titled_luda</span><span class="p">,</span> <span class="n">where</span><span class="p">(</span><span class="ss">:title</span> <span class="o">=&gt;</span> <span class="s1">&#39;Luda&#39;</span><span class="p">)</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>We can use this scope to directly build instances (as well as create, new, create! etc&#8230;):</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - irb session</em>&#x000A;<div class="highlight"><pre><span class="no">Post</span><span class="o">.</span><span class="n">titled_luda</span><span class="o">.</span><span class="n">size</span> <span class="c1">#=&gt; 0</span>&#x000A;<span class="no">Post</span><span class="o">.</span><span class="n">titled_luda</span><span class="o">.</span><span class="n">build</span>&#x000A;  <span class="c1">#=&gt; #&lt;Post id: nil, title: &quot;Luda&quot;, ...&gt;</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;&#x000A;&#x000A;<div class="notice alert">&#x000A;  <p>In order to use the creation/builder methods on a scope, the scope should directly define attribute equality using a `where` relation and the hash form of the attribute values, as was done above.</p>&#x000A;  &#x000A;  <p>Specifying <code>where("title = 'Luda'")</code> would not have propagated the attribute values to newly constructed instances.</p>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Scopes really can be thought of now as named packages of <em>both</em> query and construction logic.  Very powerful.</p>&#x000A;&#x000A;<p><a name="crazytown"></a></p>&#x000A;&#x000A;<h3>Crazy Town</h3>&#x000A;&#x000A;<p>One thing that&#8217;s always bugged me is how the logic for what makes a <code>Post</code> published is split between scopes in both the <code>Post</code> class and the <code>User</code> class.  To refresh our collective memories:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - post.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="n">scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span> &#x000A;    <span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>&#x000A;  <span class="p">}</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>And:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - user.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="n">scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span>&#x000A;    <span class="n">joins</span><span class="p">(</span><span class="ss">:posts</span><span class="p">)</span><span class="o">.</span>&#x000A;    <span class="n">where</span><span class="p">(</span><span class="s2">&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span><span class="o">.</span>&#x000A;    <span class="n">group</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">)</span>&#x000A;  <span class="p">}</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Most good developers will immediately cringe at the duplication of the <code>where("posts.published_at IS NOT NULL AND posts.published_at &lt;= ?", Time.zone.now)</code> relation.</p>&#x000A;&#x000A;<p>Thanks to a <a href="http://disq.us/d0y5l">tip by Railscast&#8217;s Ryan Bates</a>, there&#8217;s a pretty slick way to refer to, and combine, scope logic: the <a href="http://github.com/rails/rails/blob/24cc9e5b4f9b729f02d2e0b56265032d08933a41/activerecord/lib/active_record/relation/spawn_methods.rb#L7">merge method, aliased as &#8216;&amp;&#8217;</a>. Let&#8217;s look at how we can use <code>scope#&amp;</code> to refer to the query logic of the <code>Post.published</code> scope from within our <code>User.published</code> scope:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - user.rb</em>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  &#x000A;  <span class="n">scope</span> <span class="ss">:published</span><span class="p">,</span> <span class="nb">lambda</span> <span class="p">{</span>&#x000A;    <span class="n">joins</span><span class="p">(</span><span class="ss">:posts</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="no">Post</span><span class="o">.</span><span class="n">published</span>&#x000A;  <span class="p">}</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Just so we&#8217;re clear what happens when you merge relations/scopes with the <code>&amp;</code> operator, let&#8217;s look at the resulting SQL:</p>&#x000A;&#x000A;<div class="code_window">&#x000A;<em>Ruby - irb session</em>&#x000A;<div class="highlight"><pre><span class="no">User</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">to_sql</span>&#x000A;  <span class="c1">#=&gt; SELECT users.* FROM &quot;users&quot;</span>&#x000A;  <span class="c1">#   INNER JOIN &quot;posts&quot; ON &quot;posts&quot;.&quot;author_id&quot; = &quot;users&quot;.&quot;id&quot;</span>&#x000A;  <span class="c1">#   WHERE (posts.published_at IS NOT NULL AND posts.published_at &lt;= &#39;2010-02-27 02:55:45.063181&#39;)</span>&#x000A;  <span class="c1">#   GROUP BY users.id</span>&#x000A;</pre>&#x000A;</div>&#x000A;</div>&#x000A;&#x000A;&#x000A;<p>Notice how the conditions defined within <code>Post.published</code> are merged into the <code>joins</code> and <code>group</code> relations of the <code>User.published</code> scope?  Very nice. And merging works with all the mergeable relations, not just <code>where</code> conditions we used here.</p>&#x000A;&#x000A;<h3>Summary</h3>&#x000A;&#x000A;<p>This post somewhat glosses over the new query interface for ActiveRecord in Rails 3 to get to the meat of using scopes.  However, none of the scoped yumminess could have happened without the slick new underpinnings of ActiveRecord.  So, if you&#8217;re still a little confused about all this, definitely read some more about ActiveRecord before jumping into scopes.  Once you do have that foundation, however, you will use scopes on a very regular basis.</p>&#x000A;&#x000A;<div class="notice resources">&#x000A;  <p>The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:</p>&#x000A;&#x000A;  <ul>&#x000A;    <li><a href="http://m.onkey.org/2010/1/22/active-record-query-interface">Pratik&#8217;s &#8216;Active Record Query Interface 3.0&#8217; article</a></li>&#x000A;    <li><a href="http://railscasts.com/episodes/202-active-record-queries-in-rails-3">Railscast 202: Active Record Queries in Rails 3</a></li>&#x000A;  </ul>&#x000A;</div>&#x000A;
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering'>Default RESTful Rendering</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>

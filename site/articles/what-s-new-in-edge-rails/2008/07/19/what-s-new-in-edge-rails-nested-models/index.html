@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Nested Model Mass Assignment</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>Nested Model Mass Assignment</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: July 19th, 2008
+                </div>
+                &#x000A;<p><em>Looks like this feature has been pulled from Edge Rails though it&#8217;s tentatively <a href="http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5">scheduled to come back</a> post the 2.2 release.  <a href="http://rails.uservoice.com/pages/rails3/suggestions/99641-nested-model-forms">Vote here</a> if you want to see this feature implemented in Rails!</em></p>&#x000A;<p><a href="http://railscasts.com/episodes/75">Nested models</a> (nested forms by another name) describe the scenario when you want to create and modify values of nested attributes through a containing model.  For instance, if you have an user model with many phone numbers:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:login</span>&#x000A;  <span class="n">has_many</span> <span class="ss">:phone_numbers</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="k">class</span> <span class="nc">PhoneNumber</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:area_code</span><span class="p">,</span> <span class="ss">:number</span>&#x000A;  <span class="n">belongs_to</span> <span class="ss">:user</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>you may want to be able to create the user and a group of phone numbers <em>at the same time_.  This is what this looks like with the new <a href="http://github.com/rails/rails/commit/e0750d6a5c7f621e4ca12205137c0b135cab444a">mass assignment</a> functionality of Rails keyed off of the <code>:accessible</code> option of the association declaration (@:phone</em>numbers@, in this case).</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:login</span>&#x000A;  <span class="n">has_many</span> <span class="ss">:phone_numbers</span><span class="p">,</span> <span class="ss">:accessible</span> <span class="o">=&gt;</span> <span class="kp">true</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="n">ryan</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span> <span class="p">{</span>&#x000A;  <span class="ss">:login</span> <span class="o">=&gt;</span> <span class="s1">&#39;ryan&#39;</span><span class="p">,</span>&#x000A;  <span class="ss">:phone_numbers</span> <span class="o">=&gt;</span> <span class="o">[</span>&#x000A;    <span class="p">{</span> <span class="ss">:area_code</span> <span class="o">=&gt;</span> <span class="s1">&#39;919&#39;</span><span class="p">,</span> <span class="ss">:number</span> <span class="o">=&gt;</span> <span class="s1">&#39;123-4567&#39;</span> <span class="p">},</span>&#x000A;    <span class="p">{</span> <span class="ss">:area_code</span> <span class="o">=&gt;</span> <span class="s1">&#39;920&#39;</span><span class="p">,</span> <span class="ss">:number</span> <span class="o">=&gt;</span> <span class="s1">&#39;123-8901&#39;</span> <span class="p">}</span>&#x000A;  <span class="o">]</span>&#x000A;<span class="p">})</span>&#x000A;&#x000A;<span class="n">ryan</span><span class="o">.</span><span class="n">phone_numbers</span><span class="o">.</span><span class="n">count</span> <span class="c1">#=&gt; 2</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>A single hash of values being sent to <code>User.create</code> results in both a new user object and new associated phone numbers.  Previously, you would have had to manually create your own <code>phone_numbers=</code> setter method on user to get this same functionality:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">phone_numbers</span><span class="o">=</span><span class="p">(</span><span class="n">attrs_array</span><span class="p">)</span>&#x000A;    <span class="n">attrs_array</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">attrs</span><span class="o">|</span>&#x000A;      <span class="n">phone_numbers</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Mass assignment now gives you this functionality for free.</p>&#x000A;<p>This may not look like much, but it is a step in the direction of letting you use nested forms.  Consider a user registration form where a user can enter their login name and their phone numbers in the same form (through the use of <a href="http://api.rubyonrails.com/classes/ActionView/Helpers/FormHelper.html#M001738"><code>fields_for</code></a> which will bundle nested model attributes into a single form):</p>&#x000A;<div class="highlight"><pre><span class="o">&lt;</span><span class="sx">% form_for </span><span class="vi">@user</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="sx">%&gt;</span>&#x000A;<span class="sx">  &lt;%= f.text_field :login %&gt;</span>&#x000A;  <span class="o">&lt;</span><span class="sx">% fields_for </span><span class="ss">:phone_numbers</span> <span class="k">do</span> <span class="o">|</span><span class="n">pn_f</span><span class="o">|</span> <span class="sx">%&gt;</span>&#x000A;<span class="sx">    &lt;%= pn_f.text_field :area_code %&gt;</span>&#x000A;    <span class="o">&lt;</span><span class="sx">%= pn_f.text_field :number %&gt;</span>&#x000A;<span class="sx">  &lt;% end %&gt;</span>&#x000A;<span class="sx">  &lt;%=</span> <span class="n">submit_tag</span> <span class="sx">%&gt;</span>&#x000A;<span class="sx">&lt;% end %&gt;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This form, when submitted to the following standard RESTful <code>UserController</code>, will correctly create the user and its associated phone numbers through the beauty of mass assignment.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UserController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="c1"># Create a new user and their phone numbers with mass assignment</span>&#x000A;  <span class="k">def</span> <span class="nf">new</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="n">wants</span><span class="o">|</span>&#x000A;      <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Mass assignment can be used on all association types &#8211; <code>:belongs_to</code>, <code>:has_one</code>, :<code>has_many</code> and <code>:has_and_belongs_to_many</code> as long as the <code>:accessible =&gt; true</code> option is specified.</p>&#x000A;<p>This is a very convenient addition to ActiveRecord, but the real zinger will come with <a href="http://groups.google.com/group/rubyonrails-core/browse_thread/thread/4049b4b313fa8be2">full nested form support</a> when you can create, update and delete these nested models directly from what is pushed down in the parameter hash of a form submission.  This would allow for the functionality in this <a href="http://railscasts.com/episodes/75">complex forms screencast</a> with minimal hassle.  What a fine day that would be.</p>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2008/07/19/what-s-new-in-edge-rails-nested-models";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>

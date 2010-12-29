@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Fixtures Just Got a Whole Lot Easier</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>Fixtures Just Got a Whole Lot Easier</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: October 26th, 2007
+                </div>
+                &#x000A;<p>There are a <a href="http://code.google.com/p/fixture-scenarios/">plethora</a> of <a href="http://www.caboo.se/articles/2006/11/2/fixture-hack-gets-pluginized-caboose-plugin-repository-lunches">fixture plugins</a> that attempt to make your test fixtures less of a pain in the arse to work with.  And most do succeed in one manner or another.</p>&#x000A;<p>Well one of the nicest fixture plugins, called <a href="http://svn.geeksomnia.com/rathole/trunk/README">Rathole</a>, has just been <a href="http://dev.rubyonrails.org/changeset/8036">sucked down into rails</a> &#8211; and it&#8217;s a doozy.  Let&#8217;s summarize so you can decide whether to dive in or not.</p>&#x000A;<p>Let&#8217;s use the following model for this example:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Company</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">;</span> <span class="n">has_many</span> <span class="ss">:employees</span><span class="p">;</span> <span class="k">end</span>&#x000A;<span class="k">class</span> <span class="nc">Employee</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="p">;</span> <span class="n">belongs_to</span> <span class="ss">:company</span> <span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Just a simple one-to-many association between a company and its employees, easy enough.  But when we get into setting up our fixtures there&#8217;s a lot of non-essential stuff and easy to mess up ids we have to manually specify.  And all this just gets exponentially hairier as the data-set increases.</p>&#x000A;<p><code>companies.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span>&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no">LLC</span>&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now %&gt;</span>&#x000A;<span class="sx">  updated_at: &lt;%=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span><br />&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no"><span class="caps">LLC</span></span><br />&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now <span>&gt;</span><br />&#x000A;<span class="sx">  updated_at: &lt;</span>=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p><code>employees.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span>&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span>&#x000A;  <span class="n">company_id</span><span class="p">:</span> <span class="mi">1</span>&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now %&gt;</span>&#x000A;<span class="sx">  updated_at: &lt;%=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span><br />&#x000A;  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span><br />&#x000A;  <span class="n">company_id</span><span class="p">:</span> <span class="mi">1</span><br />&#x000A;  <span class="n">created_at</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= Time.now <span>&gt;</span><br />&#x000A;<span class="sx">  updated_at: &lt;</span>=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">%&gt;</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>With Rathole&#8217;s features you no longer need to manually reconcile the cross referenced ids and to set the auto-magic date column values.  Watch carefully what your fixtures can be when they grow up:</p>&#x000A;<p><code>companies.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no">LLC</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no"><span class="caps">LLC</span></span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p><code>employees.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span>&#x000A;  <span class="n">company</span><span class="p">:</span> <span class="n">yfactorial</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">ryan</span><span class="p">:</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="no">Ryan</span> <span class="no">Daigle</span><br />&#x000A;  <span class="n">company</span><span class="p">:</span> <span class="n">yfactorial</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>Take special note of the following changes between the two fixture-sets:</p>&#x000A;<ul>&#x000A;	<li>You no longer have to specify the id for each record.  That&#8217;s automatically done for you as the hash of the name of the record (so the integer hash of <code>"yfactorial"</code> becomes that record&#8217;s id)</li>&#x000A;	<li>No need to specify the auto-magic date field values anymore.  All the <code>created_xx</code> and <code>updated_xx</code> fields will be automatically populated with <code>Time.now</code></li>&#x000A;	<li>When referencing other record ids (as in <code>employees.company_id</code>), you can just put the fixture name and it will resolve that column to be the pk value of the referenced record.  This is what allowed me to change the <code>company_id: 1</code> line in <code>employees.yml</code> to be <code>company: yfactorial</code>.</li>&#x000A;</ul>&#x000A;<p><em>Note: Since the primary keys of each record are calculated (as a hash of the fixture name), the fixture doesn&#8217;t need to be loaded before knowing what it&#8217;s pk value will be.  This resolves a lot of the recursive dependency and ordering issues you might&#8217;ve otherwise encountered with an approach such as this.</em></p>&#x000A;<p>But there&#8217;s more&#8230;  Foreign key references get especially twisted when you have join tables that govern your <code>has_and_belongs_to_many</code> associations.  So assume a company <code>has_and_belongs_to_many</code> <code>industry_associations</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Company</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">has_and_belongs_to_many</span> <span class="ss">:industry_associations</span><span class="p">,</span>&#x000A;                          <span class="ss">:join_table</span> <span class="o">=&gt;</span> <span class="s1">&#39;company_industry_associations&#39;</span>&#x000A;<span class="k">end</span>&#x000A;<span class="k">class</span> <span class="nc">IndustryAssociation</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">has_and_belongs_to_many</span> <span class="ss">:companies</span><span class="p">,</span>&#x000A;                          <span class="ss">:join_table</span> <span class="o">=&gt;</span> <span class="s1">&#39;company_industry_associations&#39;</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Instead of having to write our own <code>company_industry_associations.yml</code> fixture file, we can just reference the collection of associations a company belongs to inline in <code>companies.yml</code>:</p>&#x000A;<p><code>companies.yml</code><br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span>&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no">LLC</span>&#x000A;  <span class="n">industry_associations</span><span class="p">:</span> <span class="n">ruby</span><span class="p">,</span> <span class="n">webservices</span>&#x000A;<br />&#x000A;<div class="highlight"><pre><span class="n">yfactorial</span><span class="p">:</span><br />&#x000A;  <span class="nb">name</span><span class="p">:</span> <span class="n">yFactorial</span><span class="p">,</span> <span class="no"><span class="caps">LLC</span></span><br />&#x000A;  <span class="n">industry_associations</span><span class="p">:</span> <span class="n">ruby</span><span class="p">,</span> <span class="n">webservices</span><br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>Assuming there&#8217;s an <code>industry_associations.yml</code> fixture file that specifies records named <code>ruby</code> and <code>webservices</code>, the habtm join table will be automatically populated for you.</p>&#x000A;<p>This is a really big win for you fixture users (of which I am one).  Perhaps those that have turned their nose up at fixtures will take a second look?  Really great functionality &#8211; thanks, <a href="http://geeksomnia.com/">John</a>, for the contribution!</p>&#x000A;<p><em>Take a look at the bottom of the plugin&#8217;s <a href="http://svn.geeksomnia.com/rathole/trunk/README"><span class="caps">README</span></a> file to see how to setup default values and how to fetch the pks of other fixtures</em></p>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2007/10/26/what-s-new-in-edge-rails-fixtures-just-got-a-whole-lot-easier";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>

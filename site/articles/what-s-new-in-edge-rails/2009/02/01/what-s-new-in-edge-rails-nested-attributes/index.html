@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Nested Object Forms</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>Nested Object Forms</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: February 1st, 2009
+                </div>
+                &#x000A;<span class="version"><strong>Rails</strong> 2.3</span><p>We were all teased a few months ago about the possibility of finally <a href="/articles/2008/7/19/what-s-new-in-edge-rails-nested-models">solving the nested model/complex forms problem in Rails</a>, but were then cruelly notified that it wasn&#8217;t <a href="http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5">quite ready for prime time</a>.  But our day has come &#8211; the <a href="http://rails.uservoice.com/pages/rails3/suggestions/99641-nested-model-forms">most requested feature</a> for Rails 2.3, the <a href="http://github.com/rails/rails/commit/ec8f04584479aff895b0b511a7ba1e9d33f84067">ability to handle multiple models in a single form</a>, is here.</p>&#x000A;<p><em>This <a href="http://github.com/rails/rails/commit/5dbc9d40a49f5f0f50c2f3ebe6dda942f0e61562"><span class="caps">API</span> update</a> was added after the original commit.  I&#8217;ve updated the examples here to account for this.</em></p>&#x000A;<p>This feature has <a href="http://weblog.rubyonrails.org/2009/1/26/nested-model-forms">already been written about on the Rails Blog</a> quite well by Eloy Duran, the committer of this fine feature, so I&#8217;ll try not to replicate what&#8217;s already out there.  However, here&#8217;s a basic rundown of what you need to do to get your models nested-form capable.</p>&#x000A;<h3>Step 1: Notify Your Model of Nest-able Associations</h3>&#x000A;<p>The first step is to tell your models which of their associations will be able to receive nested attributes.  For all associations you want exposed in nested forms you&#8217;ll need to use <code>accepts_nested_attributes_for</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:name</span>&#x000A;&#x000A;  <span class="n">has_many</span> <span class="ss">:children</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Person&#39;</span>&#x000A;  <span class="n">accepts_nested_attributes_for</span> <span class="ss">:children</span><span class="p">,</span> <span class="ss">:allow_destroy</span> <span class="o">=&gt;</span> <span class="kp">true</span>&#x000A;    <span class="c1"># can also be used on has_one etc.. associations</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>With this bit in place, you can now directly create, edit and delete children from a person:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Add a new child to this person</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children_attributes</span> <span class="o">=</span> <span class="o">[</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Son&#39;</span> <span class="p">}</span> <span class="o">]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children</span> <span class="c1">#=&gt; [ &lt;#Person: name: &#39;Son&#39;&gt; ]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">clear</span>&#x000A;&#x000A;<span class="c1"># Add two new children to this person</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children_attributes</span> <span class="o">=</span>&#x000A;  <span class="o">[</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Son&#39;</span> <span class="p">},</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Daughter&#39;</span> <span class="p">}</span> <span class="o">]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">save</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children</span> <span class="c1">#=&gt; [ &lt;#Person: name: &#39;Son&#39;&gt;, &lt;#Person: name: &#39;Daughter&#39;&gt; ]</span>&#x000A;&#x000A;<span class="c1"># Edit the son (assuming id == 1)</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children_attributes</span> <span class="o">=</span> <span class="o">[</span> <span class="p">{</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Lad&#39;</span> <span class="p">}</span> <span class="o">]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">save</span>&#x000A;  <span class="c1">#=&gt; the son&#39;s name is now &#39;Lad&#39;</span>&#x000A;&#x000A;<span class="c1"># Edit the daughter (id == 2) and add a new offspring</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children_attributes</span> <span class="o">=</span>&#x000A;  <span class="o">[</span> <span class="p">{</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Lassie&#39;</span> <span class="p">},</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Pat&#39;</span> <span class="p">}</span> <span class="o">]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">save</span>&#x000A;  <span class="c1">#=&gt; the daughter&#39;s name is now &#39;Lassie&#39; and there&#39;s a new offspring called &#39;Pat&#39;</span>&#x000A;&#x000A;<span class="c1"># Remove Pat (id = 3), we don&#39;t like him/her</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children_attributes</span> <span class="o">=</span> <span class="o">[</span> <span class="ss">:id</span> <span class="o">=&gt;</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;_delete&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span> <span class="p">}</span> <span class="o">]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">save</span>&#x000A;  <span class="c1">#=&gt; Pat is now deleted</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>You&#8217;ll want to take away a few things from these examples.</p>&#x000A;<ul>&#x000A;	<li>To support both the creation of new objects and the editing of existing ones we have to use an array of hashes for one-to-many associations or a single hash for one-to-one associations.  If no <code>:id</code> property exists then it is assumed to represent a nested model to create.</li>&#x000A;	<li>To delete an existing nested model, use this format: <code>[ :id =&gt; pk, '_delete' =&gt; '1' } ]</code> where the value of <code>_delete</code> evaluates to anything <code>true</code>.  You must also set the @ accepts_nested_attributes_for@ option <code>:allow_destroy</code> to true as that capability is turned off by default.</li>&#x000A;</ul>&#x000A;<p>While this may appear a bit hackish when you&#8217;re used to dealing with the pleasantries of a rich object model and with ActiveRecord&#8217;s associations, this provides the foundation for a seamless transition to the view where you need to create your nested model forms&#8230;</p>&#x000A;<h3>Step 2: Create a Nested Model Form</h3>&#x000A;<p>In the view, simply use <a href="http://api.rubyonrails.com/classes/ActionView/Helpers/FormHelper.html#M001386">fields_for</a> on these nested models to expose the fields for each such model:</p>&#x000A;<div class="highlight"><pre><span class="cp">&lt;%</span> <span class="n">form_for</span> <span class="vi">@person</span> <span class="k">do</span> <span class="o">|</span><span class="n">person_form</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;&#x000A;<span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">person_form</span><span class="o">.</span><span class="n">label</span> <span class="ss">:name</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;<span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">person_form</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:name</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;&#x000A;<span class="x">  </span><span class="cp">&lt;%</span> <span class="n">person_form</span><span class="o">.</span><span class="n">fields_for</span> <span class="ss">:children</span> <span class="k">do</span> <span class="o">|</span><span class="n">child_form</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;&#x000A;<span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">child_form</span><span class="o">.</span><span class="n">label</span> <span class="ss">:name</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;<span class="x">    </span><span class="cp">&lt;%=</span> <span class="n">child_form</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:name</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;&#x000A;<span class="x">    </span><span class="cp">&lt;%</span> <span class="k">unless</span> <span class="n">child_form</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">new_record?</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">child_form</span><span class="o">.</span><span class="n">check_box</span> <span class="s1">&#39;_delete&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;<span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">child_form</span><span class="o">.</span><span class="n">label</span> <span class="s1">&#39;_delete&#39;</span><span class="p">,</span> <span class="s1">&#39;Remove&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;<span class="x">    </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;&#x000A;<span class="x">  </span><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;&#x000A;<span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">submit_tag</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This will create a form with all the form fields necessary for submitting to a RESTful controller, transparently pushing your <code>children_attributes</code> onto the person.</p>&#x000A;<p>If there are any validation errors on a child, they will be added to <code>person.errors</code>, and nothing will save if any of the children fail (i.e. fully transactional).</p>&#x000A;<p>A few notes that might be useful to you:</p>&#x000A;<ul>&#x000A;	<li>Using <code>fields_for</code> on a has_many association automatically executes once for each nested model present, so think of yourself as being inside a loop when building your <code>child_form</code></li>&#x000A;	<li>If you ever need to change behavior based on the nested model currently in scope, it can be accessed via <code>child_form.object</code>.  In this example we use <code>child_form.object.new_record?</code> to determine whether or not to display the delete checkbox (as that only makes sense on an existing record).</li>&#x000A;</ul>&#x000A;<h3>Step 3: In Your Controllers &#8230; Do Nothing</h3>&#x000A;<p>The third step should be the easiest, because we&#8217;re all dealing with purely RESTful controllers, right?  The beauty of this solution is that it takes your controllers out of the mix and makes standard for submissions work perfectly with no interference at the controller level.  Just so there&#8217;s no confusion, here&#8217;s how your create and update actions will look:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">PersonController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="vi">@person</span><span class="o">.</span><span class="n">save</span> <span class="p">?</span> <span class="n">redirect_to</span><span class="p">(</span><span class="n">person_path</span><span class="p">(</span><span class="vi">@person</span><span class="p">))</span> <span class="p">:</span> <span class="n">render</span><span class="p">(</span><span class="ss">:action</span> <span class="o">=&gt;</span> <span class="ss">:new</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">update</span>&#x000A;    <span class="vi">@person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="vi">@person</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:person</span><span class="o">]</span><span class="p">)</span> <span class="p">?</span>&#x000A;      <span class="n">redirect_to</span><span class="p">(</span><span class="n">person_path</span><span class="p">(</span><span class="vi">@person</span><span class="p">))</span> <span class="p">:</span> <span class="n">render</span><span class="p">(</span><span class="ss">:action</span> <span class="o">=&gt;</span> <span class="ss">:edit</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Not a peep of those pesky nested models &#8211; with the rich support for nested objects at the model layer, it just works!</p>&#x000A;<h3>Extras</h3>&#x000A;<p>As with most powerful features, there are few little tweaks you may find yourself needing.</p>&#x000A;<h4>Default Create Form Fields</h4>&#x000A;<p>Often times you&#8217;ll want to have the form displayed with empty fields for easily creating a new nested model.  For example, when a user goes to create a new person I want there to be fields for creating a new child already displayed.</p>&#x000A;<p>Since the <code>person</code> object is brand new they have an empty <code>children</code> collection and no <code>child_form</code> fields will be displayed.  There are two ways to get around this:</p>&#x000A;<p>You can build a new nested object on the controller side (i.e. in the <code>new</code> action):</p>&#x000A;<div class="highlight"><pre>  <span class="k">def</span> <span class="nf">new</span>&#x000A;    <span class="vi">@person</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span>&#x000A;    <span class="vi">@person</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">build</span>&#x000A;    <span class="c1"># ...</span>&#x000A;  <span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>which will cause there to be empty <code>child_form</code> fields displayed as desired.  Or you can do it on the view side with a view helper:</p>&#x000A;<div class="highlight"><pre><span class="k">module</span> <span class="nn">ApplicationHelper</span>&#x000A;  <span class="k">def</span> <span class="nf">setup_person</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>&#x000A;    <span class="n">returning</span><span class="p">(</span><span class="n">person</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>&#x000A;      <span class="nb">p</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">build</span> <span class="k">if</span> <span class="nb">p</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">empty?</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Which can then be used within <code>form_for</code> to setup the person to the correct form state:</p>&#x000A;<div class="highlight"><pre><span class="cp">&lt;%</span> <span class="n">form_for</span> <span class="n">setup_person</span><span class="p">(</span><span class="vi">@person</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">person_form</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;<span class="x">  &lt;!-- ... --&gt;</span>&#x000A;<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>I prefer this view-helper approach as it really is a view concern (whether or not to display the form fields to create a new nested object by default).</p>&#x000A;<h4>Specify When Nested Models get Built</h4>&#x000A;<p>If you do have empty nested model form fields displayed by default, you&#8217;ll run into the issue where the user submits the form with no values filled in and you have to decide if you want to treat that as somebody trying to create a new nested item with no values, or if that means that no new nested item was submitted.  Quite often you just want to ignore the submissions with no nested field values filled out.</p>&#x000A;<p>Although I would have expected this to be default behavior, you need to manually specify that submissions with empty nested values are ignored using the <code>:reject_if</code> option of <code>accepts_nested_attributes_for</code>:</p>&#x000A;<p><em><strong>Note:</strong> You <a href="http://github.com/rails/rails/commit/9010ed27559ed5ab89ea71b4b16f4c8e56d03dbb">now have the option to use <code>:all_blank</code></a> to ignore the item if all properties are blank.  See below for an updated example.</em></p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:name</span>&#x000A;&#x000A;  <span class="n">has_many</span> <span class="ss">:children</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Person&#39;</span>&#x000A;&#x000A;  <span class="c1"># This will prevent children_attributes with all empty values to be ignored</span>&#x000A;  <span class="n">accepts_nested_attributes_for</span> <span class="ss">:children</span><span class="p">,</span>&#x000A;    <span class="ss">:reject_if</span> <span class="o">=&gt;</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="n">attrs</span><span class="o">|</span> <span class="n">attrs</span><span class="o">.</span><span class="n">all?</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span> <span class="n">v</span><span class="o">.</span><span class="n">blank?</span> <span class="p">}</span> <span class="p">}</span>&#x000A;&#x000A;  <span class="c1"># This does the same thing using :all_blank</span>&#x000A;  <span class="n">accepts_nested_attributes_for</span> <span class="ss">:children</span><span class="p">,</span> <span class="ss">:reject_if</span> <span class="o">=&gt;</span> <span class="ss">:all_blank</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<div class="highlight"><pre><span class="vi">@person</span><span class="o">.</span><span class="n">children_attributes</span> <span class="o">=</span> <span class="o">[</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span> <span class="p">}</span> <span class="o">]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">save</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">count</span> <span class="c1">#=&gt; 0</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This is also useful if you have boolean values in your nested model fields (since, as a checkbox, &#8216;0&#8217; will be submitted if there&#8217;s no value):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">validates_presence_of</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:bad</span>&#x000A;&#x000A;  <span class="n">has_many</span> <span class="ss">:children</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Person&#39;</span>&#x000A;&#x000A;  <span class="c1"># This will prevent empty checkboxes submitted for a child to be</span>&#x000A;  <span class="c1"># construed as a submission</span>&#x000A;  <span class="n">accepts_nested_attributes_for</span> <span class="ss">:children</span><span class="p">,</span>&#x000A;    <span class="ss">:reject_if</span> <span class="o">=&gt;</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="n">attrs</span><span class="o">|</span> <span class="n">attrs</span><span class="o">[</span><span class="s1">&#39;bad&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">attrs</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">].</span><span class="n">blank?</span> <span class="p">}</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<div class="highlight"><pre><span class="vi">@person</span><span class="o">.</span><span class="n">children_attributes</span> <span class="o">=</span> <span class="o">[</span> <span class="p">{</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="ss">:bad</span> <span class="o">=&gt;</span> <span class="s1">&#39;0&#39;</span> <span class="p">}</span> <span class="o">]</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">save</span>&#x000A;<span class="vi">@person</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">count</span> <span class="c1">#=&gt; 0</span>&#x000A;</pre>&#x000A;</div>&#x000A;<h4>Dynamically Adding Nested Form Fields</h4>&#x000A;<p>If you want to allow the addition of a large number of nested models via your <span class="caps">HTML</span> forms, one option is to just have several empty nested forms displayed by default.  This is a little unappealing, however. The far slicker option is to use javascript to dynamically display the new nested form on the user&#8217;s request.</p>&#x000A;<p>Eloy has a great <a href="http://github.com/alloy/complex-form-examples/tree/nested_attributes">example application</a> setup on GitHub outlining how this works, and I&#8217;ll let you take a peek over there to see how to <a href="http://github.com/alloy/complex-form-examples/blob/a234fde4419836f277d7e340657f1d8418911d68/app/views/projects/_form.html.erb#L40">wire up your dynamic nested form additions</a>.</p>&#x000A;<p>Eloy&#8217;s example app is also a great place to see how the whole thing works, end-to-end.  By far the best resource out there.</p>&#x000A;<h3>Conclusion</h3>&#x000A;<p>So there it is, Rails&#8217; most requested new feature in the flesh and blood.  I&#8217;m not sure if my experiences are indicative of everybody else&#8217;s, but this is a godsend for me.  Many thanks to all the folks involved with this functionality (if you don&#8217;t know who they are, check out the next section which links to a bunch of great resources).  A really great effort by the community.</p>&#x000A;<h3>Resources</h3>&#x000A;<ul>&#x000A;	<li><a href="http://github.com/alloy/complex-form-examples/tree/nested_attributes">Eloy Duran&#8217;s example nested model project</a></li>&#x000A;	<li><a href="http://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/1202-add-attributes-writer-method-for-an-association">The Lighthouse ticket for this feature with some good discussions</a></li>&#x000A;	<li><a href="http://weblog.rubyonrails.org/2009/1/26/nested-model-forms">The blog post on the official Rails blog</a></li>&#x000A;	<li><a href="http://groups.google.com/group/rubyonrails-core/browse_thread/thread/3c61e00916c365e5">The discussion of the various incarnations of this feature on the mailing list</a></li>&#x000A;	<li><a href="http://railscasts.com/episodes/73">Ryan Bates&#8217; Railscast on complex forms</a></li>&#x000A;</ul>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2009/02/01/what-s-new-in-edge-rails-nested-attributes";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Default RESTful Rendering</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>Default RESTful Rendering</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: August 10th, 2009
+                </div>
+                &#x000A;<span class="version"><strong>Rails</strong> 3.0</span><p>A few days ago I wrote about the new <a href="http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with"><code>respond_with</code> functionality</a> of Rails 3.  It&#8217;s basically a clean way to specify the resource to send back in response to a RESTful request.  This works wonders for successful <code>:xml</code> and <code>:json</code> requests where the default response is to send back the integerized form of the resource, but still presents a lot of cruft when handling user-invoked <code>:html</code> requests (i.e. &#8216;navigational&#8217; requests) and requests where error handling is required.  For instance, consider your standard <code>create</code> action:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;&#x000A;    <span class="c1"># Have to always override the html format to properly</span>&#x000A;    <span class="c1"># handle the redirect</span>&#x000A;    <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>&#x000A;      <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;User was created successfully.&quot;</span>&#x000A;      <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:created</span><span class="p">,</span> <span class="ss">:location</span> <span class="o">=&gt;</span> <span class="vi">@user</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;        <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="vi">@user</span> <span class="p">}</span>&#x000A;      <span class="k">end</span>&#x000A;&#x000A;    <span class="c1"># Have to send back the errors collection if they exist for xml, json and</span>&#x000A;    <span class="c1"># redirect back to new for html.</span>&#x000A;    <span class="k">else</span>&#x000A;      <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:unprocessable_entity</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;        <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:action</span> <span class="o">=&gt;</span> <span class="ss">:new</span> <span class="p">}</span>&#x000A;      <span class="k">end</span>&#x000A;    <span class="k">end</span>&#x000A;&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Even with the heavy lifting of <code>respond_with</code> you can see that there&#8217;s still a lot of plumbing left for you to do &#8211; plumbing that is mostly the same for all RESTful requests.  Well <a href="http://blog.plataformatec.com.br/">José</a> and the Rails team have a solution to this and have <a href="http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4">introduced controller responders</a>.</p>&#x000A;<h3>Controller Responders</h3>&#x000A;<p>Controller responders handle the chore of matching the <span class="caps">HTTP</span> request method and the resource format type to determine what type of response should be sent.  And since <span class="caps">REST</span> is so well-defined it&#8217;s very easy to establish a default responder to handle the basics.</p>&#x000A;<p>Here&#8217;s what a controller utilizing responder support (now baked into <code>respond_with</code>) looks like:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">index</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">new</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">))</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">edit</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">))</span>&#x000A;  <span class="k">end</span>&#x000A;&#x000A;  <span class="k">def</span> <span class="nf">update</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="vi">@user</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>The built-in responder performs the following logic for each action:</p>&#x000A;<ul>&#x000A;	<li>If the <code>:html</code> format was requested:&#x000A;	<ul>&#x000A;		<li>If it was a <code>GET</code> request, invoke <code>render</code> (which will display the view template for the current action)</li>&#x000A;		<li>If it was a <code>POST</code> request and the resource has validation errors, <code>render</code> <code>:new</code> (so the user can fix their errors)</li>&#x000A;		<li>If it was a <code>PUT</code> request and the resource has validation errors, <code>render</code> <code>:edit</code> (so the user can fix their errors)</li>&#x000A;		<li>Else, redirect to the resource location (i.e. <code>user_url</code>)</li>&#x000A;	</ul></li>&#x000A;	<li>If another format was requested, (i.e. <code>:xml</code> or <code>:json</code>)&#x000A;	<ul>&#x000A;		<li>If it was a <code>GET</code> request, invoke the <code>:to_format</code> method on the resource and send that back</li>&#x000A;		<li>If the resource has validation errors, send back the errors in the requested format with the <code>:unprocessable_entity</code> status code</li>&#x000A;		<li>If it was a <code>POST</code> request, invoke the <code>:to_format</code> method on the resource and send that back with the <code>:created</code> status and the <code>:location</code> of the new created resource</li>&#x000A;		<li>Else, send back the <code>:ok</code> response with no body</li>&#x000A;	</ul></li>&#x000A;</ul>&#x000A;<p>Wading through this logic tree you can see that the default logic for each RESTful action is appropriately handled, letting your controller actions focus exclusively on resource retrieval and modification.  And with that cruft out of the way your controllers will start to look even more similar &#8211; I suspect we&#8217;ll be seeing a solution for this coming around the bend shortly as well&#8230;?</p>&#x000A;<p>So, just to recap the basics, here are a few action implementations side by side (the first being before responders and the latter being after):</p>&#x000A;<div class="highlight"><pre><span class="c1"># Old</span>&#x000A;<span class="k">def</span> <span class="nf">index</span>&#x000A;  <span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span>&#x000A;  <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;    <span class="nb">format</span><span class="o">.</span><span class="n">html</span>&#x000A;    <span class="nb">format</span><span class="o">.</span><span class="n">xml</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:xml</span> <span class="o">=&gt;</span> <span class="vi">@users</span> <span class="p">}</span>&#x000A;    <span class="nb">format</span><span class="o">.</span><span class="n">json</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="vi">@users</span> <span class="p">}</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="c1"># New</span>&#x000A;<span class="k">def</span> <span class="nf">index</span>&#x000A;  <span class="n">respond_with</span><span class="p">(</span><span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<div class="highlight"><pre><span class="c1"># Old</span>&#x000A;<span class="k">def</span> <span class="nf">create</span>&#x000A;  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;  <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>&#x000A;    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;User successfully created&quot;</span>&#x000A;    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="vi">@user</span> <span class="p">}</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">xml</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:xml</span> <span class="o">=&gt;</span> <span class="vi">@user</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:created</span><span class="p">,</span>&#x000A;        <span class="ss">:location</span> <span class="o">=&gt;</span> <span class="n">user_url</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span> <span class="p">}</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">json</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="vi">@users</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:created</span><span class="p">,</span>&#x000A;        <span class="ss">:location</span> <span class="o">=&gt;</span> <span class="n">user_url</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span> <span class="p">}</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">else</span>&#x000A;    <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:new</span> <span class="p">}</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">xml</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:xml</span> <span class="o">=&gt;</span> <span class="vi">@user</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:unprocessable_entity</span> <span class="p">}</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">json</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="vi">@user</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="ss">:status</span> <span class="o">=&gt;</span> <span class="ss">:unprocessable_entity</span> <span class="p">}</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="c1"># New</span>&#x000A;<span class="k">def</span> <span class="nf">create</span>&#x000A;  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;User successfully created&quot;</span> <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>&#x000A;  <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Oh yeah, that&#8217;s getting real lean.</p>&#x000A;<h3>Overriding Default Behavior</h3>&#x000A;<p>If you need to override the default behavior of a particular format you can do so by passing a block to <code>respond_with</code> (as I wrote about in the <a href="http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with">original article</a>):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span>&#x000A;&#x000A;  <span class="c1"># Override html format since we want to redirect to the collections page</span>&#x000A;  <span class="c1"># instead of the user page.</span>&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;User successfully created&quot;</span> <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@user</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>&#x000A;      <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="n">users_url</span> <span class="p">}</span>&#x000A;    <span class="k">end</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<h3>Nested Resources</h3>&#x000A;<p>It&#8217;s quite common to operate on resources within a nested resource graph (though I prefer to go one level deep, at most).  For such cases you need to let <code>respond_with</code> know of the object hierarchy (using the same parameters as <a href="http://api.rubyonrails.org/classes/ActionController/PolymorphicRoutes.html#M000486"><code>polymorphic_url</code></a>):</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="n">respond_to</span> <span class="ss">:html</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">,</span> <span class="ss">:json</span>&#x000A;&#x000A;  <span class="c1"># In this case, users exist within a company</span>&#x000A;  <span class="k">def</span> <span class="nf">create</span>&#x000A;    <span class="vi">@company</span> <span class="o">=</span> <span class="no">Company</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:company_id</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="vi">@user</span> <span class="o">=</span> <span class="vi">@company</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>&#x000A;    <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;User successfully created&quot;</span> <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>&#x000A;&#x000A;    <span class="c1"># Ensure that the new user location is nested within @company,</span>&#x000A;    <span class="c1"># for html format (/companies/1/users/2.html) as well as</span>&#x000A;    <span class="c1"># resource formats (/companies/1/users/2)</span>&#x000A;    <span class="n">respond_with</span><span class="p">(</span><span class="vi">@company</span><span class="p">,</span> <span class="vi">@user</span><span class="p">)</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>If you have a singleton resource within your resource graph just use a symbol instead of an actual object instance.  So to get <code>/admin/users/1</code> you would invoke <code>respond_with(:admin, @user)</code>.</p>&#x000A;<h3>Custom Responders</h3>&#x000A;<p>While there&#8217;s no facility to provide your own responder classes, it will no doubt be added shortly.  If you look at the <a href="http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L81">current responder class definition</a>, it&#8217;s a very simple <span class="caps">API</span> essentially only requiring a <code>call</code> method (more intuitively take a look at the <a href="http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L111"><code>:to_html</code></a> and <a href="hhttp://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L125"><code>:to_format</code></a> methods).</p>&#x000A;<p>Stay tuned here for further refinements to this very handy functionality &#8211; you&#8217;re going to see a lot more tightening in the coming weeks.</p>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>

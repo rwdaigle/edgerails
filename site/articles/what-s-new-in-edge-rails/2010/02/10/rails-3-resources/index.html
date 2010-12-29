@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: Rails 3 Resources</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/edgerails.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>Rails 3 Resources</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: February 10th, 2010
+                </div>
+                <p><span class="version"><strong>Rails</strong> 3.0</span></p>&#x000A;&#x000A;<p>While we get some <a href="/articles/announcements/2010/02/08/edgerails.info-is-live/">momentum back</a> here at EdgeRails.info I thought it&#8217;d be a good time to spotlight all the other great posts out there regarding <a href="http://weblog.rubyonrails.org/2010/2/5/rails-3-0-beta-release">new features in Rails 3</a>.  There are a lot of changes, both internally and externally, so buckle up:</p>&#x000A;&#x000A;<h3>Overviews</h3>&#x000A;&#x000A;<p>Here are some good overview posts that will wet your appetite for the juicier technical details below&#8230;</p>&#x000A;&#x000A;<p><a href="http://yehudakatz.com/">Yehuda</a>, da man, has a few good writeups:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://www.engineyard.com/blog/2010/rails-3-beta-is-out-a-retrospective/">A Rails 3 retrospective</a></li>&#x000A;<li><a href="http://www.engineyard.com/blog/2009/my-five-favorite-things-about-rails-3/">His five favorite things about Rails 3</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<p><a href="http://omgbloglol.com">Jeremy McAnally</a> has done a lot of work writing about Rails 3 (finally, dude, where ya been?) and has these writeups:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://omgbloglol.com/post/344792822/the-path-to-rails-3-introduction">An overview of the work done to bring Rails 3 to you</a></li>&#x000A;<li><a href="http://omgbloglol.com/post/371893012/the-path-to-rails-3-greenfielding-new-apps-with-the">Greenfielding a new Rails 3 app</a>.</li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>ActiveRecord/ActiveModel</h3>&#x000A;&#x000A;<p>ActiveRecord, while no longer the only persistence framework in town thanks to Rails&#8217; new ORM agnosticism, has gotten a lot of love.  Not only have validations and other non core-persistence functionality been pulled out into a new <a href="http://github.com/rails/rails/tree/master/activemodel">ActiveModel component</a> but ActiveRecord itself now has a much more flexible, chainable and flexible API.  You will like this.</p>&#x000A;&#x000A;<p>A little about ActiveModel:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://yehudakatz.com/2010/01/10/activemodel-make-any-ruby-object-feel-like-activerecord/">Yehuda gives the lowdown on ActiveModel</a></li>&#x000A;<li><a href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators/">I talk a little bit more about the new independent validators</a></li>&#x000A;<li><a href="http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/">Validations get sexy</a></li>&#x000A;<li><a href="http://lindsaar.net/2010/1/31/validates_rails_3_awesome_is_true">Some more validation goodness</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<p>And some meat and potatoes on <a href="http://github.com/rails/rails/tree/master/activerecord/">ActiveRecord</a>.</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://m.onkey.org/2010/1/22/active-record-query-interface">Pratik talks about the new query interface</a></li>&#x000A;<li><a href="http://magicscalingsprinkles.wordpress.com/2010/01/28/why-i-wrote-arel/">Nick Kallen lays some heavy details about the making of the new query interface</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>ActionController</h3>&#x000A;&#x000A;<p>RESTful support has made it&#8217;s way from the routing layer and is now embedded deep into ActionController now:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with/">I run down the new respond_to RESTful response mechanism</a></li>&#x000A;<li><a href="http://blog.plataformatec.com.br/2009/08/embracing-rest-with-mind-body-and-soul/">Jose Valim, the author, goes into more detail about the new RESTful controller support</a></li>&#x000A;<li><a href="http://weblog.rubyonrails.org/2009/8/31/three-reasons-love-responder">Jose adds some examples on the rails blog</a></li>&#x000A;<li><a href="http://www.engineyard.com/blog/2010/render-options-in-rails-3/">Yehuda explains the new render options</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>Routing</h3>&#x000A;&#x000A;<p>Routing, one of the hairier, and slicker, parts of the Rails stack has a slightly modified API and a very direct way to address rack mini-apps.  Read about it here:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://lindsaar.net/2010/2/7/rails_3_routing_with_rack">Mikel Lindsaar continues his assault on the Rails scene with this great example of how to run a Sinatra app within Rails</a></li>&#x000A;<li><a href="http://yehudakatz.com/2009/12/26/the-rails-3-router-rack-it-up/">Yehuda gives a great overview of the new routing config</a></li>&#x000A;<li><a href="http://rizwanreza.com/2009/12/20/revamped-routes-in-rails-3">Rizwan Reza gets down and dirty with some example routing blocks</a></li>&#x000A;<li><a href="http://yehudakatz.com/2009/12/20/generic-actions-in-rails-3/">Yehuda talks about support for generic actions</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>ActionMailer</h3>&#x000A;&#x000A;<p>Even the black sheep of the family gets some attention now and then:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://lindsaar.net/2010/1/26/new-actionmailer-api-in-rails-3">Mikel Lindsaar talks about his refactoring of ActionMailer</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>Gem Bundler</h3>&#x000A;&#x000A;<p>Rails 3 comes with a whole new way of specifying, loading and managing gem dependencies: the new <a href="http://github.com/carlhuda/bundler">gem bundler</a> which was developed in parallel with the new version of Rails and replaces what you&#8217;re used to seeing as a bunch of <code>config.gem</code> statements:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://lindsaar.net/2010/2/6/bundle_me_some_rails">Mikel (you should now be on a first name basis with him by now) has a very complete rundown of the new bundler features</a></li>&#x000A;<li><a href="http://yehudakatz.com/2010/02/01/bundler-0-9-heading-toward-1-0/">Yehuda, one of the bundler project committers, gives a nice narrative of the bundler features</a></li>&#x000A;<li><a href="http://yehudakatz.com/2010/02/09/using-bundler-in-real-life/">Yehuda continues with some real world examples</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>Railties</h3>&#x000A;&#x000A;<p>Like Thanksgiving leftovers, railties are a grab-bag of goodies:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://litanyagainstfear.com/blog/2010/02/03/the-rails-module/">Nick Quaranto talks about the new Rails module (no more RAILS_XXX constants)</a></li>&#x000A;<li><a href="http://paulbarry.com/articles/2010/01/13/customizing-generators-in-rails-3">Paul Barry talks about creating customized generators</a></li>&#x000A;<li><a href="http://caffeinedd.com/guides/331-making-generators-for-rails-3-with-thor">Amp your generators using Thor</a></li>&#x000A;<li><a href="http://benscofield.com/2009/09/application-templates-in-rails-3/">Ben Scofield shows you how to create module app templates</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<p>There&#8217;s a new kid in town in Rails 3 - instrumentation.  There&#8217;s not been much written about it yet but here are few nibbles to get you going:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://hasmanyquestions.wordpress.com/2010/01/17/let-your-sql-growl-in-rails-3/">Gavin Stark writes about using instrumentation to log SQL calls</a></li>&#x000A;<li><a href="http://github.com/rails/rails/blob/master/railties/lib/rails/subscriber.rb">The subscriber class is the main facilitator of instrumentation so give it a look</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>Plugins</h3>&#x000A;&#x000A;<p>A whole lot of effort was put into making the internal API of Rails much cleaner.  Cleaner to the point that monkey-patching should be a thing of the past.  One of the main benefactors of this are plugins, which have a whole new way of integrating with Rails apps:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://weblog.rubyonrails.org/2010/2/9/plugin-authors-toward-a-better-future">Yehuda gives you the lowdown on the official rails blog</a></li>&#x000A;<li><a href="http://www.engineyard.com/blog/2010/rails-and-merb-merge-plugin-api-part-3-of-6/">Yehuda gives you the behind the scenes take on plugins</a></li>&#x000A;<li><a href="http://boldr.net/upgrade-plugins-gems-rails-3/">Nicolas Merouze shows you plugin developers out there how to upgrade your goodies</a></li>&#x000A;<li><a href="http://www.railsplugins.org/">EngineYard has set up a plugins listing site to publicize which are (and are not) Rails 3 compatible</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<h3>Upgrading</h3>&#x000A;&#x000A;<p>Whew!  If you&#8217;ve gotten to this point you may be wondering how to stitch this all together and make your now crusty Rails 2.3 app a good looking Rails 3 stud?  Thankfully, you&#8217;re not alone.</p>&#x000A;&#x000A;<p>Jeremy McAnally has been busting his hump to bring you the latest on upgrading:</p>&#x000A;&#x000A;<ul>&#x000A;<li><a href="http://omgbloglol.com/post/353978923/the-path-to-rails-3-approaching-the-upgrade">How to approach the upgrade</a></li>&#x000A;<li><a href="http://omgbloglol.com/post/364624593/rails-upgrade-is-now-an-official-plugin">A plugin to help you on your way</a></li>&#x000A;</ul>&#x000A;&#x000A;&#x000A;<p>And everybody&#8217;s <a href="http://peepcode.com">favorite screencaster</a> <a href="http://blog.peepcode.com/tutorials/2010/live-coding-rails-3-upgrade">live codes an upgrade</a>.</p>&#x000A;&#x000A;<p>Rails 3 represents a huge amount of work, both in internal and external improvements.  A big congrats to the whole team and to the community for providing such great content about these changes.</p>&#x000A;&#x000A;<p>Let me know if I missed any great posts that you&#8217;ve found helpful, I know there are at least a few out there&#8230;</p>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators'>Independent Model Validators</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering'>Default RESTful Rendering</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2010 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>
