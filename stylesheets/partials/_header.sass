@@ -4,17 +4,17 @@
     //position: relative
     //padding: 0 15px
   a.title
-    font-size= !h1
+    font-size: $h1
     +heading-font
     width: 383px
     height: 77px
-    +replace-text("edgerails-logo.png")
+    +replace-text(unquote("edgerails-logo.png"))
     display: inline-block
-    color= !title_color
+    color: $title_color
     text-decoration: none
   a#fork
     display: inline
-    +replace-text("fork.png")
+    +replace-text(unquote("fork.png"))
     width: 150px
     height: 150px
     position: absolute

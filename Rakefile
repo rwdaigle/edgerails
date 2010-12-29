@@ -1,5 +1,6 @@
-gem 'activesupport', "~> 2.3"
+# gem 'activesupport', "~> 2.3"
 require 'active_support'
+require 'source/_helpers'
 
 domain = "edgerails.info"
 site_url  = "http://#{domain}"   # deployed site url for sitemap.xml generator
@@ -93,7 +94,7 @@ end
 desc "Generate styles only"
 task :generate_style do
   puts ">>> Generating styles <<<"
-  system "compass"
+  system "compass compile"
 end
 
 desc "Generate site files only"

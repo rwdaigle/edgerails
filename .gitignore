@@ -1,4 +1,6 @@
+.bundle
 site
 .sass-cache
 test
 source/_stash
+.DS_Store
