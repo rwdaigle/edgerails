@@ -37,10 +37,11 @@
   };
   
   var storeTweets = function(tweets, cookieName) {
-    $.cookie(cookieName, serializeTweets(tweets), { expires: 1 });
+    // $.cookie(cookieName, serializeTweets(tweets), { expires: 1 });
   }
   
   var getStoredTweets = function(cookieName) {
+    return null;
     cookieData = $.cookie(cookieName);
     return cookieData ? JSON.parse(cookieData) : null;
   };

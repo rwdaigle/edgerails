@@ -37,10 +37,11 @@
   };
   
   var storeFeed = function(feed, cookieName) {
-    $.cookie(cookieName, serializeFeed(feed), { expires: 1 })
+    // $.cookie(cookieName, serializeFeed(feed), { expires: 1 })
   };
   
   var getStoredFeed = function(cookieName) {
+    return null;
     cookieData = $.cookie(cookieName);
     return cookieData ? JSON.parse(cookieData) : null;
   };
