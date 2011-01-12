@@ -1,0 +1,1138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Edge Rails.info</title>
+  <link href="http://edgerails.info/atom.xml" rel="self" />
+  <link href="http://edgerails.info" />
+  <updated>2011-01-12T16:05:59-05:00</updated>
+  <id>http://edgerails.info</id>
+  <entry>
+    <title>Template Inheritance</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2011/01/12/template-inheritance" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2011-01-12T00:00:00-05:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/01/12/template-inheritance</id>
+    <content type="html">
+      &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;Now that the internals of Rails 3 are a little more hospitable to changes we now have a &lt;a href=&quot;https://rails.lighthouseapp.com/projects/8994/tickets/948&quot;&gt;long-standing feature request&lt;/a&gt; finally implemented - &lt;a href=&quot;https://github.com/rails/rails/commit/0f32febad7bca595df44&quot;&gt;inherited templates&lt;/a&gt;. As the name implies, inherited templates make template lookup follow the controller inheritance heirarchy if it can&#8217;t find a template for the current controller. This is probably best described with a basic code example. Assuming we have the following controller heirarchy (basically PostsController inherits from AssetsController):&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - assets_controller.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AssetsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# Assume index, show etc... action definitions&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - posts_controller.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PostsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;AssetsController&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# Assume index, show etc... action definitions&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Assume there are asset templates for &lt;code&gt;show&lt;/code&gt; and &lt;code&gt;index&lt;/code&gt; but only an &lt;code&gt;index&lt;/code&gt; template for posts:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Bash - directory listings&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;myapp &gt; ls app/views/assets
+      index.html.haml     show.html.haml
+      
+      myapp &gt; ls app/views/posts
+      index.html.haml
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;In this scenario any request to the &lt;code&gt;show&lt;/code&gt; action of the &lt;code&gt;posts_controller&lt;/code&gt; will be rendered using the &lt;code&gt;views/assets/show&lt;/code&gt; template. &lt;code&gt;index&lt;/code&gt; requests will be rendered as expected since both controllers have their own index templates.&lt;/p&gt;
+      
+      &lt;p&gt;&lt;span class=&quot;notice&quot;&gt;
+      Template inheritance does also apply to partial lookups, though it does NOT apply to layouts.
+      &lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;While a seemingly small feature this new inherited lookup of templates allows you to reuse whole parts of common view logic without resorting to using an amalgamation of partials to accomplish the same thing.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>The Skinny on Scopes (Formerly named_scope)</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2010-02-23T00:00:00-05:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope</id>
+    <content type="html">
+      &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;&lt;span class=&quot;notice source&quot;&gt;
+        The source for the examples contained in this article are located at: &lt;a href=&quot;http://github.com/rwdaigle/edgerails-support/tree/master/the-skinny-on-scopes-formerly-named-scope/&quot;&gt;http://github.com/rwdaigle/edgerails-support/tree/master/the-skinny-on-scopes-formerly-named-scope/&lt;/a&gt;
+      &lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;I remember my heart fluttering with a boyish crush the first time I saw &lt;a href=&quot;http://magicscalingsprinkles.wordpress.com/&quot;&gt;Nick Kallen&lt;/a&gt;&#8217;s has_finder functionality &lt;a href=&quot;http://edgerails.info/articles/what-s-new-in-edge-rails/2008/03/24/what-s-new-in-edge-rails-has-finder-functionality/&quot;&gt;make it into Rails in the form of &lt;code&gt;named_scope&lt;/code&gt;&lt;/a&gt;. &lt;code&gt;named_scope&lt;/code&gt; quickly made its way into my toolset as a great way to encapsulate reusable, chainable bits of query logic.  While it had its downsides (namely its lack of first-class chain support for the likes of &lt;code&gt;:joins&lt;/code&gt; and &lt;code&gt;:include&lt;/code&gt;) it redefined how I thought about structuring my model logic.  Once you taste the chainable goodness of &lt;code&gt;named_scope&lt;/code&gt; you never go back.&lt;/p&gt;
+      
+      &lt;p&gt;So here we are with Rails 3 completely refactoring the internals of ActiveRecord - what&#8217;s up with our beloved &lt;code&gt;named_scope&lt;/code&gt;?  Well, the simple answer is that it&#8217;s been renamed to &lt;code&gt;scope&lt;/code&gt; and you can use it just as you&#8217;re used to &#8230; but that&#8217;s taking the easy way out.  Let&#8217;s see what else we can do with &lt;code&gt;scope&lt;/code&gt; in Rails 3.&lt;/p&gt;
+      
+      &lt;h3&gt;Basic Usage&lt;/h3&gt;
+      
+      &lt;p&gt;Let&#8217;s assume a standard &lt;code&gt;Post&lt;/code&gt; model with &lt;code&gt;published_at&lt;/code&gt; datetime field along with &lt;code&gt;title&lt;/code&gt; and &lt;code&gt;body&lt;/code&gt; (to follow along in code, see the &lt;a href=&quot;http://github.com/rwdaigle/edgerails-support/tree/master/20100221_skinny_on_scopes/&quot;&gt;accompanying project in github&lt;/a&gt;).&lt;/p&gt;
+      
+      &lt;p&gt;In Rails 2.x here&#8217;s how we&#8217;d have to define the self-explanatory &lt;code&gt;published&lt;/code&gt; and &lt;code&gt;recent&lt;/code&gt; named scopes:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - post.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;named_scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:conditions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
+        &lt;span class=&quot;n&quot;&gt;named_scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:recent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:order&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at DESC&quot;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;&lt;span class=&quot;notice&quot;&gt;
+        The reason we need to use a &lt;code&gt;lambda&lt;/code&gt; here is that it delays the evaluation of the &lt;code&gt;Time.zone.now&lt;/code&gt; argument to when the scope is actually invoked.  Without the &lt;code&gt;lambda&lt;/code&gt; the time that would be used in the query logic would be the time that the class was first evaluated, not the scope itself.
+      &lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;With Rails 3 the bulk of ActiveRecord is now based on the &lt;a href=&quot;http://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation.rb&quot;&gt;Relation&lt;/a&gt; class.  Think of relation as named_scope on steroids, weaving chainable query logic into the very fabric of ActiveRecord.&lt;/p&gt;
+      
+      &lt;p&gt;You can see how to use the individual &lt;code&gt;where&lt;/code&gt;, &lt;code&gt;order&lt;/code&gt; etc&#8230; commands of &lt;code&gt;Relation&lt;/code&gt; on &lt;a href=&quot;http://m.onkey.org/2010/1/22/active-record-query-interface&quot;&gt;Pratik&#8217;s great writeup of the new query interface&lt;/a&gt; as well in &lt;a href=&quot;http://railscasts.com/episodes/202-active-record-queries-in-rails-3&quot;&gt;this Railscast&lt;/a&gt;.  Understanding these are important as the new &lt;code&gt;scope&lt;/code&gt; is built upon them.&lt;/p&gt;
+      
+      &lt;p&gt;Let&#8217;s see how - here&#8217;s how the two named scopes from our previous &lt;code&gt;Post&lt;/code&gt; example will look in Rails 3:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - post.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+          &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:recent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at DESC&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;While the bulk of the logic is the same - the SQL string portions - you start to see how scopes use the new query interface directly to create reusable query logic versus constructing an options hash as was done in Rails 2.  This really is our first glimpse of how much more flexible the new query interface allows our scopes to be.  No longer are they a slightly different construct than your normal query methods.  They are now &lt;em&gt;built upon&lt;/em&gt; the very same query methods that you would use were you to execute a query directly.  This consistency is now prevalent all throughout ActiveRecord.&lt;/p&gt;
+      
+      &lt;p&gt;And there&#8217;s more&#8230;&lt;/p&gt;
+      
+      &lt;h3&gt;Scope Reusability&lt;/h3&gt;
+      
+      &lt;p&gt;Suppose we want to update our &lt;code&gt;recent&lt;/code&gt; scope to only include published posts.  We&#8217;ve already defined what &lt;code&gt;published&lt;/code&gt; means and shouldn&#8217;t have to redefine it to create a new scope.  Well, you can also chain scopes within scope definitions themselves as we&#8217;ll do here with the new &lt;code&gt;recent&lt;/code&gt; and &lt;code&gt;published_since&lt;/code&gt; scopes.&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - post.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+          &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published_since&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at &gt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:recent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at DESC&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Ok, now we&#8217;re getting warmed up.&lt;/p&gt;
+      
+      &lt;h3&gt;Dynamic Scope Construction&lt;/h3&gt;
+      
+      &lt;p&gt;I&#8217;ve been in love with the &lt;a href=&quot;http://github.com/rails/rails/blob/17f336e2f00f419a41eb7effb817bd7ad3e84f0d/activerecord/lib/active_record/named_scope.rb#L3&quot;&gt;&lt;code&gt;scoped&lt;/code&gt; the anonymous named_scope constructor&lt;/a&gt; in Rails 2.3 for sometime now, using it to create dynamic and chainable scopes on an as-needed basis.  One use-case you see a lot for this type of functionality is for creating a &lt;code&gt;search&lt;/code&gt; method that you can still append other query manipulations onto.&lt;/p&gt;
+      
+      &lt;p&gt;For instance, to search our posts we can create this method which will return a scope for your caller to further filter (notice the use of &lt;code&gt;scoped&lt;/code&gt; to start the chain off with an innocuous scope upon which others can be appended):&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - post.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;
+          
+          &lt;span class=&quot;c1&quot;&gt;# Search the title and body fields for the given string.&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# Start with an empty scope and build on it for each attr.&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# (Allows for easy extraction of searchable fields definition&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# in the future)&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scoped&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;combined_scope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;attr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+              &lt;span class=&quot;n&quot;&gt;combined_scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;attr&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; LIKE ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;%&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;%&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;The use of &lt;code&gt;inject&lt;/code&gt; here somewhat obfuscates the intent of the method if you&#8217;re not used to looking at such iterations - here&#8217;s an easier to follow version with the searchable fields more hard coded (which actually doesn&#8217;t even use an anonymous scope to get bootstrapped):&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - post.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;
+          
+          &lt;span class=&quot;c1&quot;&gt;# The less-slick but, perhaps, more obvious version&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;%&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;%&quot;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.title LIKE ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.body LIKE ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Since we&#8217;re building upon the chainable goodness of then new query interface (think of scopes now as named bundles of the new ActiveRelation construct), we can do the following with the &lt;code&gt;search&lt;/code&gt; method:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - irb session&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# What&#39;s in the db, titles ~= publish date&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;1 week from now&quot;, &quot;Now&quot;, &quot;1 week ago&quot;, &quot;2 weeks ago&quot;]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;Now&quot;, &quot;1 week ago&quot;, &quot;2 weeks ago&quot;]&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Search combinations&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;1&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;1 week from now&quot;, &quot;1 week ago&quot;]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;1&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;1 week ago&quot;]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;w&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published_since&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ago&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;Now&quot;, &quot;1 week ago&quot;]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;w&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;created_at DESC&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;2 weeks ago&quot;, &quot;1 week ago&quot;]&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;You can imagine a scenario where more complex query-string support could be built, all using anonymous scopes.&lt;/p&gt;
+      
+      &lt;p&gt;Feels great, huh?  It also feels a lot like the &lt;a href=&quot;http://rubygems.org/gems/utility_scopes&quot;&gt;&lt;code&gt;utility_scopes&lt;/code&gt; gem&lt;/a&gt; I &lt;a href=&quot;http://ryandaigle.com/articles/2008/8/20/named-scope-it-s-not-just-for-conditions-ya-know&quot;&gt;released awhile ago&lt;/a&gt; which was my attempt to package up the chainable goodness of named_scope for common query operations.  Rest-assured, there&#8217;s a much smoother implementation under the covers here in Rails 3 than just some hacks on top of &lt;code&gt;named_scope&lt;/code&gt;&lt;/p&gt;
+      
+      &lt;h3&gt;Cross-Model Scopes&lt;/h3&gt;
+      
+      &lt;p&gt;Scopes are great for operating solely on the columns of a singular class&#8217;s table, but they can also be used to package cross-model queries (i.e. any SQL that would require a &lt;code&gt;join&lt;/code&gt;).  Let&#8217;s add in users (who can author and comment on posts) to the mix and write some scopes on &lt;code&gt;User&lt;/code&gt; that will fetch only users that have authored published posts as well as users that have commented on a post:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - user.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:foreign_key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:author_id&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;
+        
+        &lt;span class=&quot;c1&quot;&gt;# Get all users that have published a post&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;joins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;join posts on posts.author_id = users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        
+        &lt;span class=&quot;c1&quot;&gt;# Get all users that have commented on a post&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:commented&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;join comments on comments.user_id = users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Also, as &lt;a href=&quot;http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/#comment-36265313&quot;&gt;Steffen pointed out in the comments&lt;/a&gt;, ActiveRelation is smart enough to know how to do a join based on an association definition, allowing us to collapse the joins relations from SQL strings to an association reference:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - user.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;c1&quot;&gt;# Get all users that have published a post&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;joins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;# No need to write your own SQL&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        
+        &lt;span class=&quot;c1&quot;&gt;# Get all users that have commented on a post&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:commented&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Just reference :comments&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;notice&quot;&gt;
+        &lt;p&gt;It&#8217;s a good practice to always refer to the full &lt;code&gt;table_name.column_name&lt;/code&gt; when building scopes versus just the &lt;code&gt;column_name&lt;/code&gt; itself (i.e.: &lt;code&gt;posts.published_at&lt;/code&gt; vs. just &lt;code&gt;published_at&lt;/code&gt; in the example above).  This allows for unambiguous column references - especially important when building cross-model scopes where columns from more than one table are joined.&lt;/p&gt;
+      
+        &lt;p&gt;To be extra-flexible you can always invoke &lt;code&gt;table_name&lt;/code&gt; in place of the hard-coded table name, though. to confess, this is a step I rarely take the time to implement myself: &lt;code&gt;where(&quot;#{table_name}.published_at IS NOT NULL&quot;)&lt;/code&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Since we&#8217;ve got the full arsenal of ActiveRelation operators at our disposal in scopes, we can do joins and group bys within scopes that will be safely chained in complex queries - something where the old &lt;code&gt;named_scope&lt;/code&gt; crapped the bed:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - irb session&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# Get all users that have a post published&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;tim&quot;, &quot;dave&quot;]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_sql&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; SELECT &quot;users&quot;.* FROM &quot;users&quot; join posts on posts.author_id = users.id&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   WHERE (posts.published_at IS NOT NULL AND posts.published_at &lt;= &#39;2010-02-22 21:33:00.892308&#39;)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   GROUP BY users.id&lt;/span&gt;
+        
+      &lt;span class=&quot;c1&quot;&gt;# Get all users that have commented on a post&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commented&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;ryan&quot;, &quot;john&quot;, &quot;tim&quot;, &quot;dave&quot;]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commented&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_sql&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; SELECT &quot;users&quot;.* FROM &quot;users&quot; join comments on comments.user_id = users.id&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   GROUP BY users.id&lt;/span&gt;
+        
+      &lt;span class=&quot;c1&quot;&gt;# Combine them to get all authors that have also commented&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commented&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [&quot;tim&quot;, &quot;dave&quot;]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commented&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_sql&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; SELECT &quot;users&quot;.* FROM &quot;users&quot;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   join posts on posts.author_id = users.id&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   join comments on comments.user_id = users.id&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   WHERE (posts.published_at IS NOT NULL AND posts.published_at &lt;= &#39;2010-02-22 21:33:00.892308&#39;)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   GROUP BY users.id&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;&lt;span class=&quot;notice&quot;&gt;
+        As I&#8217;ve done here, use &lt;code&gt;scope#to_sql&lt;/code&gt; to peek at what SQL the scope will execute.  Very useful for debugging purposes.
+      &lt;/span&gt;&lt;/p&gt;
+      
+      &lt;h3&gt;Scope-based Model CRUD&lt;/h3&gt;
+      
+      &lt;p&gt;Since ActiveRelation lets you invoke all the builder/update/destroy methods on a relation that you&#8217;re used to using directly against your models, that power is also available at the end of a scope/scope-chain.  Let&#8217;s play around with our post scopes and use them to do more than just query:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - irb session&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# Increment the views_count for all published posts&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:views_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [59, 71, 42]&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;views_count = views_count + 1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:views_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; [60, 72, 43]&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Nobody cares about unpublished posts&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unpublished&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; 1&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unpublished&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;destroy_all&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unpublished&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; 0&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;You can also create a new model from existing scopes - suppose we have a (very contrived) scoped that gets only posts of certain title:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - post.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;c1&quot;&gt;# Ludacris&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:titled_luda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Luda&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;We can use this scope to directly build instances (as well as create, new, create! etc&#8230;):&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - irb session&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;titled_luda&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; 0&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;titled_luda&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; #&lt;Post id: nil, title: &quot;Luda&quot;, ...&gt;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;notice alert&quot;&gt;
+        &lt;p&gt;In order to use the creation/builder methods on a scope, the scope should directly define attribute equality using a `where` relation and the hash form of the attribute values, as was done above.&lt;/p&gt;
+        
+        &lt;p&gt;Specifying &lt;code&gt;where(&quot;title = 'Luda'&quot;)&lt;/code&gt; would not have propagated the attribute values to newly constructed instances.&lt;/p&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Scopes really can be thought of now as named packages of &lt;em&gt;both&lt;/em&gt; query and construction logic.  Very powerful.&lt;/p&gt;
+      
+      &lt;p&gt;&lt;a name=&quot;crazytown&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+      
+      &lt;h3&gt;Crazy Town&lt;/h3&gt;
+      
+      &lt;p&gt;One thing that&#8217;s always bugged me is how the logic for what makes a &lt;code&gt;Post&lt;/code&gt; published is split between scopes in both the &lt;code&gt;Post&lt;/code&gt; class and the &lt;code&gt;User&lt;/code&gt; class.  To refresh our collective memories:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - post.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+          &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;And:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - user.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;joins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Most good developers will immediately cringe at the duplication of the &lt;code&gt;where(&quot;posts.published_at IS NOT NULL AND posts.published_at &lt;= ?&quot;, Time.zone.now)&lt;/code&gt; relation.&lt;/p&gt;
+      
+      &lt;p&gt;Thanks to a &lt;a href=&quot;http://disq.us/d0y5l&quot;&gt;tip by Railscast&#8217;s Ryan Bates&lt;/a&gt;, there&#8217;s a pretty slick way to refer to, and combine, scope logic: the &lt;a href=&quot;http://github.com/rails/rails/blob/24cc9e5b4f9b729f02d2e0b56265032d08933a41/activerecord/lib/active_record/relation/spawn_methods.rb#L7&quot;&gt;merge method, aliased as &#8216;&amp;&#8217;&lt;/a&gt;. Let&#8217;s look at how we can use &lt;code&gt;scope#&amp;&lt;/code&gt; to refer to the query logic of the &lt;code&gt;Post.published&lt;/code&gt; scope from within our &lt;code&gt;User.published&lt;/code&gt; scope:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - user.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;joins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;users.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Just so we&#8217;re clear what happens when you merge relations/scopes with the &lt;code&gt;&amp;&lt;/code&gt; operator, let&#8217;s look at the resulting SQL:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - irb session&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_sql&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#=&gt; SELECT users.* FROM &quot;users&quot;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   INNER JOIN &quot;posts&quot; ON &quot;posts&quot;.&quot;author_id&quot; = &quot;users&quot;.&quot;id&quot;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   WHERE (posts.published_at IS NOT NULL AND posts.published_at &lt;= &#39;2010-02-27 02:55:45.063181&#39;)&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;#   GROUP BY users.id&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Notice how the conditions defined within &lt;code&gt;Post.published&lt;/code&gt; are merged into the &lt;code&gt;joins&lt;/code&gt; and &lt;code&gt;group&lt;/code&gt; relations of the &lt;code&gt;User.published&lt;/code&gt; scope?  Very nice. And merging works with all the mergeable relations, not just &lt;code&gt;where&lt;/code&gt; conditions we used here.&lt;/p&gt;
+      
+      &lt;h3&gt;Summary&lt;/h3&gt;
+      
+      &lt;p&gt;This post somewhat glosses over the new query interface for ActiveRecord in Rails 3 to get to the meat of using scopes.  However, none of the scoped yumminess could have happened without the slick new underpinnings of ActiveRecord.  So, if you&#8217;re still a little confused about all this, definitely read some more about ActiveRecord before jumping into scopes.  Once you do have that foundation, however, you will use scopes on a very regular basis.&lt;/p&gt;
+      
+      &lt;div class=&quot;notice resources&quot;&gt;
+        &lt;p&gt;The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:&lt;/p&gt;
+      
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;http://m.onkey.org/2010/1/22/active-record-query-interface&quot;&gt;Pratik&#8217;s &#8216;Active Record Query Interface 3.0&#8217; article&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;http://railscasts.com/episodes/202-active-record-queries-in-rails-3&quot;&gt;Railscast 202: Active Record Queries in Rails 3&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Notes From The First Rails Online Conference</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2010-02-18T00:00:00-05:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference</id>
+    <content type="html">
+      &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;Earlier today the inaugural &lt;a href=&quot;http://en.oreilly.com/railswinter10&quot;&gt;Rails Online Conf&lt;/a&gt; occurred and, Webex being a bag of hurt aside, it was a great experience.  Basically, we got a high-level rundown of most of the big changes (internal and external) in Rails 3 from an all-star lineup of Railstuds.  The slides are up on the site but if you want to save a single click-through, here they are again:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://assets.en.oreilly.com/1/event/46/Getting%20up-to-date%20with%20Rails%203%20Presentation.pdf&quot;&gt;Yehuda gives us the Rails 3 overview&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://assets.en.oreilly.com/1/event/46/Rails%202%20to%20the%203%20_Abridged_%20Presentation.pdf&quot;&gt;Gregg Pollack bats second with a spirited highlight reel of Rails 3 goodies&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://assets.en.oreilly.com/1/event/46/Why%20Port_%20Presentation.pdf&quot;&gt;Jeremy McAnally gives us the lowdown on upgrading from Rails 2 to 3&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://assets.en.oreilly.com/1/event/46/Rack%20in%20Rails%203%20Presentation.pdf&quot;&gt;Ryan Tomayko talks about Rack and Rails use of Rack to become more modular and extensible&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;p&gt;Don&#8217;t forget to check out Jeremy&#8217;s upcoming &lt;a href=&quot;http://railsupgradehandbook.com/&quot;&gt;Rails 3 Upgrade Handbook&lt;/a&gt; if you&#8217;re in the market for test driving all the sweetness Rails 3 has to offer.  Jeremy&#8217;s a great writer and this 120-page manual is sure to impress.&lt;/p&gt;
+      
+      &lt;p&gt;The RailsConf program committee of &lt;a href=&quot;http://chadfowler.com/&quot;&gt;Chad&lt;/a&gt; and &lt;a href=&quot;http://benscofield.com/&quot;&gt;Ben&lt;/a&gt; deserves a big &#8220;thanks&#8221; for putting on the online conf.  My hope is that mini-events like this become more frequent in the future.&lt;/p&gt;
+      
+      &lt;p&gt;If you missed out on this event and aren&#8217;t a fan of visuals, you can always &lt;a href=&quot;http://en.oreilly.com/railswinter10/public/sv/q/216&quot;&gt;download the audio recording&lt;/a&gt; when it comes out.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Rails 3 Resources</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2010-02-10T00:00:00-05:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources</id>
+    <content type="html">
+      &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;While we get some &lt;a href=&quot;http://edgerails.info/articles/announcements/2010/02/08/edgerails.info-is-live/&quot;&gt;momentum back&lt;/a&gt; here at EdgeRails.info I thought it&#8217;d be a good time to spotlight all the other great posts out there regarding &lt;a href=&quot;http://weblog.rubyonrails.org/2010/2/5/rails-3-0-beta-release&quot;&gt;new features in Rails 3&lt;/a&gt;.  There are a lot of changes, both internally and externally, so buckle up:&lt;/p&gt;
+      
+      &lt;h3&gt;Overviews&lt;/h3&gt;
+      
+      &lt;p&gt;Here are some good overview posts that will wet your appetite for the juicier technical details below&#8230;&lt;/p&gt;
+      
+      &lt;p&gt;&lt;a href=&quot;http://yehudakatz.com/&quot;&gt;Yehuda&lt;/a&gt;, da man, has a few good writeups:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://www.engineyard.com/blog/2010/rails-3-beta-is-out-a-retrospective/&quot;&gt;A Rails 3 retrospective&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://www.engineyard.com/blog/2009/my-five-favorite-things-about-rails-3/&quot;&gt;His five favorite things about Rails 3&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;p&gt;&lt;a href=&quot;http://omgbloglol.com&quot;&gt;Jeremy McAnally&lt;/a&gt; has done a lot of work writing about Rails 3 (finally, dude, where ya been?) and has these writeups:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://omgbloglol.com/post/344792822/the-path-to-rails-3-introduction&quot;&gt;An overview of the work done to bring Rails 3 to you&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://omgbloglol.com/post/371893012/the-path-to-rails-3-greenfielding-new-apps-with-the&quot;&gt;Greenfielding a new Rails 3 app&lt;/a&gt;.&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;ActiveRecord/ActiveModel&lt;/h3&gt;
+      
+      &lt;p&gt;ActiveRecord, while no longer the only persistence framework in town thanks to Rails&#8217; new ORM agnosticism, has gotten a lot of love.  Not only have validations and other non core-persistence functionality been pulled out into a new &lt;a href=&quot;http://github.com/rails/rails/tree/master/activemodel&quot;&gt;ActiveModel component&lt;/a&gt; but ActiveRecord itself now has a much more flexible, chainable and flexible API.  You will like this.&lt;/p&gt;
+      
+      &lt;p&gt;A little about ActiveModel:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://yehudakatz.com/2010/01/10/activemodel-make-any-ruby-object-feel-like-activerecord/&quot;&gt;Yehuda gives the lowdown on ActiveModel&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators/&quot;&gt;I talk a little bit more about the new independent validators&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/&quot;&gt;Validations get sexy&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://lindsaar.net/2010/1/31/validates_rails_3_awesome_is_true&quot;&gt;Some more validation goodness&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;p&gt;And some meat and potatoes on &lt;a href=&quot;http://github.com/rails/rails/tree/master/activerecord/&quot;&gt;ActiveRecord&lt;/a&gt;.&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://m.onkey.org/2010/1/22/active-record-query-interface&quot;&gt;Pratik talks about the new query interface&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://magicscalingsprinkles.wordpress.com/2010/01/28/why-i-wrote-arel/&quot;&gt;Nick Kallen lays some heavy details about the making of the new query interface&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;ActionController&lt;/h3&gt;
+      
+      &lt;p&gt;RESTful support has made it&#8217;s way from the routing layer and is now embedded deep into ActionController now:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with/&quot;&gt;I run down the new respond_to RESTful response mechanism&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://blog.plataformatec.com.br/2009/08/embracing-rest-with-mind-body-and-soul/&quot;&gt;Jose Valim, the author, goes into more detail about the new RESTful controller support&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://weblog.rubyonrails.org/2009/8/31/three-reasons-love-responder&quot;&gt;Jose adds some examples on the rails blog&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://www.engineyard.com/blog/2010/render-options-in-rails-3/&quot;&gt;Yehuda explains the new render options&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;Routing&lt;/h3&gt;
+      
+      &lt;p&gt;Routing, one of the hairier, and slicker, parts of the Rails stack has a slightly modified API and a very direct way to address rack mini-apps.  Read about it here:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://lindsaar.net/2010/2/7/rails_3_routing_with_rack&quot;&gt;Mikel Lindsaar continues his assault on the Rails scene with this great example of how to run a Sinatra app within Rails&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://yehudakatz.com/2009/12/26/the-rails-3-router-rack-it-up/&quot;&gt;Yehuda gives a great overview of the new routing config&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://rizwanreza.com/2009/12/20/revamped-routes-in-rails-3&quot;&gt;Rizwan Reza gets down and dirty with some example routing blocks&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://yehudakatz.com/2009/12/20/generic-actions-in-rails-3/&quot;&gt;Yehuda talks about support for generic actions&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;ActionMailer&lt;/h3&gt;
+      
+      &lt;p&gt;Even the black sheep of the family gets some attention now and then:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://lindsaar.net/2010/1/26/new-actionmailer-api-in-rails-3&quot;&gt;Mikel Lindsaar talks about his refactoring of ActionMailer&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;Gem Bundler&lt;/h3&gt;
+      
+      &lt;p&gt;Rails 3 comes with a whole new way of specifying, loading and managing gem dependencies: the new &lt;a href=&quot;http://github.com/carlhuda/bundler&quot;&gt;gem bundler&lt;/a&gt; which was developed in parallel with the new version of Rails and replaces what you&#8217;re used to seeing as a bunch of &lt;code&gt;config.gem&lt;/code&gt; statements:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://lindsaar.net/2010/2/6/bundle_me_some_rails&quot;&gt;Mikel (you should now be on a first name basis with him by now) has a very complete rundown of the new bundler features&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://yehudakatz.com/2010/02/01/bundler-0-9-heading-toward-1-0/&quot;&gt;Yehuda, one of the bundler project committers, gives a nice narrative of the bundler features&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://yehudakatz.com/2010/02/09/using-bundler-in-real-life/&quot;&gt;Yehuda continues with some real world examples&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;Railties&lt;/h3&gt;
+      
+      &lt;p&gt;Like Thanksgiving leftovers, railties are a grab-bag of goodies:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://litanyagainstfear.com/blog/2010/02/03/the-rails-module/&quot;&gt;Nick Quaranto talks about the new Rails module (no more RAILS_XXX constants)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://paulbarry.com/articles/2010/01/13/customizing-generators-in-rails-3&quot;&gt;Paul Barry talks about creating customized generators&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://caffeinedd.com/guides/331-making-generators-for-rails-3-with-thor&quot;&gt;Amp your generators using Thor&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://benscofield.com/2009/09/application-templates-in-rails-3/&quot;&gt;Ben Scofield shows you how to create module app templates&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;p&gt;There&#8217;s a new kid in town in Rails 3 - instrumentation.  There&#8217;s not been much written about it yet but here are few nibbles to get you going:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://hasmanyquestions.wordpress.com/2010/01/17/let-your-sql-growl-in-rails-3/&quot;&gt;Gavin Stark writes about using instrumentation to log SQL calls&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://github.com/rails/rails/blob/master/railties/lib/rails/subscriber.rb&quot;&gt;The subscriber class is the main facilitator of instrumentation so give it a look&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;Plugins&lt;/h3&gt;
+      
+      &lt;p&gt;A whole lot of effort was put into making the internal API of Rails much cleaner.  Cleaner to the point that monkey-patching should be a thing of the past.  One of the main benefactors of this are plugins, which have a whole new way of integrating with Rails apps:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://weblog.rubyonrails.org/2010/2/9/plugin-authors-toward-a-better-future&quot;&gt;Yehuda gives you the lowdown on the official rails blog&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://www.engineyard.com/blog/2010/rails-and-merb-merge-plugin-api-part-3-of-6/&quot;&gt;Yehuda gives you the behind the scenes take on plugins&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://boldr.net/upgrade-plugins-gems-rails-3/&quot;&gt;Nicolas Merouze shows you plugin developers out there how to upgrade your goodies&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://www.railsplugins.org/&quot;&gt;EngineYard has set up a plugins listing site to publicize which are (and are not) Rails 3 compatible&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;h3&gt;Upgrading&lt;/h3&gt;
+      
+      &lt;p&gt;Whew!  If you&#8217;ve gotten to this point you may be wondering how to stitch this all together and make your now crusty Rails 2.3 app a good looking Rails 3 stud?  Thankfully, you&#8217;re not alone.&lt;/p&gt;
+      
+      &lt;p&gt;Jeremy McAnally has been busting his hump to bring you the latest on upgrading:&lt;/p&gt;
+      
+      &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;http://omgbloglol.com/post/353978923/the-path-to-rails-3-approaching-the-upgrade&quot;&gt;How to approach the upgrade&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;http://omgbloglol.com/post/364624593/rails-upgrade-is-now-an-official-plugin&quot;&gt;A plugin to help you on your way&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      
+      
+      &lt;p&gt;And everybody&#8217;s &lt;a href=&quot;http://peepcode.com&quot;&gt;favorite screencaster&lt;/a&gt; &lt;a href=&quot;http://blog.peepcode.com/tutorials/2010/live-coding-rails-3-upgrade&quot;&gt;live codes an upgrade&lt;/a&gt;.&lt;/p&gt;
+      
+      &lt;p&gt;Rails 3 represents a huge amount of work, both in internal and external improvements.  A big congrats to the whole team and to the community for providing such great content about these changes.&lt;/p&gt;
+      
+      &lt;p&gt;Let me know if I missed any great posts that you&#8217;ve found helpful, I know there are at least a few out there&#8230;&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>EdgeRails.Info Is Live</title>
+    <link href="http://edgerails.info/articles/announcements/2010/02/08/edgerails.info-is-live" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2010-02-08T00:00:00-05:00</updated>
+    <id>http://edgerails.info/articles/announcements/2010/02/08/edgerails.info-is-live</id>
+    <content type="html">
+      &lt;p&gt;As I mentioned back on my &lt;a href=&quot;http://ryandaigle.com/articles/2010/2/8/what-s-new-in-edge-rails-moves-to-edgerails-info&quot;&gt;personal site&lt;/a&gt;, the continuation and evolution of the What&#8217;s New in Edge Rails series continues here as EdgeRails.info.  I&#8217;ve long wanted to give the Edge Rails series it&#8217;s own dedicated site and have finally pulled my act together to get this party started.&lt;/p&gt;
+      
+      &lt;p&gt;But, rather than just continue publishing my soliloquies under a new domain, I wanted to alter the direction and expand the site to accept direct input and contributions from the community.  I feel like this mirrors the growth of the Rails framework itself, growing from a single person into a much more community-driven effort.  Also, to be honest, it&#8217;s a lot of work to keep up with the sometimes frenzied pace of contributions to the &lt;a href=&quot;http://github.com/rails/rails&quot;&gt;edge rails branch&lt;/a&gt; of the repository and far be it for me to not admit when I&#8217;m the one holding things up. (I.e., keeping up with the &lt;a href=&quot;http://github.com/rails/rails/commits/master&quot;&gt;firehouse that has been Rails 3&lt;/a&gt; has been an impossible task for me).  I also envision more than just play-by-plays of Rails commits - perhaps including some well-written tutorials, timely news etc&#8230;?&lt;/p&gt;
+      
+      &lt;p&gt;So how can you contribute?  Well, I&#8217;m still &lt;a href=&quot;http://edgerails.info/publish.html&quot;&gt;figuring out the exact details&lt;/a&gt;, but the &lt;a href=&quot;http://github.com/rwdaigle/edgerails&quot;&gt;full content of the site is available on github&lt;/a&gt; and I fully intend to allow interested parties in using the reach of the site to publish both their own posts of new features they&#8217;re interested in as well as fixes to any mistakes in my posts (past and present).  It will be a fully distributed and github-powered publishing and editorial process.&lt;/p&gt;
+      
+      &lt;p&gt;If you&#8217;re the motivated type and familiar with &lt;a href=&quot;http://help.github.com/forking/&quot;&gt;forking on github&lt;/a&gt;, feel free to dive right in and send contributions my way.  If you&#8217;re a little on the shy side then hold tight, I&#8217;ll be putting some more detailed instructions up soon.&lt;/p&gt;
+      
+      &lt;p&gt;I also wanted to have the new site reflect the vitality of the Rails community by pulling in community activity from around the web and have added an &#8220;edgerails&#8221; tweets and recent Rails commits feed to the sidebar area.  I&#8217;ll also be on the lookout for other relevant activity that can be pulled in here to enhance the tutorial nature of the main content.&lt;/p&gt;
+      
+      &lt;p&gt;I&#8217;d like to give a shout out to &lt;a href=&quot;http://brandonmathis.com/&quot;&gt;Brandon Mathis&lt;/a&gt; who pulled the initial site design together for me and whose &lt;a href=&quot;http://github.com/imathis/octopress&quot;&gt;Octopress framework&lt;/a&gt; is powering this &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt;-generated static site.  If you&#8217;re looking for a sharp designer who is great to talk to, designs clean &lt;em&gt;and&lt;/em&gt; beautiful sites and understands reusability better than most developers, then Brandon is your man.  &lt;a href=&quot;http://brandonmathis.com/&quot;&gt;Get in touch&lt;/a&gt; with him - you won&#8217;t be disappointed.&lt;/p&gt;
+      
+      &lt;p&gt;I&#8217;m stoked to start a new chapter in the Edge Rails series, let&#8217;s see where this party takes us, shall we?&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Set Flash in redirect_to</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2009-12-20T00:00:00-05:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to</id>
+    <content type="html">
+      
+      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 2.3&lt;/span&gt;&lt;p&gt;&lt;a href=&quot;http://api.rubyonrails.org/classes/ActionController/Flash.html&quot;&gt;Rails&#8217; flash&lt;/a&gt; is a convenient way of passing objects (though mostly used for message strings) across http redirects.  In fact, every time you set a flash parameter the very next step is often to perform your redirect w/ &lt;code&gt;redirect_to&lt;/code&gt;:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;The user was successfully created&quot;&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;I know I hate to see two lines of code where one makes sense &#8211; in this case what you&#8217;re saying is to &#8220;redirect to the new user page with the given notice message&#8221; &#8211; something that seems to make more sense as a singular command.&lt;/p&gt;
+      &lt;p&gt;&lt;span class=&quot;caps&quot;&gt;DHH&lt;/span&gt; seems to agree and has &lt;a href=&quot;http://github.com/rails/rails/commit/e6cadd422b72ba9818cc2f3b22243a6aa754c9f8&quot;&gt;added &lt;code&gt;:notice&lt;/code&gt;, &lt;code&gt;:alert&lt;/code&gt; and &lt;code&gt;:flash&lt;/code&gt; options to &lt;code&gt;redirect_to&lt;/code&gt;&lt;/a&gt; to consolidate commands.  &lt;code&gt;:notice&lt;/code&gt; and &lt;code&gt;:alert&lt;/code&gt; automatically sets the flash parameters of the same name and &lt;code&gt;:flash&lt;/code&gt; let&#8217;s you get as specific as you want.  For instance, to rewrite the above example:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;The user was successfully created&quot;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Or to set a non &lt;code&gt;:alert&lt;/code&gt;/&lt;code&gt;:notice&lt;/code&gt; flash:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:flash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;The user was successfully created&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;I&#8217;ve become accustomed to setting my flash messages in &lt;code&gt;:error&lt;/code&gt;, &lt;code&gt;:info&lt;/code&gt; and sometimes &lt;code&gt;:notice&lt;/code&gt; making the choice to provide only &lt;code&gt;:alert&lt;/code&gt; and &lt;code&gt;:notice&lt;/code&gt; accessors fell somewhat constrained to me, but maybe I&#8217;m loopy in my choice of flash param names.&lt;/p&gt;
+      &lt;p&gt;Whatever your naming scheme, enjoy the new one-line redirect!&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Independent Model Validators</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2009-08-11T00:00:00-04:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators</id>
+    <content type="html">
+      
+      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;p&gt;ActiveRecord validations, ground zero for anybody learning about Rails, got a lil&#8217; bit of decoupling mojo today with the &lt;a href=&quot;http://github.com/rails/rails/commit/22f339825329e2d4463a4130e9fa68baf9d27eb6&quot;&gt;introduction of validator classes&lt;/a&gt;.  Until today, the only options you had to define a custom validation was by overriding the &lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveRecord/Validations.html#M002158&quot;&gt;validate&lt;/a&gt; method or by using &lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002161&quot;&gt;validates_each&lt;/a&gt;, both of which pollute your models with gobs of validation logic.&lt;/p&gt;
+      &lt;h3&gt;ActiveRecord Validators&lt;/h3&gt;
+      &lt;p&gt;Validators remedy this by containing granular levels of validation logic that can be reused across your models.  For instance, for that classic email validation example we can create a single validator:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EmailValidator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Validator&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;validate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;is not valid&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Each validator should implement a &lt;code&gt;validate&lt;/code&gt; method, within which it has access to the model instance in question as &lt;code&gt;record&lt;/code&gt;.  Validation errors can then be added to the base model by adding to the &lt;code&gt;errors&lt;/code&gt; collection as in this example.&lt;/p&gt;
+      &lt;p&gt;So how do you tell a validator to operate on a model?  &lt;code&gt;validates_with&lt;/code&gt; that takes the class of the validator:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;Validation Arguments&lt;/h3&gt;
+      &lt;p&gt;This is all well and good, but is a pretty brittle solution in this example as the validator is assuming an &lt;code&gt;email&lt;/code&gt; field.  We need a way to pass in the name of the field to validate against for a model class that is unknown until runtime.  We can do this by passing in options to &lt;code&gt;validates_with&lt;/code&gt; which are then made available to the validator at runtime as the &lt;code&gt;options&lt;/code&gt; hash.  So let&#8217;s update our email validator to operate on an email field that can be set by the model requiring validation:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EmailValidator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Validator&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;validate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;email_field&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:attr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email_field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;is not valid&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email_field&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;And to wire it up from the user model:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:attr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email_address&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Any arguments can be passed into your validators by hitching a ride onto this options hash of &lt;code&gt;validates_with&lt;/code&gt;.&lt;/p&gt;
+      &lt;h3&gt;Options &amp; Notes&lt;/h3&gt;
+      &lt;p&gt;There are also some built-in options that you&#8217;ll be very familiar with, namely &lt;code&gt;:on&lt;/code&gt;, &lt;code&gt;:if&lt;/code&gt; and &lt;code&gt;:unless&lt;/code&gt; that define when the validation will occur.  They&#8217;re all the same as the options to built-in validations like &lt;a href=&quot;http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#M002164&quot;&gt;&lt;code&gt;validates_presence_of&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Proc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;signup_step&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+          &lt;span class=&quot;ss&quot;&gt;:attr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:email_address&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;It&#8217;s also possible to specify more than one validator with &lt;code&gt;validates_with&lt;/code&gt;:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_with&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EmailValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ZipCodeValidator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:on&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:create&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;While this might seem like a pretty minor update, it allows for far better reusability of custom validation logic than what&#8217;s available now.  So enjoy.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Default RESTful Rendering</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2009-08-10T00:00:00-04:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering</id>
+    <content type="html">
+      
+      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;p&gt;A few days ago I wrote about the new &lt;a href=&quot;http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with&quot;&gt;&lt;code&gt;respond_with&lt;/code&gt; functionality&lt;/a&gt; of Rails 3.  It&#8217;s basically a clean way to specify the resource to send back in response to a RESTful request.  This works wonders for successful &lt;code&gt;:xml&lt;/code&gt; and &lt;code&gt;:json&lt;/code&gt; requests where the default response is to send back the integerized form of the resource, but still presents a lot of cruft when handling user-invoked &lt;code&gt;:html&lt;/code&gt; requests (i.e. &#8216;navigational&#8217; requests) and requests where error handling is required.  For instance, consider your standard &lt;code&gt;create&lt;/code&gt; action:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+      
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Have to always override the html format to properly&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# handle the redirect&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User was created successfully.&quot;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+              &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Have to send back the errors collection if they exist for xml, json and&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# redirect back to new for html.&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:unprocessable_entity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+              &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:action&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:new&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Even with the heavy lifting of &lt;code&gt;respond_with&lt;/code&gt; you can see that there&#8217;s still a lot of plumbing left for you to do &#8211; plumbing that is mostly the same for all RESTful requests.  Well &lt;a href=&quot;http://blog.plataformatec.com.br/&quot;&gt;José&lt;/a&gt; and the Rails team have a solution to this and have &lt;a href=&quot;http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4&quot;&gt;introduced controller responders&lt;/a&gt;.&lt;/p&gt;
+      &lt;h3&gt;Controller Responders&lt;/h3&gt;
+      &lt;p&gt;Controller responders handle the chore of matching the &lt;span class=&quot;caps&quot;&gt;HTTP&lt;/span&gt; request method and the resource format type to determine what type of response should be sent.  And since &lt;span class=&quot;caps&quot;&gt;REST&lt;/span&gt; is so well-defined it&#8217;s very easy to establish a default responder to handle the basics.&lt;/p&gt;
+      &lt;p&gt;Here&#8217;s what a controller utilizing responder support (now baked into &lt;code&gt;respond_with&lt;/code&gt;) looks like:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;edit&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_attributes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;The built-in responder performs the following logic for each action:&lt;/p&gt;
+      &lt;ul&gt;
+      	&lt;li&gt;If the &lt;code&gt;:html&lt;/code&gt; format was requested:
+      	&lt;ul&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;GET&lt;/code&gt; request, invoke &lt;code&gt;render&lt;/code&gt; (which will display the view template for the current action)&lt;/li&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;POST&lt;/code&gt; request and the resource has validation errors, &lt;code&gt;render&lt;/code&gt; &lt;code&gt;:new&lt;/code&gt; (so the user can fix their errors)&lt;/li&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;PUT&lt;/code&gt; request and the resource has validation errors, &lt;code&gt;render&lt;/code&gt; &lt;code&gt;:edit&lt;/code&gt; (so the user can fix their errors)&lt;/li&gt;
+      		&lt;li&gt;Else, redirect to the resource location (i.e. &lt;code&gt;user_url&lt;/code&gt;)&lt;/li&gt;
+      	&lt;/ul&gt;&lt;/li&gt;
+      	&lt;li&gt;If another format was requested, (i.e. &lt;code&gt;:xml&lt;/code&gt; or &lt;code&gt;:json&lt;/code&gt;)
+      	&lt;ul&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;GET&lt;/code&gt; request, invoke the &lt;code&gt;:to_format&lt;/code&gt; method on the resource and send that back&lt;/li&gt;
+      		&lt;li&gt;If the resource has validation errors, send back the errors in the requested format with the &lt;code&gt;:unprocessable_entity&lt;/code&gt; status code&lt;/li&gt;
+      		&lt;li&gt;If it was a &lt;code&gt;POST&lt;/code&gt; request, invoke the &lt;code&gt;:to_format&lt;/code&gt; method on the resource and send that back with the &lt;code&gt;:created&lt;/code&gt; status and the &lt;code&gt;:location&lt;/code&gt; of the new created resource&lt;/li&gt;
+      		&lt;li&gt;Else, send back the &lt;code&gt;:ok&lt;/code&gt; response with no body&lt;/li&gt;
+      	&lt;/ul&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;p&gt;Wading through this logic tree you can see that the default logic for each RESTful action is appropriately handled, letting your controller actions focus exclusively on resource retrieval and modification.  And with that cruft out of the way your controllers will start to look even more similar &#8211; I suspect we&#8217;ll be seeing a solution for this coming around the bend shortly as well&#8230;?&lt;/p&gt;
+      &lt;p&gt;So, just to recap the basics, here are a few action implementations side by side (the first being before responders and the latter being after):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# Old&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# New&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;# Old&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:new&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:unprocessable_entity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:unprocessable_entity&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# New&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+        &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Oh yeah, that&#8217;s getting real lean.&lt;/p&gt;
+      &lt;h3&gt;Overriding Default Behavior&lt;/h3&gt;
+      &lt;p&gt;If you need to override the default behavior of a particular format you can do so by passing a block to &lt;code&gt;respond_with&lt;/code&gt; (as I wrote about in the &lt;a href=&quot;http://ryandaigle.com/articles/2009/8/6/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with&quot;&gt;original article&lt;/a&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# Override html format since we want to redirect to the collections page&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# instead of the user page.&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;Nested Resources&lt;/h3&gt;
+      &lt;p&gt;It&#8217;s quite common to operate on resources within a nested resource graph (though I prefer to go one level deep, at most).  For such cases you need to let &lt;code&gt;respond_with&lt;/code&gt; know of the object hierarchy (using the same parameters as &lt;a href=&quot;http://api.rubyonrails.org/classes/ActionController/PolymorphicRoutes.html#M000486&quot;&gt;&lt;code&gt;polymorphic_url&lt;/code&gt;&lt;/a&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# In this case, users exist within a company&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@company&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Company&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:company_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@company&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:notice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;User successfully created&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+      
+          &lt;span class=&quot;c1&quot;&gt;# Ensure that the new user location is nested within @company,&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# for html format (/companies/1/users/2.html) as well as&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;# resource formats (/companies/1/users/2)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@company&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;If you have a singleton resource within your resource graph just use a symbol instead of an actual object instance.  So to get &lt;code&gt;/admin/users/1&lt;/code&gt; you would invoke &lt;code&gt;respond_with(:admin, @user)&lt;/code&gt;.&lt;/p&gt;
+      &lt;h3&gt;Custom Responders&lt;/h3&gt;
+      &lt;p&gt;While there&#8217;s no facility to provide your own responder classes, it will no doubt be added shortly.  If you look at the &lt;a href=&quot;http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L81&quot;&gt;current responder class definition&lt;/a&gt;, it&#8217;s a very simple &lt;span class=&quot;caps&quot;&gt;API&lt;/span&gt; essentially only requiring a &lt;code&gt;call&lt;/code&gt; method (more intuitively take a look at the &lt;a href=&quot;http://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L111&quot;&gt;&lt;code&gt;:to_html&lt;/code&gt;&lt;/a&gt; and &lt;a href=&quot;hhttp://github.com/rails/rails/blob/600a89f2082beadf4af9fe140a1a2ae56386cd49/actionpack/lib/action_controller/metal/responder.rb#L125&quot;&gt;&lt;code&gt;:to_format&lt;/code&gt;&lt;/a&gt; methods).&lt;/p&gt;
+      &lt;p&gt;Stay tuned here for further refinements to this very handy functionality &#8211; you&#8217;re going to see a lot more tightening in the coming weeks.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Cleaner RESTful Controllers w/ respond_with</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2009-08-06T00:00:00-04:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/06/what-s-new-in-edge-rails-cleaner-restful-controllers-w-respond_with</id>
+    <content type="html">
+      
+      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;p&gt;&lt;span class=&quot;caps&quot;&gt;REST&lt;/span&gt; is a first-class citizen in the Rails world, though most of the hard work is done at the routing level.  The controller stack has some niceties revolving around mime type handling with the &lt;code&gt;respond_to&lt;/code&gt; facility but, to date, there&#8217;s not been a lot built into actionpack to handle the serving of resources.  The &lt;a href=&quot;http://github.com/rails/rails/commit/09de34ca56598ae5d0302a14715b2a11b6cc9845&quot;&gt;addition of &lt;code&gt;respond_with&lt;/code&gt;&lt;/a&gt; (and &lt;a href=&quot;http://github.com/rails/rails/commit/aed135d3e261cbee153a35fcfbeb47e2e02b12e4&quot;&gt;this follow-up&lt;/a&gt;) takes one step towards more robust RESTful support with an easy way to specify how resources are delivered.  Here&#8217;s how it works:&lt;/p&gt;
+      &lt;h3&gt;Basic Usage&lt;/h3&gt;
+      &lt;p&gt;In your controller you can specify what resource formats are supported with the class method &lt;code&gt;respond_*to*&lt;/code&gt;.  Then, within your individual actions, you tell the controller the resource or resources to be delivered using &lt;code&gt;respond_*with*&lt;/code&gt;:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;This will match each supported format with an appropriate response.  For instance, if the request is for &lt;code&gt;/users.xml&lt;/code&gt; then the controller will look for a &lt;code&gt;/users/index.xml.erb&lt;/code&gt; view template to render.  If such a view template doesn&#8217;t exist then it tries to directly render the resource in the &lt;code&gt;:xml&lt;/code&gt; format by invoking &lt;code&gt;to_xml&lt;/code&gt; (if it exists).  Lastly, if &lt;code&gt;respond_with&lt;/code&gt; was invoked with a &lt;code&gt;:location&lt;/code&gt; option the request will be redirected to that location (as in the case of the &lt;code&gt;create&lt;/code&gt; action in the above example).&lt;/p&gt;
+      &lt;p&gt;So here&#8217;s the equivalent implementation without the use of &lt;code&gt;respond_with&lt;/code&gt; (assuming no index view templates):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+          
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;You can see how much boilerplate response handling is now handled for you especially if it&#8217;s multiplied over the other default actions.  You can pass in &lt;code&gt;:status&lt;/code&gt; and &lt;code&gt;:head&lt;/code&gt; options to &lt;code&gt;respond_with&lt;/code&gt; as well if you need to send these headers back on resources rendered directly (i.e. via &lt;code&gt;to_xml&lt;/code&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;Per-Action Overriding&lt;/h3&gt;
+      &lt;p&gt;It&#8217;s also possible to override standard resource handling by passing in a block to &lt;code&gt;respond_with&lt;/code&gt; specifying which formats to override for that action:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# Override html format since we want to redirect to a different page,&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# not just serve back the new resource&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+          &lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;respond_with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users_path&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;:except And :only Options&lt;/h3&gt;
+      &lt;p&gt;You can also pass in &lt;code&gt;:except&lt;/code&gt; and &lt;code&gt;:only&lt;/code&gt; options to only support formats for specific actions (as you do with &lt;code&gt;before_filter&lt;/code&gt;):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:only&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:index&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:except&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:show&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;The :any Format&lt;/h3&gt;
+      &lt;p&gt;If you&#8217;re still want to use &lt;code&gt;respond_to&lt;/code&gt; within your individual actions this update has also bundled the &lt;code&gt;:any&lt;/code&gt; resource format that can be used as a wildcard match against any unspecified formats:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UsersController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+      
+          &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+      
+          &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_sym&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@users&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;So all in all this is a small, but meaningful, step towards robust controller-level &lt;span class=&quot;caps&quot;&gt;REST&lt;/span&gt; support.  I should point out that the contributor of this patch is &lt;a href=&quot;http://blog.plataformatec.com.br/&quot;&gt;José Valim&lt;/a&gt; who has authored the very robust &lt;a href=&quot;http://github.com/josevalim/inherited_resources/tree/master&quot;&gt;inherited_resources&lt;/a&gt; framework that already has support for &lt;code&gt;respond_with&lt;/code&gt;-like functionality and many more goodies.  If you&#8217;re on the search for a solid RESTful controller framework to accompany Rails&#8217; native RESTful routing support I would suggest you take a look at his fine work.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Database Seeding</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/05/13/what-s-new-in-edge-rails-database-seeding" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2009-05-13T00:00:00-04:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/05/13/what-s-new-in-edge-rails-database-seeding</id>
+    <content type="html">
+      
+      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 2.3&lt;/span&gt;&lt;p&gt;I&#8217;m not sure if this was ever stated explicitly has a preferred practice or not, but for the longest time many of us have recognized that using migrations as a way to populate the database with a base configuration dataset is wrong.  Migrations are for manipulating the structure of your database, not for the data within it and certainly not for simple population tasks.&lt;/p&gt;
+      &lt;p&gt;Well, this practice now has a formal support in Rails with the addition of the &lt;a href=&quot;http://github.com/rails/rails/commit/4932f7b38f72104819022abca0c952ba6f9888cb&quot;&gt;database seeding&lt;/a&gt; feature.  Quite simply this is a rake task that sucks in the data specified in a &lt;code&gt;db/seeds.rb&lt;/code&gt;.  Here are the details:&lt;/p&gt;
+      &lt;h3&gt;Specify Seed Data&lt;/h3&gt;
+      &lt;p&gt;Add or open the &lt;code&gt;db/seeds.rb&lt;/code&gt; file and put in model creation statements (or any ruby code) for the data you need to be present in order for your application to run.  I.e. configuration and default data (and nothing more):&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:admin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:login&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:role&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;Load the Data&lt;/h3&gt;
+      &lt;p&gt;Once that is in place you can run one of two rake tasks that will populate the database with this data:&lt;br /&gt;
+      &lt;code&gt;rake db:seed&lt;/code&gt; which will only populate the db with this data and &lt;code&gt;rake db:setup&lt;/code&gt; which will create the db, load the schema and then load the seed data.  This is the task you&#8217;ll want to use if you&#8217;re starting in a fresh environment.&lt;/p&gt;
+      &lt;p&gt;So, quit overloading your migrations with seed data and use this new facility.  But, don&#8217;t go overboard and use &lt;code&gt;seeds.rb&lt;/code&gt; for test or staging datasets &#8211; it should only be used for the base data that is necessary for your app to run.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title>Touching</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/04/20/what-s-new-in-edge-rails-touching" />
+    <author>
+      <name>Ryan Daigle</name>
+    </author>
+    <updated>2009-04-20T00:00:00-04:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/04/20/what-s-new-in-edge-rails-touching</id>
+    <content type="html">
+      
+      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 2.3.3&lt;/span&gt;&lt;p&gt;There are often times when you want an update made to one object to be reflected up the object graph as an update of an associated parent object.  For instance, if a new comment is created on an article, you may very well want to mark the article as being updated.  With the &lt;a href=&quot;http://github.com/rails/rails/commit/abb899c54e8777428b7a607774370ba29a5573bd&quot;&gt;new touch feature&lt;/a&gt; of ActiveRecord, this is a whole lot easier.  Using our previous example, here&#8217;s is how it works:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+      
+        &lt;span class=&quot;c1&quot;&gt;# Make create/update/deletes of a comment mark its&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# parent article as updated&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:touch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Adding a new comment marks the article as being updated&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;New comment&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Same for updates/deletes&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;destroy&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:45:23 -0400 2009&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;This is a great way to keep tightly coupled domain models in-sync without resorting to a potential maze of callback logic.&lt;/p&gt;
+      &lt;p&gt;Also, if you have a timestamp field named something other than the standard &lt;code&gt;updated_at&lt;/code&gt; or &lt;code&gt;updated_on&lt;/code&gt; you can explicitly specify that field as the value to the &lt;code&gt;:touch&lt;/code&gt; option and it will get marked instead:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;validates_presence_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_updated_at&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# non-standard&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:touch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_updated_at&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+      &lt;span class=&quot;c1&quot;&gt;# Adding a new comment marks the article as being updated&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;New comment&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Also, somewhat conveniently, you can invoke &lt;code&gt;touch&lt;/code&gt; directly on a model to update its timestamp outside any association callbacks:&lt;/p&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;touch&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;So, touch away (in a non-creepy kind of way)!&lt;/p&gt;
+    </content>
+  </entry>
+</feed>

@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Edge Rails.info :: ActiveResource Gets Custom Methods</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <meta content='2mKA7BQdzoMID17KsbMUeJRDNiJ014GEDJ5f1XTyKVg' name='google-site-verification' />
+    <link href='/stylesheets/screen.css' media='screen, projection' rel='stylesheet' type='text/css' />
+    <link href='/atom.xml' rel='alternate' title='Edge Rails.info' type='application/atom+xml' />
+    <script src='http://www.google.com/jsapi?key=ABQIAAAAy8pbLvXSAhT6CrI93EHftRR2Vx9IrckWRbFszzbqrF7HPRyGLxRbhX5HmXRQATF-75QozHQ-TWk5Mw' type='text/javascript'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.setup.js' type='text/javascript'></script>
+    <script src='/javascripts/json2.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.template.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.cookie.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.prettydate.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.twitter.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.feed.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.googlesearch.js' type='text/javascript'></script>
+    <script src='/javascripts/jquery.search.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+          $('div.feed').feedme();
+        });
+      //]]>
+    </script>
+  </head>
+  <body class="" id="">
+    <div id="header">
+      <div class='page_width'>
+        <a class='title' href='/'>Edge Rails.info</a>
+      </div>
+      <a href='/publish.html' id='fork'>Fork, Contribute, & Publish</a>
+    </div>
+    <div id="nav">
+      <div class='page_width'>
+        <ul>
+          <li class='articles first'>
+            <a href='/'>Articles</a>
+          </li>
+          <li class='about'>
+            <a href='/about.html'>About</a>
+          </li>
+          <li class='publish last'>
+            <a href='/publish.html'>Publishing Guide</a>
+          </li>
+          <li class='search'>
+            <form cse='001155634542480541734:-pewsihppdg' id='google_search' results='#search_results'>
+              <input class='search_field' size='10' type='text' />
+            </form>
+          </li>
+          <li class='subscribe'>
+            <a href='http://feeds.feedburner.com/edgerails'>Subscribe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="search">
+      <div class='page_width'>
+        <script type='text/javascript'>
+          //<![CDATA[
+            $(window).load(function() {
+              $('#google_search').enableSearch();
+            });
+            function hideSearchResults() {
+              $('#search_results').hide();
+            }
+          //]]>
+        </script>
+        <div class='hidden' id='search_results' template='#search_template'></div>
+        <script id='search_template' type='text/html'>
+          <div class="results">
+            <h5>Search Results:</h5>
+            <% if (results.length){ %>
+            <ul>
+              <% for ( var i = 0; i < results.length; i++ ) { %>
+                <% var result = results[i]; %>
+                <li>
+                  <a href="<%= result.url %>"><%= result.titleNoFormatting %></a>
+                <p><%= result.content %></p>
+                </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+              <strong>Oops! We couldn't find posts about that.</strong>
+            <% } %>
+            <a id="close_search" href="#" onClick="hideSearchResults(); return false;">close</a>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div id="page">
+      <div class='page_width'>
+        <div id='main'>
+          <div class='contents'>
+            <div class='blog'>
+              <div class='article'>
+                <h2>ActiveResource Gets Custom Methods</h2>
+                <div class='meta'>
+                  by: Ryan Daigle | posted: April 26th, 2007
+                </div>
+                &#x000A;<p>ActiveResource got a pretty major update today with the <a href="http://dev.rubyonrails.org/changeset/6584">ability to invoke custom methods</a> without having to go rooting around to manually build the invocation <span class="caps">URI</span>.  This feature is close to my heart not only because of my affinity for ARes, but also because this patch was one I submitted as part of the <a href="http://www.workingwithrails.com/contests/hackfest2007/winners">Rails Hackfest</a>.  There was initially a lot of <a href="http://dev.rubyonrails.org/ticket/6979">back and forth</a> regarding the implementation and I didn&#8217;t know if it would ever make it in.  Thankfully, it has.  But enough about me, let&#8217;s talk about you.</p>&#x000A;<p>So say you&#8217;ve got your RESTable web service humming along nicely.  It has your standard compliment of <span class="caps">CRUD</span> based actions for a <code>Person</code> resource, along with a few custom element methods like <code>promote</code> and <code>deactivate</code> and a custom collection method, <code>sort</code>.  Without custom method support in ARes, you would have to manually build the <span class="caps">URI</span> you want to call and then start man-handling the underlying http connection to actually invoke the method call.  Yeah, not cool.  Enter custom method support.</p>&#x000A;<p>Let&#8217;s assume a remote service that supports the following:</p>&#x000A;<div class="highlight"><pre><span class="c"># Collection custom method</span>&#x000A;GET /people/sorted.xml?by<span class="o">=</span>sort_field&#x000A;&#x000A;<span class="c"># Element custom methods</span>&#x000A;PUT /people/1/promoted.xml?position<span class="o">=</span>position_name&#x000A;DELETE /people/1/deactivated.xml&#x000A;</pre>&#x000A;</div>&#x000A;<p>And we&#8217;ve got our bare-bones ARes <code>Person</code> class:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span> <span class="o">&lt;</span> <span class="no">ActiveResource</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="nb">self</span><span class="o">.</span><span class="n">site</span> <span class="o">=</span> <span class="s2">&quot;http://mypeeps.com/&quot;</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>The syntax for invoking a custom method in ARes is pretty simple.  Just call one of <code>get</code>, <code>post</code>, <code>put</code>, or <code>delete</code> on either the class (for collection custom methods) or the instance (for element custom methods) that matches the Http method you want to use.  Pass in the name of the custom method to invoke as the first argument with any parameters that need to be passed along as the second.  That description sounded like poo so let me use an example to get the point across a little better.</p>&#x000A;<p>Since we&#8217;ve got a well-behaved remote <span class="caps">REST</span> service, we can do the following:</p>&#x000A;<h3>ActiveResource Collection Custom Method Calls</h3>&#x000A;<p>A collection call is one that is invoked against the collection of resources.  An easier way to think of this is any call that is not operating on an existing resource is a collection call.  They&#8217;re usually pretty easy to spot as their <span class="caps">URI</span> does not reference a resource id.</p>&#x000A;<p>A custom method call is one that is not one of the default <span class="caps">CRUD</span> actions that you get out of the box with RESTful routing.  In our example we&#8217;ve got a collection custom method called <code>sorted</code> that returns the resources sorted by a particular field (<em>In my original example this was called <code>sort</code>, but after a recommendation by <span class="caps">DHH</span>, was changed to the adjective form <code>sorted</code>.  You&#8217;ll see that this makes for much more readable, sentence-like URIs and ARes invocations.</em>)</p>&#x000A;<p>The remote service supports this <span class="caps">URI</span>:</p>&#x000A;<div class="highlight"><pre><span class="c"># Collection custom method</span>&#x000A;GET /people/sorted.xml?by<span class="o">=</span>sort_field&#x000A;</pre>&#x000A;</div>&#x000A;<p>And this is how you invoke it from ARes:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Get all people sorted by first name</span>&#x000A;<span class="n">people</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:sorted</span><span class="p">,</span> <span class="ss">:by</span> <span class="o">=&gt;</span> <span class="s1">&#39;first_name&#39;</span><span class="p">)</span> <span class="c1"># =&gt;</span>&#x000A;   <span class="c1"># GET /people/sorted.xml?by=first_name</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>If your company has hit hard times, and you&#8217;ve got a <code>layoff</code> <span class="caps">REST</span> action supported by the remote service that expects the <code>put</code> method your invocation would look like this:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Fire everybody</span>&#x000A;<span class="no">Person</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="ss">:layoff</span><span class="p">)</span> <span class="c1"># =&gt; PUT /people/layoff.xml</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>I hope by now it&#8217;s clear that you invoke the Http method you want to call the remote service with on your ARes  class, and pass in the name of the custom method as the first argument.  Quite simple.  Custom methods called against the class are known to be collection methods (Since it&#8217;s not referencing an in existence resource) and so the <span class="caps">URI</span> is properly built for the resource collection.</p>&#x000A;<h3>ActiveResource Element Custom Method Calls</h3>&#x000A;<p>If you are manipulating a specific resource, you are invoking an element call.  The only real differentiation in ARes between a collection and element custom method is that with the element call, you&#8217;re operating on an instance of the ARes model.  The URIs that are built are then appropriate for a specific resource.  Onto our example.</p>&#x000A;<p>The remote service supports this <span class="caps">URI</span>:</p>&#x000A;<div class="highlight"><pre><span class="c"># Element custom method to promote a person to specific position</span>&#x000A;PUT /people/1/promoted.xml?position<span class="o">=</span>position_name&#x000A;</pre>&#x000A;</div>&#x000A;<p>And this is how you invoke it from ARes:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Promote our star developer</span>&#x000A;<span class="n">ryan</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>&#x000A;<span class="n">ryan</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="ss">:promoted</span><span class="p">,</span> <span class="ss">:position</span> <span class="o">=&gt;</span> <span class="s1">&#39;Manager&#39;</span><span class="p">)</span>  <span class="c1"># Is this really a promotion?</span>&#x000A;    <span class="c1"># PUT /people/1/promoted.xml?position=Manager</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>The remote service expects the <code>promoted</code> call to be used with the <code>PUT</code> http method, so all you do is invoke <code>put</code> on the instance of <code>Person</code> that you want to promote and the parameters hash to send along with it.  Similarly, for a delete:</p>&#x000A;<p>On the server&#8230;</p>&#x000A;<div class="highlight"><pre>DELETE /people/1/deactivated.xml&#x000A;</pre>&#x000A;</div>&#x000A;<p>And in ARes&#8230;</p>&#x000A;<div class="highlight"><pre><span class="c1"># He turned out to not be so hot</span>&#x000A;<span class="n">ryan</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>&#x000A;<span class="n">ryan</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:deactivated</span><span class="p">)</span>  <span class="c1"># DELETE /people/1/deactivate.xml</span>&#x000A;</pre>&#x000A;</div>&#x000A;<h3>Other Bits</h3>&#x000A;<p>One thing to note is that all custom method calls except <code>get</code> return the remote service response, from which you can check out the response codes and spin your own response handling.  <code>get</code> returns a hash (or array of hashes for multiple resources) representing the <span class="caps">XML</span> data that was returned in the body of the response.  If you want to get actual objects back from a <code>get</code> call, you can use the <code>find</code> method and pass in a symbol:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Get all managers</span>&#x000A;<span class="no">Person</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="ss">:managers</span><span class="p">)</span> <span class="c1">#=&gt; [{:name =&gt; &quot;Ryan&quot;}, {:name =&gt; &quot;David&quot;}]</span>&#x000A;<span class="no">Person</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:managers</span><span class="p">)</span> <span class="c1">#=&gt; &lt;#Person...&gt;&lt;#Person ...&gt;</span>&#x000A;   <span class="c1">#=&gt; GET /people/managers.xml</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>And there you have it, custom methods with ActiveResource.</p>
+              </div>
+              <div id='disqus_thread'>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var disqus_url = "http://edgerails.info/articles/what-s-new-in-edge-rails/2007/04/26/what-s-new-in-edge-rails-activeresource-gets-custom-methods";
+                  //]]>
+                </script>
+                <noscript>
+                  <a href='http://edgerails.disqus.com/?url=ref'>View the discussion thread</a>
+                </noscript>
+                <script src='http://disqus.com/forums/edgerails/embed.js' type='text/javascript'></script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='sidebar'>
+          <div class='contents'>
+            <div class='group' id='ads'>
+              <div class='aside'>
+                <a href='http://brandonmathis.com/' id='brandon_ad'><span style="display: none">Brandon Mathis - Design Enthusiast</span></a>
+                <script type='text/javascript'>
+                  //<![CDATA[
+                    var images = ["brandon_mathis_1.png", "brandon_mathis_2.png", "brandon_mathis_3.png"]
+                    choice = Math.floor((2)*Math.random());      
+                    $("<img src='/images/"+images[choice]+"'/>").prependTo("#brandon_ad");
+                  //]]>
+                </script>
+              </div>
+              <div class='aside'>
+                <div class='small'>
+                  <div id='adzerk'>
+                    <div id='adzerk_ad_div'>
+                      <script src='http://rubyrow.net/Server/RUBY/DAIGLE/VERT' type='text/javascript'></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='related_posts'>
+              <h4>Related articles</h4>
+              <div class='posts'>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/01/12/template-inheritance'>Template Inheritance</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope'>The Skinny on Scopes (Formerly named_scope)</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference'>Notes From The First Rails Online Conference</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources'>Rails 3 Resources</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/announcements/2010/02/08/edgerails.info-is-live'>EdgeRails.Info Is Live</a>
+                </div>
+                <div class='post'>
+                  <a href='/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to'>Set Flash in redirect_to</a>
+                </div>
+              </div>
+            </div>
+            <div class='aside' id='er_comments'>
+              <h4>Recent comments</h4>
+              <div class='feed' feed='http://edgerails.disqus.com/comments.rss' id='comment_feed' template='#comment_feed_template'>
+                Fetching comments...
+              </div>
+              <script id='comment_feed_template' type='text/html'>
+                <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                  <% var entry = feed.entries[i]; %>
+                  <div class="entry">
+                    <%= entry.author %> said: <%= entry.contentSnippet %>
+                    <div class="meta">
+                      <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+            <div class='group'>
+              <h4>Recent Commits</h4>
+              <div class='aside' id='rails_commits'>
+                <h5>Rails commits</h5>
+                <div class='feed' feed='http://github.com/feeds/rails/commits/rails/master' id='rails_commit_feed' template='#rails_commit_feed_template'>
+                  Fetching Rails commits...
+                </div>
+                <script id='rails_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+              <div class='aside' id='er_updates'>
+                <h5>EdgeRails.info updates</h5>
+                <div class='feed' feed='http://github.com/feeds/rwdaigle/commits/edgerails/master' id='er_commit_feed' template='#er_commit_feed_template'>
+                  Fetching EdgeRails.info updates...
+                </div>
+                <script id='er_commit_feed_template' type='text/html'>
+                  <% for ( var i = 0; i < feed.entries.length; i++ ) { %>
+                    <% var entry = feed.entries[i]; %>
+                    <div class="entry">
+                      <%= entry.author %> <a href="<%= entry.link %>"><%= entry.title %></a>
+                    </div>
+                  <% } %>
+                </script>
+              </div>
+            </div>
+            <script type='text/javascript'>
+              //<![CDATA[
+                $(document).ready(function() {
+                  $('#edgerails_tweets').twitterize({ q: 'edgerails OR "edge rails"' });
+                  $('#edgerailsinfo_tweets').twitterize({ from: 'edgerailsinfo' });
+                });
+              //]]>
+            </script>
+            <div class='aside' id='twitter'>
+              <h4>
+                EdgeRails.info tweets
+                <span class='small'>
+                  <a href='http://twitter.com/edgerailsinfo'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerailsinfo_tweets' template='#tweets_template'>Loading tweets about edgerails...</div>
+            </div>
+            <div class='aside' id='twitter'>
+              <h4>
+                Edge rails tweets
+                <span class='small'>
+                  <a href='http://search.twitter.com/search?q=edgerails OR "edge rails"'>&gt;&gt;</a>
+                </span>
+              </h4>
+              <div class='twitter_feed' id='edgerails_tweets' search_url='' template='#tweets_template'>Loading tweets about edgerails...</div>
+              <script id='tweets_template' type='text/html'>
+                <% for ( var i = 0; i < results.length; i++ ) { %>
+                  <% var tweet = results[i]; %>
+                  <div class="entry">
+                    <p>
+                      <a class="user" href="http://twitter.com/<%= tweet.from_user %>">@<%= tweet.from_user %></a>:
+                      <%= tweet.text.replace(/(https?:\/\/[\w\-:;?&=+.%#\/]+)/gi,'<a href="$1">$1</a>').replace(/\n\n/gi,'</p><p>') %>
+                    </p>
+                    <div class="meta">
+                      About
+                      <a href="http://twitter.com/<%= tweet.from_user %>/statuses/<%= tweet.id %>">
+                        <%= prettyDate(tweet.created_at) %>
+                      </a>
+                    </div>
+                  </div>
+                <% } %>
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class='page_width'>
+        Copyright &copy; 2011 - Edge Rails.info
+        <span class='credit'>
+          designed by
+          <a href='http://brandonmathis.com/'>Brandon Mathis</a>
+          powered by
+          <a href='http://octopress.org'>Octopress</a>
+        </span>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+              if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+              }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/edgerails/get_num_replies.js' + query + '"></' + 'script>');
+          })();
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-77805-13']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
+      //]]>
+    </script>
+  </body>
+</html>
