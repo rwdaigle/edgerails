@@ -3,7 +3,7 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-01-12T16:05:59-05:00</updated>
+  <updated>2011-01-14T08:30:22-05:00</updated>
   <id>http://edgerails.info</id>
   <entry>
     <title>Template Inheritance</title>
@@ -57,7 +57,7 @@
       &lt;p&gt;In this scenario any request to the &lt;code&gt;show&lt;/code&gt; action of the &lt;code&gt;posts_controller&lt;/code&gt; will be rendered using the &lt;code&gt;views/assets/show&lt;/code&gt; template. &lt;code&gt;index&lt;/code&gt; requests will be rendered as expected since both controllers have their own index templates.&lt;/p&gt;
       
       &lt;p&gt;&lt;span class=&quot;notice&quot;&gt;
-      Template inheritance does also apply to partial lookups, though it does NOT apply to layouts.
+      Template inheritance also applies to partial lookups and does not touch layout lookup which is already based on heirarchical lookup. (So basically all template types have inherited lookups.)
       &lt;/span&gt;&lt;/p&gt;
       
       &lt;p&gt;While a seemingly small feature this new inherited lookup of templates allows you to reuse whole parts of common view logic without resorting to using an amalgamation of partials to accomplish the same thing.&lt;/p&gt;

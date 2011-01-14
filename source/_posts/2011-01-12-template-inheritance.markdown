@@ -43,7 +43,7 @@ index.html.haml
 In this scenario any request to the `show` action of the `posts_controller` will be rendered using the `views/assets/show` template. `index` requests will be rendered as expected since both controllers have their own index templates.
 
 <span class="notice">
-Template inheritance does also apply to partial lookups, though it does NOT apply to layouts.
+Template inheritance also applies to partial lookups and does not touch layout lookup which is already based on heirarchical lookup. (So basically all template types have inherited lookups.)
 </span>
 
 While a seemingly small feature this new inherited lookup of templates allows you to reuse whole parts of common view logic without resorting to using an amalgamation of partials to accomplish the same thing.
