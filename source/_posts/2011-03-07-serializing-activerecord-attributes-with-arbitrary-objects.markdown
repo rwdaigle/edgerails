@@ -59,19 +59,19 @@ class User < ActiveRecord::Base
     end
   end
 
-  serialize :interests, Base64.new
+  serialize :bank_account_number, Base64.new
 end
 {% endhighlight %}
 </div>
 
-Just like the default YAML serialization, ActiveRecord won't bother you with any serialized data, unless you check the sql query:
+Just like the default YAML serialization, ActiveRecord won't bother you with any serialized data, unless you check the SQL query:
 
 <div class="code_window">
 <em>rails console</em>
 {% highlight ruby %}
 user = User.create!(:back_account_number => "0000001 00000011 0000001 00000011")
 user.reload
-user.interests # => "0000001 00000011 0000001 00000011"
+user.bank_account_number # => "0000001 00000011 0000001 00000011"
 {% endhighlight %}
 </div>
 
