@@ -1,5 +1,5 @@
 ---
-title: "Serializing ActiveRecord attributes with arbitrary objects"
+title: "Serializing ActiveRecord Attributes with Arbitrary Objects"
 author: "Jeff Kreeftmeijer"
 categories:
   - "what-s-new-in-edge-rails"
