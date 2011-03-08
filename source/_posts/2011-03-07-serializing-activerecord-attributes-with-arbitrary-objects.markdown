@@ -18,7 +18,7 @@ As you might know already, ActiveRecord lets you store serialized objects by usi
 {% endhighlight %}
 </div>
 
-Now when you are using the User model you can store user interests by simply throwing them in an array:
+These serializeable attributes can then be set as any Ruby type such as an array:
 
 <div class="code_window">
 <em>rails console</em>
