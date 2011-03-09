@@ -3,8 +3,111 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-03-09T08:50:17-05:00</updated>
+  <updated>2011-03-09T08:59:02-05:00</updated>
   <id>http://edgerails.info</id>
+  <entry>
+    <title>Custom ActiveRecord Attribute Serialization</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization" />
+    <author>
+      <name>Jeff Kreeftmeijer</name>
+    </author>
+    <updated>2011-03-09T00:00:00-05:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization</id>
+    <content type="html">
+      &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;As you might know already, ActiveRecord lets you store serialized objects by using &lt;code&gt;serialize&lt;/code&gt; in your model:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - app/models/user.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;serialize&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:interests&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;These serializeable attributes can then be set as any Ruby type such as an array:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;rails console&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:interests&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;dinosaurs&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;lasers&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reload&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;interests&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; [&quot;dinosaurs&quot;, &quot;lasers&quot;]&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Under the hood, this array is automatically converted to YAML. You won&#8217;t notice this unless you check what&#8217;s being inserted into your database:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;log/development.log&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;updated_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;interests&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;created_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 13:14:05.054192&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;---&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;- dinosaurs&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;- lasers&lt;/span&gt;
+      &lt;span class=&quot;s1&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 13:14:05.054192&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;h3&gt;Using arbitrary objects&lt;/h3&gt;
+      
+      &lt;p&gt;Aaron Patterson recently did some work for Rails 3.1 which allows you to use arbitrary objects to serialize your attributes, all they need to do is respond to &lt;code&gt;load&lt;/code&gt; and &lt;code&gt;dump&lt;/code&gt;. This allows you to specify a custom encoding for your models &lt;code&gt;serialize&lt;/code&gt; fields. For example, here is what a Base64 encoding might look like:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - app/models/user.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base64&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unpack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;m&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+          &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pack&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;m&#39;&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;serialize&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:bank_account_number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Base64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Just like the default YAML serialization, ActiveRecord won&#8217;t bother you with any serialized data, unless you check the SQL query:&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;rails console&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:back_account_number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0000001 00000011 0000001 00000011&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reload&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bank_account_number&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; &quot;0000001 00000011 0000001 00000011&quot;&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;log/development.log&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;updated_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;back_account_number&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;created_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 17:12:01.459862&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;MDAwMDAwMSAwMDAwMDAxMSAwMDAwMDAxIDAwMDAwMDEx\n&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 17:12:01.459862&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Just remember, YAML serialization is still used by default, but creating your own serialization object is as simple as &lt;code&gt;load&lt;/code&gt; and &lt;code&gt;dump&lt;/code&gt;.&lt;/p&gt;
+      
+      &lt;h4&gt;Links:&lt;/h4&gt;
+      
+      &lt;p&gt;&lt;a href=&quot;http://www.youtube.com/watch?v=7cco1jxori8&quot;&gt;Custom serialization in action video&lt;/a&gt;&lt;/p&gt;
+      
+      &lt;p&gt;The Rails commits &lt;a href=&quot;https://github.com/rails/rails/commit/3cc2b77dc1cb4c1e5cfac68c7828e35a27415e0d&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;https://github.com/rails/rails/commit/ebe485fd8ec80a1a9b86516bc6f74bc5bbba3476&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+    </content>
+  </entry>
   <entry>
     <title>Template Inheritance</title>
     <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2011/01/12/template-inheritance" />
@@ -1075,64 +1178,6 @@
       &lt;p&gt;Once that is in place you can run one of two rake tasks that will populate the database with this data:&lt;br /&gt;
       &lt;code&gt;rake db:seed&lt;/code&gt; which will only populate the db with this data and &lt;code&gt;rake db:setup&lt;/code&gt; which will create the db, load the schema and then load the seed data.  This is the task you&#8217;ll want to use if you&#8217;re starting in a fresh environment.&lt;/p&gt;
       &lt;p&gt;So, quit overloading your migrations with seed data and use this new facility.  But, don&#8217;t go overboard and use &lt;code&gt;seeds.rb&lt;/code&gt; for test or staging datasets &#8211; it should only be used for the base data that is necessary for your app to run.&lt;/p&gt;
-    </content>
-  </entry>
-  <entry>
-    <title>Touching</title>
-    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/04/20/what-s-new-in-edge-rails-touching" />
-    <author>
-      <name>Ryan Daigle</name>
-    </author>
-    <updated>2009-04-20T00:00:00-04:00</updated>
-    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/04/20/what-s-new-in-edge-rails-touching</id>
-    <content type="html">
-      
-      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 2.3.3&lt;/span&gt;&lt;p&gt;There are often times when you want an update made to one object to be reflected up the object graph as an update of an associated parent object.  For instance, if a new comment is created on an article, you may very well want to mark the article as being updated.  With the &lt;a href=&quot;http://github.com/rails/rails/commit/abb899c54e8777428b7a607774370ba29a5573bd&quot;&gt;new touch feature&lt;/a&gt; of ActiveRecord, this is a whole lot easier.  Using our previous example, here&#8217;s is how it works:&lt;/p&gt;
-      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-      
-      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-      
-        &lt;span class=&quot;c1&quot;&gt;# Make create/update/deletes of a comment mark its&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;# parent article as updated&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:touch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-      
-      &lt;span class=&quot;c1&quot;&gt;# Adding a new comment marks the article as being updated&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;New comment&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
-      
-      &lt;span class=&quot;c1&quot;&gt;# Same for updates/deletes&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;destroy&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:45:23 -0400 2009&quot;&lt;/span&gt;
-      &lt;/pre&gt;
-      &lt;/div&gt;
-      &lt;p&gt;This is a great way to keep tightly coupled domain models in-sync without resorting to a potential maze of callback logic.&lt;/p&gt;
-      &lt;p&gt;Also, if you have a timestamp field named something other than the standard &lt;code&gt;updated_at&lt;/code&gt; or &lt;code&gt;updated_on&lt;/code&gt; you can explicitly specify that field as the value to the &lt;code&gt;:touch&lt;/code&gt; option and it will get marked instead:&lt;/p&gt;
-      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Article&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:comments&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;validates_presence_of&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_updated_at&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# non-standard&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-      
-      &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:article&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:touch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:last_updated_at&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-      
-      &lt;span class=&quot;c1&quot;&gt;# Adding a new comment marks the article as being updated&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;New comment&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
-      &lt;/pre&gt;
-      &lt;/div&gt;
-      &lt;p&gt;Also, somewhat conveniently, you can invoke &lt;code&gt;touch&lt;/code&gt; directly on a model to update its timestamp outside any association callbacks:&lt;/p&gt;
-      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:42:53 -0400 2009&quot;&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;touch&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;article&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updated_at&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#=&gt; &quot;Mon Apr 20 07:43:27 -0400 2009&quot;&lt;/span&gt;
-      &lt;/pre&gt;
-      &lt;/div&gt;
-      &lt;p&gt;So, touch away (in a non-creepy kind of way)!&lt;/p&gt;
     </content>
   </entry>
 </feed>
