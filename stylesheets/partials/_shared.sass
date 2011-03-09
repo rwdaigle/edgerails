@@ -1,12 +1,13 @@
 .small
   font-size: 85%
   line-height: 1.4em
+
 #collapser
   +sans-font
   display: block
   cursor: pointer
   background: #f8f8f8
-  color: #888
+  color: #888888
   padding: 5px 10px
   font-size: 10px
   line-height: 150%
@@ -16,6 +17,6 @@
   right: 0
 
 #nav .page_width, #footer
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#{lighten(!darkgray, 10)}), to(#{darken(!darkgray, 10)}))
-  background: -moz-linear-gradient(top, #{lighten(!darkgray, 10)}, #{darken(!darkgray, 10)})
-  background-color= !nav_bg
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#{lighten($darkgray, 10)}), to(#{darken($darkgray, 10)}))
+  background: -moz-linear-gradient(top, #{lighten($darkgray, 10)}, #{darken($darkgray, 10)})
+  background-color: $nav_bg

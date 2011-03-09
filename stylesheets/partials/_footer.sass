@@ -18,7 +18,7 @@
   font-size: $base_font_size_small
   color: $footer_color
   background-color: $footer_bg
-  +v-gradient(lighten($darkgray, 5), darken($darkgray, 10), unquote("color-stop(.3, #{$darkgray})"))
+  +v-gradient(lighten($darkgray, 5), darken($darkgray, 10), unquote(unquote("color-stop(.3, #{$darkgray})")))
   border-top: 2px solid #{$header_border_top}
   .page_width
     padding: 12px 15px 10px
