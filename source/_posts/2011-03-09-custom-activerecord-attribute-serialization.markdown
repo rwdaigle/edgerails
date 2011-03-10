@@ -1,6 +1,7 @@
 ---
 title: "Custom ActiveRecord Attribute Serialization"
 author: "Jeff Kreeftmeijer"
+author_url: "http://jeffkreeftmeijer.com"
 categories:
   - "what-s-new-in-edge-rails"
 ---
