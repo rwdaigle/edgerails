@@ -82,3 +82,5 @@ Read Emilio's [blog post](http://miloops.com/post/3391477665/identity-map-and-ac
 Some of the [source code](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/identity_map.rb)
 
 The original [pull request](https://github.com/rails/rails/pull/76)
+
+And the [Identity Map pattern](http://www.martinfowler.com/eaaCatalog/identityMap.html)
