@@ -1,5 +1,5 @@
 ---
-title: "Identity Map"
+title: "ActiveRecord Identity Map"
 author: "Josh Kalderimis"
 categories:
   - "what-s-new-in-edge-rails"
@@ -12,8 +12,8 @@ If you have been using rails for a while now you may be familiar with Active Rec
 <div class="code_window">
 <em>rails console</em>
 {% highlight ruby %}
-  user1 = User.first # => #<User id: 1, name: "Josh">
-  user2 = User.first # => #<User id: 1, name: "Josh">
+  user1 = User.find(1) # => #<User id: 1, name: "Josh">
+  user2 = User.find(1) # => #<User id: 1, name: "Josh">
 
   user1 == user2 # => true
 
@@ -24,8 +24,8 @@ If you have been using rails for a while now you may be familiar with Active Rec
 <div class="code_window">
 <em>log/development.log</em>
 {% highlight sql %}
-  User Load (2.2ms)  SELECT "users".* FROM "users" LIMIT 1
-  CACHE (0.0ms)  SELECT "users".* FROM "users" LIMIT 1
+  User Load (0.2ms)  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 1]]
+  CACHE (0.0ms)  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 1]]
 {% endhighlight %}
 </div>
 
@@ -34,8 +34,8 @@ Thanks to the fantastic work of [Emilio Tagua](http://twitter.com/miloops) durin
 <div class="code_window">
 <em>rails console</em>
 {% highlight ruby %}
-  user1 = User.first # => #<User id: 1, name: "Josh">
-  user2 = User.first # => #<User id: 1, name: "Josh">
+  user1 = User.find(1) # => #<User id: 1, name: "Josh">
+  user2 = User.find(1) # => #<User id: 1, name: "Josh">
 
   user1 == user2 # => true
 
@@ -47,7 +47,7 @@ Thanks to the fantastic work of [Emilio Tagua](http://twitter.com/miloops) durin
 <em>log/development.log</em>
 {% highlight sql %}
   User Load (2.2ms)  SELECT "users".* FROM "users" LIMIT 1
-  CACHE (0.0ms)  SELECT "users".* FROM "users" LIMIT 1
+  IM User with ID = 1 loaded
 {% endhighlight %}
 </div>
 
