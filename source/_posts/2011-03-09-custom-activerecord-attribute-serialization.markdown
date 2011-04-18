@@ -1,4 +1,4 @@
----
+bank_account_number---
 title: "Custom ActiveRecord Attribute Serialization"
 author: "Jeff Kreeftmeijer"
 categories:
@@ -69,7 +69,7 @@ Just like the default YAML serialization, ActiveRecord won't bother you with any
 <div class="code_window">
 <em>rails console</em>
 {% highlight ruby %}
-user = User.create!(:back_account_number => "0000001 00000011 0000001 00000011")
+user = User.create!(:bank_account_number => "0000001 00000011 0000001 00000011")
 user.reload
 user.bank_account_number # => "0000001 00000011 0000001 00000011"
 {% endhighlight %}
@@ -78,7 +78,7 @@ user.bank_account_number # => "0000001 00000011 0000001 00000011"
 <div class="code_window">
 <em>log/development.log</em>
 {% highlight sql %}
-INSERT INTO "users" ("updated_at", "back_account_number", "created_at") VALUES ('2011-03-05 17:12:01.459862', 'MDAwMDAwMSAwMDAwMDAxMSAwMDAwMDAxIDAwMDAwMDEx\n', '2011-03-05 17:12:01.459862')
+INSERT INTO "users" ("updated_at", "bank_account_number", "created_at") VALUES ('2011-03-05 17:12:01.459862', 'MDAwMDAwMSAwMDAwMDAxMSAwMDAwMDAxIDAwMDAwMDEx\n', '2011-03-05 17:12:01.459862')
 {% endhighlight %}
 </div>
 
