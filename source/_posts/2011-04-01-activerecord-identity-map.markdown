@@ -47,7 +47,7 @@ Thanks to the fantastic work of [Emilio Tagua](http://twitter.com/miloops) durin
 <em>log/development.log</em>
 {% highlight sql %}
   User Load (2.2ms)  SELECT "users".* FROM "users" LIMIT 1
-  IM User with ID = 1 loaded
+  User with ID = 1 loaded from Identity Map
 {% endhighlight %}
 </div>
 
@@ -63,7 +63,7 @@ Rails wraps a request with the identity map and flushes it at the end of the req
 {% endhighlight %}
 </div>
 
-Although rails 3.1 will come with the identity map built in and turned on out of the box, you can try it out for yourself by living on the edge and turning it on in application.rb,
+Although Rails 3.1 will come with the identity map built-in and turned on out of the box, you can try it out for yourself by living on the edge and changing the following in application.rb :
 
 <div class="code_window">
 <em>Ruby - config/applicaton.rb</em>
@@ -72,7 +72,7 @@ Although rails 3.1 will come with the identity map built in and turned on out of
 {% endhighlight %}
 </div>
 
-or cloning [this test app](http://github.com/miloops/identity-map-example) which is all ready to use.
+And while the query cache is all about speed improvements, the identity map is primarily focused on consistency, thus they go hand in hand.
 
 
 ####Links:
