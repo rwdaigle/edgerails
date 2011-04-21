@@ -9,6 +9,10 @@ h2. How to Make an Article Contribution
 h3. Install Source & Jekyll
 
 * Checkout the source: git clone git@github.com:rwdaigle/edgerails.git
+* Install python & pygments syntax highlighter:
+** brew install python pip
+** pip install pygments
+** cd /usr/local/bin/ && ln -s ../Cellar/python/2.7/bin/pygmentize
 * Install dependencies: bundle install
 * Make sure you can generate the site: bundle exec rake generate
 
