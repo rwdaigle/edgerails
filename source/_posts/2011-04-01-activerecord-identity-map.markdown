@@ -1,6 +1,7 @@
 ---
 title: "ActiveRecord Identity Map"
 author: "Josh Kalderimis"
+author_url: "http://blog.cookiestack.com"
 categories:
   - "what-s-new-in-edge-rails"
 ---
@@ -75,12 +76,13 @@ Although Rails 3.1 will come with the identity map built-in and turned on out of
 And while the query cache is all about speed improvements, the identity map is primarily focused on consistency, thus they go hand in hand.
 
 
-####Links:
+<div class="notice resources">
+  <p>The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:</p>
 
-Read Emilio's [blog post](http://miloops.com/post/3391477665/identity-map-and-active-record)
-
-Some of the [source code](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/identity_map.rb)
-
-The original [pull request](https://github.com/rails/rails/pull/76)
-
-And the [Identity Map pattern](http://www.martinfowler.com/eaaCatalog/identityMap.html)
+  <ul>
+    <li><a href="http://miloops.com/post/3391477665/identity-map-and-active-record">Emilio Tagua's blog post</a></li>
+    <li><a href="https://github.com/rails/rails/blob/master/activerecord/lib/active_record/identity_map.rb">Some of the Identity Map code</a></li>
+    <li><a href="https://github.com/rails/rails/pull/76">The original pull request</a></li>
+    <li><a href="http://www.martinfowler.com/eaaCatalog/identityMap.html">And the Identity Map pattern</a></li>
+  </ul>
+</div>
