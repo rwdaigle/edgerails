@@ -1,4 +1,5 @@
 # gem 'activesupport', "~> 2.3"
+require 'thread'
 require 'active_support'
 require 'source/_helpers'
 

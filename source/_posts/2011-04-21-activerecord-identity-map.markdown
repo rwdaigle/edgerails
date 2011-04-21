@@ -8,7 +8,7 @@ categories:
 
 <span class="version">**Rails** 3.1</span>
 
-If you have been using rails for a while now you may be familiar with Active Records query cache. The query cache is a powerful part of Active Record which reduces unnecessary SQL calls and provides general speed improvements, especially when dealing with associations. The problem with the query cache though is when retrieving an identical record from the db, instead of the same object being returned two objects will be created. Eg.
+If you've been using rails for a while now you may be familiar with Active Record's query cache. The query cache is a powerful part of Active Record which reduces unnecessary SQL calls and provides general speed improvements, especially when dealing with associations. The problem with the query cache, however, is when retrieving two identical records from the database two in-memory objects will still be created.
 
 <div class="code_window">
 <em>rails console</em>
@@ -16,9 +16,11 @@ If you have been using rails for a while now you may be familiar with Active Rec
   user1 = User.find(1) # => #<User id: 1, name: "Josh">
   user2 = User.find(1) # => #<User id: 1, name: "Josh">
 
-  user1 == user2 # => true
+  user1 == user2 # => true, b/c AR::Base recognizes that
+                 # they have the same primary key
 
-  user1.object_id == user2.object_id # => false
+  user1.object_id == user2.object_id # => false, b/c these are two
+                                     # different in-memory objects
 {% endhighlight %}
 </div>
 
@@ -30,7 +32,7 @@ If you have been using rails for a while now you may be familiar with Active Rec
 {% endhighlight %}
 </div>
 
-Thanks to the fantastic work of [Emilio Tagua](http://twitter.com/miloops) during the Ruby Summer of Code 2010, Active Record in 3.1 will gain an identity map. What's an identity map you ask? An identity map keeps a collection of previously instantiated records and returns the object associated with this record if a request is made for it again.
+Thanks to the fantastic work of [Emilio Tagua](http://twitter.com/miloops) during the Ruby Summer of Code 2010, Active Record in 3.1 will gain an identity map. What's an identity map you ask? An identity map keeps a collection of previously instantiated records and returns the object associated with the record if a request is made for it again.
 
 <div class="code_window">
 <em>rails console</em>
@@ -40,7 +42,8 @@ Thanks to the fantastic work of [Emilio Tagua](http://twitter.com/miloops) durin
 
   user1 == user2 # => true
 
-  user1.object_id == user2.object_id # => true
+  user1.object_id == user2.object_id # => true, b/c these really are
+                                     # the same in-memory objects
 {% endhighlight %}
 </div>
 
@@ -52,7 +55,17 @@ Thanks to the fantastic work of [Emilio Tagua](http://twitter.com/miloops) durin
 {% endhighlight %}
 </div>
 
-Rails wraps a request with the identity map and flushes it at the end of the request, and don't worry, it's thread safe. You can also use an identity map in the console, background worker, or manually within a request (if it's turned off by default).
+<div class="notice">
+<p>
+Why is having the same in-memory object returned important? Because it
+ensures that there is only one copy of a model instance floating around
+your system at any one time. Without this assurance, modifications made to a model
+object in one context won't be reflected if a copy exists in another
+context which can produce hard to trace bugs and inconsistencies.
+</p>
+</div>
+
+The identity map is created on a per-request basis and is flushed at the completion of the request (as can be expected, the implementation is thread-safe). You can also use an identity map in the console, background worker, or manually within a request (if it's turned off by default).
 
 <div class="code_window">
 <em>Ruby - app/models/user.rb</em>
@@ -67,14 +80,13 @@ Rails wraps a request with the identity map and flushes it at the end of the req
 Although Rails 3.1 will come with the identity map built-in and turned on out of the box, you can try it out for yourself by living on the edge and changing the following in application.rb :
 
 <div class="code_window">
-<em>Ruby - config/applicaton.rb</em>
+<em>Ruby - config/application.rb</em>
 {% highlight ruby %}
   config.active_record.identity_map = true
 {% endhighlight %}
 </div>
 
 And while the query cache is all about speed improvements, the identity map is primarily focused on consistency, thus they go hand in hand.
-
 
 <div class="notice resources">
   <p>The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:</p>

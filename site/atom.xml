@@ -3,8 +3,124 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-03-09T08:59:02-05:00</updated>
+  <updated>2011-04-21T19:55:08-04:00</updated>
   <id>http://edgerails.info</id>
+  <entry>
+    <title>ActiveRecord Identity Map</title>
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map" />
+    <author>
+      <name>Josh Kalderimis</name>
+    </author>
+    <updated>2011-04-01T00:00:00-04:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map</id>
+    <content type="html">
+      &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
+      
+      &lt;p&gt;If you&#8217;ve been using rails for a while now you may be familiar with Active Record&#8217;s query cache. The query cache is a powerful part of Active Record which reduces unnecessary SQL calls and provides general speed improvements, especially when dealing with associations. The problem with the query cache, however, is when retrieving two identical records from the database two in-memory objects will still be created.&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;rails console&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;n&quot;&gt;user1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; #&lt;User id: 1, name: &quot;Josh&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;user2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; #&lt;User id: 1, name: &quot;Josh&quot;&gt;&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;user1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user2&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; true, b/c AR::Base recognizes that&lt;/span&gt;
+                       &lt;span class=&quot;c1&quot;&gt;# they have the same primary key&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;user1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_id&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; false, b/c these are two&lt;/span&gt;
+                                           &lt;span class=&quot;c1&quot;&gt;# different in-memory objects&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;log/development.log&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;k&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Load&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;id&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;CACHE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;id&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Thanks to the fantastic work of &lt;a href=&quot;http://twitter.com/miloops&quot;&gt;Emilio Tagua&lt;/a&gt; during the Ruby Summer of Code 2010, Active Record in 3.1 will gain an identity map. What&#8217;s an identity map you ask? An identity map keeps a collection of previously instantiated records and returns the object associated with the record if a request is made for it again.&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;rails console&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;n&quot;&gt;user1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; #&lt;User id: 1, name: &quot;Josh&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;user2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; #&lt;User id: 1, name: &quot;Josh&quot;&gt;&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;user1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user2&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; true&lt;/span&gt;
+      
+        &lt;span class=&quot;n&quot;&gt;user1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_id&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; true, b/c these really are&lt;/span&gt;
+                                           &lt;span class=&quot;c1&quot;&gt;# the same in-memory objects&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;log/development.log&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;k&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Load&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loaded&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Identity&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Map&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;notice&quot;&gt;
+      &lt;p&gt;
+      Why is having the same in-memory object returned important? Because it
+      ensures that there is only one copy of a model instance floating around
+      your system at any one time. Without this assurance, modifications made to a model
+      object in one context won&#8217;t be reflected if a copy exists in another
+      context which can produce hard to trace bugs and inconsistencies.
+      &lt;/p&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;The identity map is created on a per-request basis and is flushed at the completion of the request (as can be expected, the implementation is thread-safe). You can also use an identity map in the console, background worker, or manually within a request (if it&#8217;s turned off by default).&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - app/models/user.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;IdentityMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;do_that_heavy_thing_you_do!&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;Although Rails 3.1 will come with the identity map built-in and turned on out of the box, you can try it out for yourself by living on the edge and changing the following in application.rb :&lt;/p&gt;
+      
+      &lt;div class=&quot;code_window&quot;&gt;
+      &lt;em&gt;Ruby - config/application.rb&lt;/em&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;active_record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;identity_map&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      &lt;p&gt;And while the query cache is all about speed improvements, the identity map is primarily focused on consistency, thus they go hand in hand.&lt;/p&gt;
+      
+      &lt;div class=&quot;notice resources&quot;&gt;
+        &lt;p&gt;The following resources were instrumental in the research, creation and construction of this article.  They may also provide a different angle should you be left wanting after reading this post:&lt;/p&gt;
+      
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;http://miloops.com/post/3391477665/identity-map-and-active-record&quot;&gt;Emilio Tagua&#8217;s blog post&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/rails/rails/blob/master/activerecord/lib/active_record/identity_map.rb&quot;&gt;Some of the Identity Map code&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;https://github.com/rails/rails/pull/76&quot;&gt;The original pull request&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;http://www.martinfowler.com/eaaCatalog/identityMap.html&quot;&gt;And the Identity Map pattern&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    </content>
+  </entry>
   <entry>
     <title>Custom ActiveRecord Attribute Serialization</title>
     <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization" />
@@ -1154,30 +1270,6 @@
       &lt;/pre&gt;
       &lt;/div&gt;
       &lt;p&gt;So all in all this is a small, but meaningful, step towards robust controller-level &lt;span class=&quot;caps&quot;&gt;REST&lt;/span&gt; support.  I should point out that the contributor of this patch is &lt;a href=&quot;http://blog.plataformatec.com.br/&quot;&gt;José Valim&lt;/a&gt; who has authored the very robust &lt;a href=&quot;http://github.com/josevalim/inherited_resources/tree/master&quot;&gt;inherited_resources&lt;/a&gt; framework that already has support for &lt;code&gt;respond_with&lt;/code&gt;-like functionality and many more goodies.  If you&#8217;re on the search for a solid RESTful controller framework to accompany Rails&#8217; native RESTful routing support I would suggest you take a look at his fine work.&lt;/p&gt;
-    </content>
-  </entry>
-  <entry>
-    <title>Database Seeding</title>
-    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2009/05/13/what-s-new-in-edge-rails-database-seeding" />
-    <author>
-      <name>Ryan Daigle</name>
-    </author>
-    <updated>2009-05-13T00:00:00-04:00</updated>
-    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/05/13/what-s-new-in-edge-rails-database-seeding</id>
-    <content type="html">
-      
-      &lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 2.3&lt;/span&gt;&lt;p&gt;I&#8217;m not sure if this was ever stated explicitly has a preferred practice or not, but for the longest time many of us have recognized that using migrations as a way to populate the database with a base configuration dataset is wrong.  Migrations are for manipulating the structure of your database, not for the data within it and certainly not for simple population tasks.&lt;/p&gt;
-      &lt;p&gt;Well, this practice now has a formal support in Rails with the addition of the &lt;a href=&quot;http://github.com/rails/rails/commit/4932f7b38f72104819022abca0c952ba6f9888cb&quot;&gt;database seeding&lt;/a&gt; feature.  Quite simply this is a rake task that sucks in the data specified in a &lt;code&gt;db/seeds.rb&lt;/code&gt;.  Here are the details:&lt;/p&gt;
-      &lt;h3&gt;Specify Seed Data&lt;/h3&gt;
-      &lt;p&gt;Add or open the &lt;code&gt;db/seeds.rb&lt;/code&gt; file and put in model creation statements (or any ruby code) for the data you need to be present in order for your application to run.  I.e. configuration and default data (and nothing more):&lt;/p&gt;
-      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:admin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:login&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:role&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_by_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-      &lt;/pre&gt;
-      &lt;/div&gt;
-      &lt;h3&gt;Load the Data&lt;/h3&gt;
-      &lt;p&gt;Once that is in place you can run one of two rake tasks that will populate the database with this data:&lt;br /&gt;
-      &lt;code&gt;rake db:seed&lt;/code&gt; which will only populate the db with this data and &lt;code&gt;rake db:setup&lt;/code&gt; which will create the db, load the schema and then load the seed data.  This is the task you&#8217;ll want to use if you&#8217;re starting in a fresh environment.&lt;/p&gt;
-      &lt;p&gt;So, quit overloading your migrations with seed data and use this new facility.  But, don&#8217;t go overboard and use &lt;code&gt;seeds.rb&lt;/code&gt; for test or staging datasets &#8211; it should only be used for the base data that is necessary for your app to run.&lt;/p&gt;
     </content>
   </entry>
 </feed>
