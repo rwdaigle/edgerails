@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>No More Formatted Routes</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: November 27th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: November 27th, 2008
                 </div>
                 &#x000A;<span class="version"><strong>Rails</strong> 2.3 or 3.0</span><p>Parallel to the <a href="/articles/2008/11/13/what-s-new-in-edge-rails-except-and-only-routing-options">addition of :except and :only</a> options to Rails&#8217; routing comes the <a href="http://github.com/rails/rails/commit/fef6c32afe2276dffa0347e25808a86e7a101af1">removal of all those <code>formatted_xxx</code> named routes</a>.  Turns out these routes <a href="http://blog.hungrymachine.com/2008/11/11/how-to-save-100m-of-ram-per-mongrel-part-2">ate up a lot of memory</a> and served minimal purpose.</p>&#x000A;<p>So with this <code>routes.rb</code> definition:</p>&#x000A;<div class="highlight"><pre><span class="no">ActionController</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">Routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span> <span class="o">|</span><span class="n">map</span><span class="o">|</span>&#x000A;  <span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>you&#8217;ll no longer have any of the <code>formatted_xxx</code> url helpers available.  However, you will be able to get the same functionality by passing in a <code>:format</code> option to the base view helper methods:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Old =&gt; New</span>&#x000A;<span class="n">formatted_article_path</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="ss">:xml</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">article_path</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="ss">:format</span> <span class="o">=&gt;</span> <span class="ss">:xml</span><span class="p">)</span>&#x000A;<span class="n">formatted_new_article_path</span><span class="p">(</span><span class="ss">:json</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">new_article_path</span><span class="p">(</span><span class="ss">:format</span> <span class="o">=&gt;</span> <span class="ss">:json</span><span class="p">)</span>&#x000A;<span class="c1"># etc...</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>A minimal change that will have a big impact on the memory consumption of each of your Rails processes &#8211; especially if you&#8217;ve got a complex app with lots of routes.</p>&#x000A;<p>If you&#8217;re on Edge Rails you&#8217;re going to start seeing deprecation warnings where you reference these formatted url helpers, so you&#8217;ve got some warning before you have to make the switch.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

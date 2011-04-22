@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Nested Resource RESTful URL Builder</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: June 6th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: June 6th, 2007
                 </div>
                 &#x000A;<p><em>Don&#8217;t go too overboard with this stuff &#8211; it&#8217;s meant primarily for internal (to Rails) usage&#8230;</em></p>&#x000A;<p>The march to RESTful nirvana continues with a drop dead easy way to <a href="http://dev.rubyonrails.org/changeset/6951">build nested resource URLs</a>.  Let&#8217;s review.</p>&#x000A;<p>Assuming the following routing configuration:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:categories</span> <span class="k">do</span> <span class="o">|</span><span class="n">categories</span><span class="o">|</span>&#x000A;  <span class="n">categories</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:articles</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This automatically builds a <code>category_url(category)</code> and <code>category_article_url(category, article)</code> helper (among others) that will build the appropriate URLs:</p>&#x000A;<div class="highlight"><pre><span class="n">category_url</span><span class="p">(</span><span class="vi">@category</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1</span>&#x000A;<span class="n">category_article_url</span><span class="p">(</span><span class="vi">@category</span><span class="p">,</span> <span class="vi">@article</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1/article/1</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>All right, that&#8217;s great.  But why should we have to spell out these lengthy helper method calls when it&#8217;s clear that the first argument is a <code>Category</code> and the second is an <code>Article</code>?  Can&#8217;t the appropriate helper method be implied by the types of these arguments?  Yes &#8211; they can, and now they are with the new <code>url_for</code> update.  Now you can pass in a collection of models to <code>url_for</code>, in order of nesting (root to child), and get the correct <span class="caps">URL</span>:</p>&#x000A;<div class="highlight"><pre><span class="n">url_for</span><span class="p">(</span><span class="vi">@category</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1</span>&#x000A;<span class="n">url_for</span><span class="p">(</span><span class="o">[</span><span class="vi">@category</span><span class="p">,</span> <span class="vi">@article</span><span class="o">]</span><span class="p">)</span> <span class="c1">#=&gt; /categories/1/article/1</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>You can always fall back to the named routes provided for you by RESTful routing, but you now have an option to build URLs with an implied resource nesting.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

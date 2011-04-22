@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Deprecated Finders</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: August 17th, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: August 17th, 2006
                 </div>
                 &#x000A;<p>Those finder methods that have been marked for deprecation have now been <a href="http://dev.rubyonrails.org/changeset/4682">formally deprecated</a> using the nifty <a href="/articles/2006/07/28/whats-new-in-edge-rails-explicit-deprecation">deprecation feature</a> recently added to edge Rails.  So, if you currently use any one of:</p>&#x000A;<ul>&#x000A;	<li><code>find_on_conditions</code></li>&#x000A;	<li><code>find_first</code></li>&#x000A;	<li><code>find_all</code></li>&#x000A;</ul>&#x000A;<p>be prepared to get a little slap on the hand in the form of an error message: <code>Your application calls ActiveRecord::Base##find_XXX, which is now deprecated. Please see the API documents at http://api.rubyonrails.org/ for more information.</code></p>&#x000A;<p>Shame on you.</p>&#x000A;<p><em>On a related note &#8211; using <a href="http://api.rubyonrails.com/classes/ActiveRecord/Associations/ClassMethods.html#M000533"><code>push_with_attributes</code></a> is also <a href="http://dev.rubyonrails.org/changeset/4680">deprecated</a>.  Use <a href="http://api.rubyonrails.com/classes/ActiveRecord/Associations/ClassMethods.html#M000530"><code>has_many :through</code></a> instead.</em></p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

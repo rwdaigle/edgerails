@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Build URLs in Your ActionMailers (and other non-controllers)</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: August 23rd, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: August 23rd, 2006
                 </div>
                 &#x000A;<p>For a long time there was no <em>good</em> way to generate a <span class="caps">URL</span> within an ActionMailer.  If you wanted to send a registration email when a user signs up for your application you would have had to <em>pass in</em> the url to be included in the email:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class MyController &lt; ApplicationController&#x000A;  def register&#x000A;    # .. registration logic ...&#x000A;    UserMailer.deliver_registration(user, home_url)&#x000A;  end&#x000A;end&#x000A;&#x000A;class UserMailer &lt; ActionMailer::Base&#x000A;  def registration(user, url)&#x000A;    @body = { 'user' =&gt; user, 'home' =&gt; url }&#x000A;  end&#x000A;end&#x000A;</code>&#x000A;</pre>&#x000A;<p>This is hardly a hack, but it&#8217;s not as nice as it could be.  It would be nice if the mailer itself could generate the url &#8211; or perhaps if the email template itself could generate the url?  That day has come with the new <a href="http://dev.rubyonrails.org/changeset/4814">ActionController::UrlWriter</a> module.</p>&#x000A;<p>Just include <code>ActionController::UrlWriter</code> in your mailer and you get access to all the familiar <code>url_for</code> and even the named url methods (<code>home_url</code> in this example):</p>&#x000A;<pre>&#x000A;<code>&#x000A;class UserMailer &lt; ActionMailer::Base&#x000A;  include ActionController::UrlWriter&#x000A;  def registration(user)&#x000A;    @body = { 'user' =&gt; user, 'home' =&gt; home_url }&#x000A;  end&#x000A;end&#x000A;</code>&#x000A;</pre>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

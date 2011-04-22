@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>DB Console</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: May 13th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: May 13th, 2008
                 </div>
                 &#x000A;<p>For those of you that haven&#8217;t committed the database username and passwords for your many apps to memory yet, there comes some help from edge Rails &#8211; the addition of a <code>dbconsole</code> script that will automatically drop you into a database prompt using the info in <code>config/database.yml</code> configuration.</p>&#x000A;<p>In an edge rails app that has a mysql db config:</p>&#x000A;<p><em>Update:</em> Because of the insecure nature of passing in the password on the command line on shared hosts &#8211; you now need to use the <code>-p</code> or <code>--include-password</code> option to force the password to be read from your config file.</p>&#x000A;<p><code>&lt;pre&gt;&#x000A;script/dbconsole -p&#x000A;...&#x000A;mysql&gt;&#x000A;&lt;/pre&gt;</code></p>&#x000A;<p>And there I am, logged into the dev database in the mysql command prompt.  No scrounging around for that app-specific username or db name or <code>cat</code> ing the <code>config/database.yml</code> file anymore.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

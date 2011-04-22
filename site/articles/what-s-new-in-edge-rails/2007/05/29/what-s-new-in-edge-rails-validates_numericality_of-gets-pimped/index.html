@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>validates_numericality_of Gets Pimped</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: May 29th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: May 29th, 2007
                 </div>
                 &#x000A;<p><code>validates_numericality_of</code> <a href="http://dev.rubyonrails.org/changeset/6850">just got a shot of mojo</a> this weekend in the form of some highly useful options.</p>&#x000A;<p>Prior to this recent change, your numerical validation options were limited to <code>only_integer</code> and <code>allow_nil</code>.  Any desires to do anything slightly more complex meant dropping down into your own validation routine.  Now, some of the more common validations one might want on a number parameter have been option-ized, including:</p>&#x000A;<ul>&#x000A;	<li><code>greater_than</code></li>&#x000A;	<li><code>greater_than_or_equal_to</code></li>&#x000A;	<li><code>equal_to</code></li>&#x000A;	<li><code>less_than</code></li>&#x000A;	<li><code>less_than_or_equal_to</code></li>&#x000A;	<li><code>odd</code></li>&#x000A;	<li><code>even</code></li>&#x000A;</ul>&#x000A;<p>Which allows us to do things such as:</p>&#x000A;<div class="highlight"><pre><span class="n">validates_numericality_of</span> <span class="ss">:salary</span><span class="p">,</span> <span class="ss">:greater_than_or_equal_to</span> <span class="o">=&gt;</span> <span class="mi">40000</span>&#x000A;<span class="n">validates_numericality_of</span> <span class="ss">:ten</span><span class="p">,</span> <span class="ss">:equal_to</span> <span class="o">=&gt;</span> <span class="mi">10</span>&#x000A;<span class="n">validates_numericality_of</span> <span class="ss">:bonus</span><span class="p">,</span> <span class="ss">:less_than</span> <span class="o">=&gt;</span> <span class="mi">5000</span>&#x000A;<span class="n">validates_numericality_of</span> <span class="ss">:prime</span><span class="p">,</span> <span class="ss">:odd</span> <span class="o">=&gt;</span> <span class="kp">true</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>So put away that crusty custom <code>validate</code> and plug into these fresh validation options.  Guaranteed to make your life easier.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

@@ -11,7 +11,7 @@
                 - if page.respond_to? :author_url
                   %a{:href => page.author_url}= page.author
                 - else
-                  #{page.author}
+                  %a{:href => "http://ryandaigle.com"}= page.author
                 | posted: #{page.date.strftime("%B #{page.date.day.ordinalize}, %Y")}
             = preserve rp(content)
           #disqus_thread= include "disqus_thread.haml"

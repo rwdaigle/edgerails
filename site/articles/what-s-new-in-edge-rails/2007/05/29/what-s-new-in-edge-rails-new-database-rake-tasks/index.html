@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>New Database Rake Tasks</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: May 29th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: May 29th, 2007
                 </div>
                 &#x000A;<p>Not two days after I just implemented these tasks myself for a client project <a href="http://dev.rubyonrails.org/changeset/6849">comes the addition of some useful rake tasks</a> that handle the provisioning of your database.</p>&#x000A;<p>Want to create your database without having to drop into that pesky mysql command prompt?  Then I believe <code>rake db:create</code> is your man.  Don&#8217;t need that database anymore?  Give <code>rake db:drop</code> a try.  Want to tear down your database and re-create it, migrations and all?  <code>rake db:reset</code> is your jack-of-all-trades then.</p>&#x000A;<p>And all the options you&#8217;re used to when raking the database still apply:</p>&#x000A;<div class="highlight"><pre><span class="c"># Drop the test database</span>&#x000A;<span class="nv">RAILS_ENV</span><span class="o">=</span><span class="nb">test </span>rake db:drop&#x000A;&#x000A;<span class="c"># Recreate the staging database, but only migrate it to version 3</span>&#x000A;<span class="nv">RAILS_ENV</span><span class="o">=</span>staging rake db:reset <span class="nv">VERSION</span><span class="o">=</span>3&#x000A;</pre>&#x000A;</div>&#x000A;<p>If you haven&#8217;t made <code>rake</code> a part of your life yet, it&#8217;s time you do so.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

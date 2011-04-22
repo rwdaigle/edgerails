@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>RESTful Routes Get a New Custom Delimiter</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: March 29th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: March 29th, 2007
                 </div>
                 &#x000A;<p>No really, I couldn&#8217;t think of any better way to title this post, and I apologize for that.  However, if you actually clicked on this post from your feed reader, you are definitely a geek, and I like that in you.</p>&#x000A;<p>So what&#8217;s <a href="http://dev.rubyonrails.org/changeset/6485">this about</a>?  It&#8217;s really a tiny little change in RESTful routing, but it negates a lot of material out there, <a href="/articles/2006/8/1/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it">including</a> my <a href="/articles/2007/3/14/rest-activeresource">own</a>.  Whenever you have a custom action route defined in Rails:</p>&#x000A;<div class="highlight"><pre><span class="n">map</span><span class="o">.</span><span class="n">resources</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:collection</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:filter</span> <span class="o">=&gt;</span> <span class="ss">:get</span> <span class="p">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>the resulting route no longer uses a semi-colon (<code>;</code>) to delimit the custom action:</p>&#x000A;<div class="highlight"><pre>GET /users;filter&#x000A;</pre>&#x000A;</div>&#x000A;<p>and instead will use your standard forward-slash (<code>/</code>):</p>&#x000A;<div class="highlight"><pre>GET /users/filter&#x000A;</pre>&#x000A;</div>&#x000A;<p>Not a big change at all, but it has big repercussions if you&#8217;ve got remote clients accessing these URIs already.  (And <a href="http://contactsapi.com">we all do now-a-days, right?</a>).</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

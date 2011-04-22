@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>A Better Way to Access Your Helpers</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: February 26th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: February 26th, 2007
                 </div>
                 &#x000A;<p>If you&#8217;ve any sort of organizational sense to you at all chances are you&#8217;ve got quite a few helpers tucked in your <code>app/helpers</code> directory (not the stock ones that go one-to-one with your controllers, but other custom ones you&#8217;ve written to handle various other common tasks).  If so, your application controller probably also has quite a few <code>helper</code> statements to make them available:</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="c1"># Our many helpers that need to be available throughout the app</span>&#x000A;  <span class="o">[</span><span class="ss">:formatting</span><span class="p">,</span> <span class="ss">:highlighting</span><span class="p">,</span> <span class="ss">:i18n</span><span class="o">].</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">h</span><span class="o">|</span> <span class="n">helper</span> <span class="n">h</span> <span class="p">}</span>&#x000A;&#x000A;  <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>We&#8217;ve now got a <a href="http://dev.rubyonrails.org/changeset/6221">convenient way to bulk include our helpers</a>.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>&#x000A;&#x000A;  <span class="c1"># Make all helpers in app/helpers/**/ available</span>&#x000A;  <span class="n">helper</span> <span class="ss">:all</span>&#x000A;&#x000A;  <span class="o">.</span><span class="n">.</span><span class="o">.</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p><em>Update: Feb. 26th: I previously thought you <strong>had</strong> to have helper sub-directories to get them properly loaded, but <span class="caps">DHH</span> has corrected me.  Any and all helpers in your helper directories will get pulled in</em></p>&#x000A;<p>And to top things off this is now the <a href="http://dev.rubyonrails.org/changeset/6222">default behavior</a> &#8211; meaning that all helpers in your <code>helpers</code> directory are automatically included for you.  (Hey &#8211; you wanted opinionated software)</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

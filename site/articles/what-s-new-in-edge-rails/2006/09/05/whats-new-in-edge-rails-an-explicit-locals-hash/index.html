@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>An Explicit Locals Hash</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: September 5th, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: September 5th, 2006
                 </div>
                 &#x000A;<p><em>In what is amounting to my most useless post yet &#8211; this feature has been reverted according to <a href="http://i.nfectio.us/">Bob</a> .</em></p>&#x000A;<p>With <a href="http://manuals.rubyonrails.com/read/book/14">Rails components</a> being <a href="http://glu.ttono.us/articles/2006/08/30/guide-things-you-shouldnt-be-doing-in-rails">shunned</a> throughout the Rails world we are often left to use a set of view partials to abstract out commonly used display functionality.  Sometimes this necessitates the use of variables (called &#8216;locals&#8217;) that may or may not be relevant in all view scenarios.  For instance, if I have a partial that I use to display form text fields there may be a <code>size</code> parameter I want to pass in to limit the field&#8217;s size:</p>&#x000A;<pre>&#x000A;<code>&#x000A;# my_form.rhtml&#x000A;&lt;%= render :partial =&gt; 'text_field', :locals =&gt; {:size =&gt; 5} %&gt;&#x000A;&#x000A;# _text_field.rhtml&#x000A;&lt;input type="text" size="&lt;%= size %&gt;" /&gt;&#x000A;</code>&#x000A;</pre>&#x000A;<p>If I want the <code>size</code> parameter to be optional however, I could try to do this with a default value of <code>5</code>:</p>&#x000A;<pre>&#x000A;<code>&#x000A;# _text_field.rhtml&#x000A;&lt;input type="text" size="&lt;%= size ? size : "5" %&gt;" /&gt;&#x000A;</code>&#x000A;</pre>&#x000A;<p>However, this fails if no size parameter is passed to the partial as <code>size</code> hasn&#8217;t been defined yet.  With <a href="http://dev.rubyonrails.org/changeset/4997">this update</a>, however, you can query an explicit locals hash to determine the existance of a local variable:</p>&#x000A;<pre>&#x000A;<code>&#x000A;# _text_field.rhtml&#x000A;&lt;input type="text" size="&lt;%= locals[:size] ? size : "5" %&gt;" /&gt;&#x000A;</code>&#x000A;</pre>&#x000A;<p>Not a huge update, but if you&#8217;re using partials extensively (which I suspect most are) you&#8217;ve no doubt run into this issue.</p>&#x000A;<p><em>And as <a href="http://source.mihelac.org/">Bojan</a> has pointed out you could also use the nifty <code>defined?</code> method</em></p>&#x000A;<pre>&#x000A;<code>&#x000A;# _text_field.rhtml&#x000A;&lt;input type="text" size="&lt;%= defined?(size) ? size : "5" %&gt;" /&gt;&#x000A;</code>&#x000A;</pre>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

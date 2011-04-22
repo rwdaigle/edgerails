@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Expanded Caching Scope</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: February 21st, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: February 21st, 2007
                 </div>
                 &#x000A;<p>Last week I pointed out the new <a href="/articles/2007/2/7/what-s-new-in-edge-rails-activerecord-explicit-caching">ActiveRecord caching feature</a> that lets you cache all ActiveRecord calls on a specific model:</p>&#x000A;<div class="highlight"><pre><span class="no">User</span><span class="o">.</span><span class="n">cache</span> <span class="k">do</span>&#x000A;  <span class="n">me</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># DB hit</span>&#x000A;  <span class="n">again</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># Cache hit</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>That&#8217;s great, but it only works on the model for which the <code>cache</code> block is applied.  If you have a block of code that accesses multiple model classes, you&#8217;d have to either nest several <code>cache</code> blocks <em>or</em> <a href="http://dev.rubyonrails.org/changeset/6179">this new top-level cache statement</a> :</p>&#x000A;<div class="highlight"><pre><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">cache</span> <span class="k">do</span>&#x000A;&#x000A;  <span class="c1"># DB hits</span>&#x000A;  <span class="n">me</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>&#x000A;  <span class="n">companies</span> <span class="o">=</span> <span class="no">Company</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span>&#x000A;&#x000A;  <span class="c1"># Cache hits</span>&#x000A;  <span class="n">me</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>&#x000A;  <span class="n">companies</span> <span class="o">=</span> <span class="no">Company</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span>&#x000A;&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>and all queries to any active record models within the block will be cached.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

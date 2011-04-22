@@ -3,16 +3,16 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-04-21T19:55:08-04:00</updated>
+  <updated>2011-04-21T20:10:37-04:00</updated>
   <id>http://edgerails.info</id>
   <entry>
     <title>ActiveRecord Identity Map</title>
-    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map" />
+    <link href="http://edgerails.info/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map" />
     <author>
       <name>Josh Kalderimis</name>
     </author>
-    <updated>2011-04-01T00:00:00-04:00</updated>
-    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map</id>
+    <updated>2011-04-21T00:00:00-04:00</updated>
+    <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
       
@@ -197,7 +197,7 @@
       
       &lt;div class=&quot;code_window&quot;&gt;
       &lt;em&gt;rails console&lt;/em&gt;
-      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:back_account_number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0000001 00000011 0000001 00000011&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:bank_account_number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0000001 00000011 0000001 00000011&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reload&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bank_account_number&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&gt; &quot;0000001 00000011 0000001 00000011&quot;&lt;/span&gt;
       &lt;/pre&gt;
@@ -209,7 +209,7 @@
       
       &lt;div class=&quot;code_window&quot;&gt;
       &lt;em&gt;log/development.log&lt;/em&gt;
-      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;updated_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;back_account_number&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;created_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 17:12:01.459862&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;MDAwMDAwMSAwMDAwMDAxMSAwMDAwMDAxIDAwMDAwMDEx\n&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 17:12:01.459862&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;users&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&quot;updated_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;bank_account_number&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&quot;created_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 17:12:01.459862&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;MDAwMDAwMSAwMDAwMDAxMSAwMDAwMDAxIDAwMDAwMDEx\n&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;2011-03-05 17:12:01.459862&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
       &lt;/pre&gt;
       &lt;/div&gt;
       &lt;/div&gt;

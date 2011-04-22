@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Around Filters are Here</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: September 22nd, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: September 22nd, 2006
                 </div>
                 &#x000A;<p><em>For the <a href="http://ryandaigle.com/articles/2006/07/20/a-rails-feature-you-should-be-using-with_scope#comment-351">second time</a> I&#8217;ve had my virtual hand slapped for trumpeting a poor usage of <code>with_scope</code> .  For the record, I want to make it clear that one should be using the rich domain model that active record provides to operate on associated objects: <code>user.assets.find()</code> and <code>user.asset.create()</code> instead of scoping to a user as my and Roman&#8217;s examples implied. Just a case of not thinking hard enough to come up with an appropriate example.  Sorry David, won&#8217;t happen again!</em></p>&#x000A;<p>I&#8217;ve <a href="/articles/2006/07/20/a-rails-feature-you-should-be-using-with_scope">mentioned</a>    the <a href="http://roman2k.free.fr/rails/meantime_filter/0.1.0/rdoc/">Meantime filter</a> plugin by Roman Le Negrate in the past as a very useful little utility &#8211; apparently the core team agrees as <a href="http://dev.rubyonrails.org/changeset/5163">around filtering</a> is now part of edge Rails.</p>&#x000A;<p>Usage is pretty much the same as with meantime:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class AssetController &lt; ActionController&#x000A;&#x000A;  before_filter :verify_login&#x000A;  around_filter :benchmark&#x000A;&#x000A;  def assets&#x000A;    @assets = Asset.find(:all)&#x000A;  end&#x000A;&#x000A;  def benchmark&#x000A;    benchmark("Asset benchmark") { yield }&#x000A;  end&#x000A;&#x000A;end&#x000A;</pre>&#x000A;<p></code></p>&#x000A;<p>You can also define a class to handle your filtering needs (whose <code>filter</code> method <code>yields</code> to the action block)</p>&#x000A;<pre>&#x000A;<code>&#x000A;class AssetController &lt; ActionController&#x000A;&#x000A;  around_filter BenchmarkFilter   # or BenchmarkFilter.new&#x000A;  ...&#x000A;&#x000A;  class BenchmarkFilter&#x000A;    def filter&#x000A;      benchmark("Benchmarking...") { yield }&#x000A;    end&#x000A;  end&#x000A;&#x000A;end&#x000A;&#x000A;</pre>&#x000A;<p></code></p>&#x000A;<p>Or you can directly pass a Proc in as the filter:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class AssetController &lt; ActionController&#x000A;&#x000A;  around_filter (:only =&gt; :assets) do |controller,action_block| &#x000A;    controller.benchmark("Benchmarking...") { action_block.call }&#x000A;  end&#x000A;  ...&#x000A;end&#x000A;</pre>&#x000A;<p></code></p>&#x000A;<p>Since the around filter explicitly governs the execution of the action being requested, you can use them to skip the action completely. This would act the same as a <code>before_filter</code> that returned false.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

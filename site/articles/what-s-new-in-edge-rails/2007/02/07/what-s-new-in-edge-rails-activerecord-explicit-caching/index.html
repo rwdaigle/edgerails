@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>ActiveRecord Explicit Caching</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: February 7th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: February 7th, 2007
                 </div>
                 &#x000A;<p>A tiny but useful update was <a href="http://dev.rubyonrails.org/changeset/6138">just added</a> to edge Rails that lets you specify a block for which a query cache will be present.  The query cache will cache <code>select</code> statements and guarantee that identical select statements will only hit the database once during the block.  Any inserts, updates or deletes will clear the cache as the result of any cached queries may have changed.</p>&#x000A;<div class="highlight"><pre><span class="no">User</span><span class="o">.</span><span class="n">cache</span> <span class="k">do</span>&#x000A;  <span class="n">me</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># DB hit</span>&#x000A;  <span class="n">again</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># Cache hit</span>&#x000A;  <span class="n">me</span><span class="o">.</span><span class="n">update_attribute</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Not Ryan&#39;</span><span class="p">)</span>  <span class="c1"># Cache cleared</span>&#x000A;  <span class="n">me</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># DB hit</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>While you might not think this is very useful in your various controller methods which <em>should</em> be of limited scope, think of your views that may call the same authentication queries several times within the view body.  While a simple @ <code>is_admin || = user.get_role('ADMIN')</code> custom cache mechanism would work just fine, you now have the options to wrap your view within a query cache and have it handled for you.</p>&#x000A;<p>The query cache is keyed on the raw <span class="caps">SQL</span> statement, so it&#8217;s very minimalist in its complexity.  It doesn&#8217;t know that your identical query with different order conditions is the same query as before &#8211; and will hit the db again.  It only caches identical <span class="caps">SQL</span> statements, literally.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

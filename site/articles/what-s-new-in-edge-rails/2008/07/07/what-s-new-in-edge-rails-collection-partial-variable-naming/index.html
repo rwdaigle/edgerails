@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Collection Partial Variable Naming</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: July 7th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: July 7th, 2008
                 </div>
                 &#x000A;<p>From the little-but-useful department comes a <a href="http://github.com/rails/rails/commit/2b43620e3c1352028f19550fcde4632d65cbd191">new addition to Rails</a> that lets you explicitly name the local variable exposed to a partial template when using a collection partial.  So, for instance, in this statement:</p>&#x000A;<div class="highlight"><pre><span class="n">render</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s1">&#39;employees&#39;</span><span class="p">,</span> <span class="ss">:collection</span> <span class="o">=&gt;</span> <span class="vi">@workers</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:person</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>each element of the <code>workers</code> collection will be exposed as <code>person</code> within the <code>employees</code> template.  No longer are you hostage to your template name.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

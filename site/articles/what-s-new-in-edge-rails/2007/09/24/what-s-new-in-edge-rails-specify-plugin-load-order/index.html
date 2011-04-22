@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Specify Plugin Load Ordering</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: September 24th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: September 24th, 2007
                 </div>
                 &#x000A;<p>You&#8217;ve always been able to specify exactly which plugins you want to be loaded up with your Rails app, instead of haphazardly loading everything in <code>vendor/plugins</code> with this little snippet that you may or may not see in your <code>environment.rb</code> file:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Only load the plugins named here, by default all plugins in vendor/plugins are loaded </span>&#x000A;<span class="n">config</span><span class="o">.</span><span class="n">plugins</span> <span class="o">=</span> <span class="sx">%W( exception_notification ssl_requirement )</span> &#x000A;</pre>&#x000A;</div>&#x000A;<p>The problem with this is that while you can explicitly specify which plugins you want loaded and in what order, it becomes quite tedious to list out every plugin when you only care about the load order of a select few.</p>&#x000A;<p>Well, this <a href="http://dev.rubyonrails.org/changeset/7531">has been taken care of</a> with the <code>:all</code> symbol you can now use in your <code>config.plugin</code> list to denote all other plugins not explicitly listed:</p>&#x000A;<div class="highlight"><pre><span class="n">config</span><span class="o">.</span><span class="n">plugins</span> <span class="o">=</span> <span class="o">[</span> <span class="ss">:exception_notification</span><span class="p">,</span> <span class="ss">:ssl_requirement</span><span class="p">,</span> <span class="ss">:all</span> <span class="o">]</span> &#x000A;</pre>&#x000A;</div>&#x000A;<p>This gives you finer-grain control over your plugin load order.  You can even use <code>:all</code> in the middle of your load order if you want to push some plugins to the back of the line:</p>&#x000A;<div class="highlight"><pre><span class="n">config</span><span class="o">.</span><span class="n">plugins</span> <span class="o">=</span> <span class="o">[</span> <span class="ss">:exception_notification</span><span class="p">,</span> <span class="ss">:all</span><span class="p">,</span> <span class="ss">:ssl_requirement</span> <span class="o">]</span> &#x000A;</pre>&#x000A;</div>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

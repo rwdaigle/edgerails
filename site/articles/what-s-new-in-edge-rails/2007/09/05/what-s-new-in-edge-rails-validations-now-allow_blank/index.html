@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Validations Now :allow_blank</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: September 5th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: September 5th, 2007
                 </div>
                 &#x000A;<p>This is a tiny <a href="http://dev.rubyonrails.org/changeset/7407">update</a>, but one worth mentioning.  The various activerecord validation methods now accept an <code>:allow_blank</code> option that will let validation pass if the value is <code>nil</code> or an empty string.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">validates_length_of</span> <span class="ss">:meta</span><span class="p">,</span> <span class="ss">:maximum</span> <span class="o">=&gt;</span> <span class="mi">3</span><span class="p">,</span> <span class="ss">:allow_blank</span> <span class="o">=&gt;</span> <span class="kp">true</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="nb">p</span> <span class="o">=</span> <span class="no">Post</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:meta</span> <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>&#x000A;<span class="nb">p</span><span class="o">.</span><span class="n">valid?</span>  <span class="c1">#=&gt; true</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Hardly earth-shattering, but convenient and a nice compliment to <code>:allow_nil</code>.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

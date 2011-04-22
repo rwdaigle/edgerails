@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>render Stops Being High-Maintenance</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: November 20th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: November 20th, 2008
                 </div>
                 &#x000A;<span class="version"><strong>Rails</strong> 2.3 or 3.0</span><p><code>render</code> is one of those oft-used view-helper methods that always seems to be a little cumbersome.  The most common use is to render a partial within another view:</p>&#x000A;<div class="highlight"><pre><span class="n">render</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s1">&#39;articles/article&#39;</span><span class="p">,</span> <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:article</span> <span class="o">=&gt;</span> <span class="vi">@article</span> <span class="p">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>But this is a lot of work for a simple operation, and <a href="http://github.com/rails/rails/commit/130fe74d17404e5c06353526c7b20beb4019cb69">now it becomes much simpler</a>.  Now the default is to assume that a partial is requested (in the past render a <code>:file</code> was the default) and that the final hash argument is the locals hash.  Here is the above functionality using the new syntax:</p>&#x000A;<div class="highlight"><pre><span class="c1"># Render the &#39;article&#39; partial with an article local variable</span>&#x000A;<span class="n">render</span> <span class="s1">&#39;articles/article&#39;</span><span class="p">,</span> <span class="ss">:article</span> <span class="o">=&gt;</span> <span class="vi">@article</span>&#x000A;&#x000A;<span class="c1"># Or even better (same as above)</span>&#x000A;<span class="n">render</span> <span class="vi">@article</span>&#x000A;&#x000A;<span class="c1"># And for collections, same as:</span>&#x000A;<span class="c1"># render :partial =&gt; &#39;articles/article&#39;, :collection =&gt; @articles</span>&#x000A;<span class="n">render</span> <span class="vi">@articles</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>If you&#8217;ve got some old <code>render</code> calls hanging around that aren&#8217;t using partials you&#8217;ll have to specify the <code>:file</code> option now:</p>&#x000A;<div class="highlight"><pre><span class="n">render</span> <span class="ss">:file</span> <span class="o">=&gt;</span> <span class="s1">&#39;original&#39;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Hassle free partial rendering.  Yay.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

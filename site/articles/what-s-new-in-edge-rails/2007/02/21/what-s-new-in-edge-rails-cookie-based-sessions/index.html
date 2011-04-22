@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Cookie Based Sessions are the New Default</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: February 21st, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: February 21st, 2007
                 </div>
                 &#x000A;<p>Edge rails now has <a href="http://dev.rubyonrails.org/changeset/6184">cookie-based session stores enabled by default</a> instead of the file based session store that was the previous default.  Why the change?  Mostly performance, it seems.  Cookie-based sessions are just faster to retrieve and process than hitting the file-system on every request.  Plus, I would imagine they scale considerably better as they&#8217;re persisted on the client side and have no server-side persistence requirements.</p>&#x000A;<p>The caveat?  Cookies are generally limited to 4K in size.  While not an issue for most (proper) usage of the session, this could be a legitimate limit for some scenarios.  If your app abuses the session so, you&#8217;ll need to decide on a different session store.  Your other options are, of course:</p>&#x000A;<ul>&#x000A;	<li><a href="http://dev.rubyonrails.org/browser/trunk/actionpack/lib/action_controller/session/active_record_store.rb">ActiveRecordStore</a></li>&#x000A;	<li><a href="http://railsexpress.de/blog/articles/2005/12/19/roll-your-own-sql-session-store">SQLSessionStore</a></li>&#x000A;	<li><a href="http://dev.rubyonrails.org/browser/trunk/actionpack/lib/action_controller/session/drb_store.rb">DRBStore</a></li>&#x000A;	<li><a href="http://dev.rubyonrails.org/browser/trunk/actionpack/lib/action_controller/session/mem_cache_store.rb">MemCacheStore</a></li>&#x000A;</ul>&#x000A;<h3>Resources</h3>&#x000A;<ul>&#x000A;	<li><a href="http://errtheblog.com/">Err the Blog</a> has a <a href="http://errtheblog.com/post/24">great Rails session-rundown</a> that discusses all your options.</li>&#x000A;	<li><a href="http://scott.elitists.net/">Scott Baron</a> has a <a href="http://scott.elitists.net/sessions.html">good, if not slightly dated session store performance comparison</a> where you can make an informed decision about what best meets your session needs.</li>&#x000A;</ul>&#x000A;<p><em>Update: Feb, 22nd 2007</em></p>&#x000A;<p>To get your brand new cookie-based session up and running, make sure this bit is in your <code>environment.rb</code>:</p>&#x000A;<div class="highlight"><pre><span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="p">{</span> &#x000A;  <span class="ss">:session_key</span> <span class="o">=&gt;</span> <span class="s1">&#39;_my_app_session&#39;</span><span class="p">,</span> &#x000A;  <span class="ss">:secret</span>      <span class="o">=&gt;</span> <span class="s1">&#39;some_really_long_and_hashed_key&#39;</span> &#x000A;<span class="p">}</span>&#x000A;</pre>&#x000A;</div>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

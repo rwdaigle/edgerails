@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Observer Generators</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: May 23rd, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: May 23rd, 2006
                 </div>
                 &#x000A;<p>I like to keep a close eye on the changes being committed to edge Rails as it&#8217;s a great learning experience &#8211; and thought I might as well post a summary of them as they roll in.  This will definitely not be an exhaustive effort &#8211; just something as I see fit or have the time.  So here goes the first one:</p>&#x000A;<h3><a href="http://dev.rubyonrails.org/changeset/4365">Rails Changeset 4365; Add generator files&#8230;</a></h3>&#x000A;<p>This changeset simply adds the files necessary to use the <code>script/generator</code> utility to auto-create observer stubs.  What&#8217;s an <a href="http://api.rubyonrails.com/classes/ActiveRecord/Observer.html">observer</a> you ask?  It&#8217;s a way to monitor lifecycle events of a model object outside of the model itself and let&#8217;s you avoid cluttering the model class with logic that&#8217;s not core to the model.</p>&#x000A;<p>So how does one use this new observer generator?  Observe:</p>&#x000A;<pre>&#x000A;<code>&#x000A;ruby script/generate observer User&#x000A;</code>&#x000A;</pre>&#x000A;<p>Yeah, that&#8217;s really it.  This will create two files for you, the observer class itself at <code>app/models/user_observer.rb</code>:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class UserObserver &lt; ActiveRecord::Observer&#x000A;end&#x000A;</code>&#x000A;</pre>&#x000A;<p>and the unit test at <code>test/unit/user_observer_test.rb</code>:</p>&#x000A;<pre>&#x000A;<code>&#x000A;require File.dirname(__FILE__) + '/../test_helper'&#x000A;&#x000A;class UserObserverTest &lt; Test::Unit::TestCase&#x000A;  fixtures :users&#x000A;&#x000A;  # Replace this with your real tests.&#x000A;  def test_truth&#x000A;    assert true&#x000A;  end&#x000A;end&#x000A;</code>&#x000A;</pre>&#x000A;<p>You can then edit the observer class with the appropriate callback methods:</p>&#x000A;<pre>&#x000A;<code>&#x000A;class UserObserver &lt; ActiveRecord::Observer&#x000A;  def after_save(comment)&#x000A;    # Do something great&#x000A;  end&lt;/code&gt;&#x000A;end&#x000A;</pre>&#x000A;<p>On a side note, I feel like the generator utility has been getting a bad rap recently from people that frown upon auto-generation of code.  Fair enough, but think of them more as best practices templates and learning tools rather than some sort of coding robot.  They&#8217;re really great tools for seeing how things should be done, and how things are expected to be done.  If you don&#8217;t want to use them, don&#8217;t &#8211; but if you&#8217;re not quite sure how to go about creating an observer, or controller, or model they&#8217;re of great help.</p>&#x000A;<p>So there you have it &#8211; the new observer generator functionality in edge Rails.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

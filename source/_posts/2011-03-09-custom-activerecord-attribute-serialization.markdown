@@ -1,4 +1,4 @@
-bank_account_number---
+---
 title: "Custom ActiveRecord Attribute Serialization"
 author: "Jeff Kreeftmeijer"
 author_url: "http://jeffkreeftmeijer.com"

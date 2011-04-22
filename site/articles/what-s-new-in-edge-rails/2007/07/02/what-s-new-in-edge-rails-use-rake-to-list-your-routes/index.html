@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Use Rake to List Your Routes</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: July 2nd, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: July 2nd, 2007
                 </div>
                 &#x000A;<p>While you&#8217;ve always been able to manually take a <a href="http://snipplr.com/view/2415/list-of-all-of-the-routes-you-have-defined/">peek at what routes</a> are defined in your application, this dollop of usefulness has <a href="http://dev.rubyonrails.org/changeset/7149">now found its way into a rake task</a>.</p>&#x000A;<p>Just run</p>&#x000A;<div class="highlight"><pre><span class="n">rake</span> <span class="n">routes</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>and voila, all routes defined will be spit out in a tidy columnar form with the following columns:</p>&#x000A;<p><code>route name, HTTP method, route path, route requirements</code></p>&#x000A;<p>As an example, here is what my output looks like:</p>&#x000A;<div class="highlight"><pre>   all_articles GET  /articles;all/      <span class="o">{</span>:action<span class="o">=</span>&gt;<span class="s2">&quot;all&quot;</span>, :controller<span class="o">=</span>&gt;<span class="s2">&quot;articles&quot;</span><span class="o">}</span>&#x000A;search_articles GET  /articles;search/   <span class="o">{</span>:action<span class="o">=</span>&gt;<span class="s2">&quot;search&quot;</span>, :controller<span class="o">=</span>&gt;<span class="s2">&quot;articles&quot;</span><span class="o">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>For those of us not riding edge, it&#8217;s pretty easy to get access to this task in your app:<br />&#x000A;<div class="highlight"><pre>curl http://svn.rubyonrails.org/rails/trunk/railties/lib/tasks/routes.rake &gt; lib/tasks/routes.rake&#x000A;<br />&#x000A;<div class="highlight"><pre>curl http://svn.rubyonrails.org/rails/trunk/railties/lib/tasks/routes.rake &gt; lib/tasks/routes.rake<br />&#x000A;</pre></p>&#x000A;</div>&#x000A;<p></notextile></p>&#x000A;<p>This is particularly useful in RESTful implementations as there&#8217;s lot of routing magic happening for you under the covers.  Now you have the means to take a harmless peek under said covers.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

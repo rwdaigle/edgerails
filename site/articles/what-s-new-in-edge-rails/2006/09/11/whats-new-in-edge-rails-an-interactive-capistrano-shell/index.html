@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>An Interactive Capistrano Shell</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: September 11th, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: September 11th, 2006
                 </div>
                 &#x000A;<p><a href="http://dev.rubyonrails.org/changeset/5085">This utility</a> comes with several warnings about its experimental state and unknown future &#8211; but we&#8217;re not going to let that damper our inquisitiveness, are we?  Introducing a way to execute capistrano commands from a shell environment (think <code>script/console</code>).  So how does this Capistrano shell work?</p>&#x000A;<p>First, start the capistrano shell w/</p>&#x000A;<p><code>cap -v shell</code></p>&#x000A;<p>Then enter commands to be executed on your remote environments.  (These are mostly from the <a href="http://dev.rubyonrails.org/browser/tools/capistrano/lib/capistrano/shell.rb">shell source comments</a> itself)</p>&#x000A;<pre>&#x000A;<code>&#x000A;# Execute on all servers&#x000A;cap&gt; echo ping&#x000A;&#x000A;# Execute on specific servers&#x000A;on myserver1.com,myserver2.com echo ping&#x000A;&#x000A;# To execute based on roles&#x000A;with app,db echo ping&#x000A;&#x000A;# Execute a capistrano task&#x000A;!deploy&#x000A;&#x000A;# Execute multiple capistrano tasks&#x000A;!setup deploy&#x000A;&#x000A;# Combine all the goodness to execute a task on&#x000A;# specific servers and roles&#x000A;on myserver1.com !setup&#x000A;with app !setup&#x000A;</code>&#x000A;</pre>&#x000A;<p>Why would you want to use this shell?  Well, you get the ability to simultaneously manipulate several environments from one shell &#8211; and all within the friendly confines of capistrano.  You should find the <code>rollback</code> task to be especially comforting&#8230;</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

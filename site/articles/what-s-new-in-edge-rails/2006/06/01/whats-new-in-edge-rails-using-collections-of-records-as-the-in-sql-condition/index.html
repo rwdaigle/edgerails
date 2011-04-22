@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Using Collections of Records as the "IN" SQL Condition</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: June 1st, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: June 1st, 2006
                 </div>
                 &#x000A;<p>It&#8217;s currently somewhat difficult to use the <code>IN</code> <span class="caps">SQL</span> condition within ActiveRecord&#8217;s finder methods &#8211; most solutions I&#8217;ve seen involve building your own <span class="caps">SQL</span> string or popping back out to the object level and performing more queries than necessary to get around this limitation.  Changesets <a href="http://dev.rubyonrails.org/changeset/4391">4391</a>, <a href="http://dev.rubyonrails.org/changeset/4387">4387</a> and <a href="http://dev.rubyonrails.org/changeset/4390">4390</a> let you now pass in a collection of ActiveRecord objects as a parameter to the <span class="caps">SQL</span> condition that will be expanded to a comma-seperated list of ids.</p>&#x000A;<p>So, if you have a collection of <code>posts</code> and want to get all comments for those posts, this finder call:</p>&#x000A;<p><code>comments = Comment.find(:all, :conditions =&gt; ['post_id IN (?)', posts])</code></p>&#x000A;<p>Will result in this <span class="caps">SQL</span>:</p>&#x000A;<p><code>SELECT * FROM COMMENTS WHERE POST_ID IN (1, 2, 3, ..)</code></p>&#x000A;<p>Ya jive?  You&#8217;re now able to pass in a collection of records to your <span class="caps">SQL</span> finder methods that will be automatically expanded into a comma-seperated list of ids.  This makes it much easier to use the <code>IN (?)</code> <span class="caps">SQL</span> condition within ActiveRecord.</p>&#x000A;<p>Parallel to this functionality is the addition of the <code>Array.to_s(:db)</code> method which does basically the same thing, converts an array of ActiveRecord objects into a comma-seperated list of ids (this is what <a href="http://dev.rubyonrails.org/changeset/4387">changeset 4387</a> adds).  This addition makes the following identical to the <code>Comment.find(...)</code> call mentioned earlier:</p>&#x000A;<p><code>comments = Comment.find(:all, :conditions =&gt; ['post_id IN (?)', posts.to_s(:db)])</code></p>&#x000A;<p>Surprisingly, the implementation of the expansion of an ActiveRecord array does not utilize <code>Array.to_s(:db)</code>&#8230;</p>&#x000A;<p><a href="http://technorati.com/tag/rubyonrails">rubyonrails</a>, <a href="http://technorati.com/tag/rails">rails</a></p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

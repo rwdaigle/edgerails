@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>1.month.from_now.no_longer.effed</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: January 26th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: January 26th, 2007
                 </div>
                 &#x000A;<p><a href="http://brian.maybeyoureinsane.net/">Brian Donovan</a> has a <a href="http://brian.maybeyoureinsane.net/blog/2007/01/25/rails-duration/">great writeup</a> of his new <a href="http://dev.rubyonrails.org/browser/trunk/activesupport/lib/active_support/duration.rb">Duration</a> fix to the Rails&#8217; <a href="http://api.rubyonrails.com/classes/ActiveSupport/CoreExtensions/Numeric/Time.html">Time convenience methods</a> that, until now, have been slightly broken.</p>&#x000A;<p>Here&#8217;s the summary.  Before (bad):</p>&#x000A;<div class="highlight"><pre><span class="no">Time</span><span class="o">.</span><span class="n">now</span>&#x000A;<span class="c1">#=&gt; Thu Jan 25 21:01:31 -0800 2007</span>&#x000A;<span class="mi">1</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">from_now</span>&#x000A;<span class="c1">#=&gt; Sat Feb 24 21:01:34 -0800 2007</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Oops &#8211; apparently one month only equals 30 days, not really one month.  But now, in edge:</p>&#x000A;<div class="highlight"><pre><span class="no">Time</span><span class="o">.</span><span class="n">now</span>&#x000A;<span class="c1">#=&gt; Thu Jan 25 21:01:31 -0800 2007</span>&#x000A;<span class="mi">1</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">from_now</span>&#x000A;<span class="c1">#=&gt; Sun Feb 25 21:01:34 -0800 2007</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>And check out this little <code>inspect</code> goodie:</p>&#x000A;<div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="o">.</span><span class="n">weeks</span>&#x000A;<span class="c1">#=&gt; 21 days</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>And just so you&#8217;re not mislead by this post&#8217;s title, this fix applies to all the time helpers, not just <code>month.from_now</code>.  <a href="http://brian.maybeyoureinsane.net/blog/2007/01/25/rails-duration/">Read the full rundown</a> to become fully enlightened.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

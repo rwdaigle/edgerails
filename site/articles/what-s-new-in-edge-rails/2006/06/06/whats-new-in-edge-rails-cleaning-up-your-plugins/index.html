@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Cleaning up Your Plugins</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: June 6th, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: June 6th, 2006
                 </div>
                 &#x000A;<p>Changesets <a href="http://dev.rubyonrails.org/changeset/4427">4427</a> and <a href="http://dev.rubyonrails.org/changeset/4440">4440</a> provide an uninstall hook for plugins.  Previously, all that was done when a plugin was uninstalled via <code>ruby script/plugin remove plugin_name</code> was that the plugin directory was deleted.</p>&#x000A;<p>Now, Rails allows plugin developers to do specific cleanup tasks on uninstall by providing an uninstall hook.  This is useful when the plugin provides specific <span class="caps">CSS</span>, view or DB resources that can be safely removed when the plugin is uninstalled.</p>&#x000A;<p>All plugins need to do is provide an <code>uninstall.rb</code> file in the plugin directory (similar to the standard <code>init.rb</code> install file) with the teardown logic specific to that plugin.  The plugin template now provides a <code>uninstall.rb</code> file too, so everything is in place for the plugin to properly clean up after itself.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

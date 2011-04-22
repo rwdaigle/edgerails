@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Some Handy Enumerable helpers</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: June 27th, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: June 27th, 2006
                 </div>
                 &#x000A;<p><code>Enumerable</code> has received a few &quot;handy &quot;:http://dev.rubyonrails.org/changeset/4491 little <a href="http://dev.rubyonrails.org/changeset/4489">extensions</a> in edge Rails.  The first is the ability to sum the contents of the enumerable:</p>&#x000A;<p><code>orders.sum { |o| o.total * discount }</code></p>&#x000A;<p>or</p>&#x000A;<p><code>orders.sum(&amp;:total)</code></p>&#x000A;<p>For those interested in the implemention, it&#8217;s pretty straight forward:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;def sum&#x000A;  inject(0) { |sum, element| sum + yield(element) }&#x000A;end&#x000A;</code><br />&#x000A;</pre></p>&#x000A;<p>And next we have <code>index_by</code> which will convert an enumerable to a hash keyed on the given block.  This is definitely best explained with an example.  Suppose we have an array of City objects that we want to convert to a hash based on the city names:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;hash = cities.index_by(&amp;:name)&#x000A;hash #=&gt; ["New York" =&gt; &lt;City ...&gt;, "London" =&gt; &lt;City ...&gt;]&#x000A;</code><br />&#x000A;</pre></p>&#x000A;<p>We now have a hash of cities keyed on the citys&#8217; names.</p>&#x000A;<p>For those that aren&#8217;t familiar with the <code>&amp;:symbol</code> syntax used as a parameter to these methods &#8211; it&#8217;s just a way to form a block that says <em>get the value of the this symbol on the passed in object</em>.</p>&#x000A;<p>So in the case of:</p>&#x000A;<p><code>orders.sum(&amp;:total)</code></p>&#x000A;<p>what we&#8217;re really saying is:</p>&#x000A;<p><code>orders.sum { |o| o.total }</code></p>&#x000A;<p>It&#8217;s just a nice shortcut to access the value of a single property.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

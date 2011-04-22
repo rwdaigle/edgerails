@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Object.try</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: November 20th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: November 20th, 2008
                 </div>
                 &#x000A;<span class="version"><strong>Rails</strong> 2.3 or 3.0</span><p>Those of you using <a href="http://ozmm.org/posts/try.html">Chris Wanstrath&#8217;s slick little <code>try</code> trick</a> will now have access to that functionality in Rails with this <a href="http://github.com/rails/rails/commit/51730792ca930a896361eb92354a42bc56903de1">ActiveSupport update</a>.</p>&#x000A;<p>Basically, <code>try</code> lets you attempt to invoke a method on an object without worrying about a NoMethodError being raised.  If the method doesn&#8217;t exist, or if the target object <code>nil</code>, then <code>nil</code> will be returned without exceptions:</p>&#x000A;<div class="highlight"><pre><span class="c1"># No exceptions when receiver is nil</span>&#x000A;<span class="kp">nil</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="ss">:destroy</span><span class="p">)</span> <span class="c1">#=&gt; nil</span>&#x000A;&#x000A;<span class="c1"># Useful when chaining potential nil items</span>&#x000A;<span class="no">User</span><span class="o">.</span><span class="n">admins</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="ss">:address</span><span class="p">)</span><span class="o">.</span><span class="n">try</span><span class="p">(</span><span class="ss">:reset</span><span class="p">)</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Just a small little bit of syntactical candy pulled in from the community.</p>&#x000A;<p><em>Update:</em> You can now also use this trick for <a href="http://github.com/rails/rails/commit/823b623fe2de8846c37aa13250010809ac940b57">methods with arguments</a></p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

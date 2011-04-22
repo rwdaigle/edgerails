@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Filters get Tweaked</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: October 22nd, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: October 22nd, 2007
                 </div>
                 &#x000A;<p><a href="http://api.rubyonrails.com/classes/ActionController/Filters/ClassMethods.html">Controller filters</a> just got a <a href="http://dev.rubyonrails.org/changeset/7984">little update</a> that may mess with your flow.  As of now, returning <code>false</code> no longer halts the execution of the action chain.  Instead, rendering or redirecting is what automatically stops the action chain.</p>&#x000A;<p>If you think about it, it makes sense that rendering or redirecting within a filter signals the abortion of normal action execution since you can only render/redirect once per call and doing so reasonably indicates that no more processing is required.</p>&#x000A;<p>So where before you might have had a filter such as:</p>&#x000A;<div class="highlight"><pre><span class="k">def</span> <span class="nf">must_be_logged_in</span>&#x000A;  <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">user_logged_in?</span><span class="p">)</span>&#x000A;    <span class="n">redirect_to</span> <span class="n">login_url</span>&#x000A;    <span class="k">return</span> <span class="kp">false</span>&#x000A;  <span class="k">end</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>You can now let the act of rendering or redirecting imply completion instead of returning <code>false</code>:</p>&#x000A;<div class="highlight"><pre><span class="k">def</span> <span class="nf">must_be_logged_in</span>&#x000A;  <span class="n">redirect_to</span> <span class="n">login_url</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">user_logged_in?</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>At first blush I thought this might mess up existing filters, but a quick review of mine indicated that whenever I return false I&#8217;ve already rendered or redirected.  Not sure if this holds true for everybody or not&#8230;</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Your DB Adapter May Have Left the Building</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: September 30th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: September 30th, 2007
                 </div>
                 &#x000A;<p>If your Rails app happens to be running against anything but a MySQL, PostgreSQL or SQLite database and you&#8217;re on Edge Rails (or are headed to Rails 2.0) then you&#8217;re going to need to make sure you have the correct gems installed on your machine.  As <a href="http://dev.rubyonrails.org/changeset/7689">of now</a> the database adapters for these databases have been pulled out of the core Rails distribution and are available as gems.  One of these should work for you if you rely on one of the affected databases:</p>&#x000A;<div class="highlight"><pre><span class="n">gem</span> <span class="n">install</span> <span class="n">activerecord</span><span class="o">-</span><span class="n">oracle</span><span class="o">-</span><span class="n">adapter</span>&#x000A;<span class="n">gem</span> <span class="n">install</span> <span class="n">activerecord</span><span class="o">-</span><span class="n">sqlserver</span><span class="o">-</span><span class="n">adapter</span>&#x000A;<span class="n">gem</span> <span class="n">install</span> <span class="n">activerecord</span><span class="o">-</span><span class="n">firebird</span><span class="o">-</span><span class="n">adapter</span>&#x000A;<span class="n">gem</span> <span class="n">install</span> <span class="n">activerecord</span><span class="o">-</span><span class="n">frontbase</span><span class="o">-</span><span class="n">adapter</span>&#x000A;<span class="n">gem</span> <span class="n">install</span> <span class="n">activerecord</span><span class="o">-</span><span class="n">openbase</span><span class="o">-</span><span class="n">adapter</span>&#x000A;<span class="n">gem</span> <span class="n">install</span> <span class="n">activerecord</span><span class="o">-</span><span class="n">sybase</span><span class="o">-</span><span class="n">adapter</span>&#x000A;</pre>&#x000A;</div>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

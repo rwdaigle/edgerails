@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Partial Updates</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: April 1st, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: April 1st, 2008
                 </div>
                 &#x000A;<p>In lock-step with the recent <a href="/articles/2008/3/31/what-s-new-in-edge-rails-dirty-objects">dirty objects</a> functionality comes the ability of <a href="http://dev.rubyonrails.org/changeset/9157">ActiveRecord models to perform partial updates</a> &#8211; which only saves the attributes that have been modified on updates.</p>&#x000A;<p>For instance:</p>&#x000A;<div class="highlight"><pre><span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:first</span><span class="p">)</span>&#x000A;<span class="n">article</span><span class="o">.</span><span class="n">title</span>  <span class="c1">#=&gt; &quot;Title&quot;</span>&#x000A;<span class="n">article</span><span class="o">.</span><span class="n">subject</span>  <span class="c1">#=&gt; &quot;Edge Rails&quot;</span>&#x000A;&#x000A;<span class="c1"># Update one of the attributes</span>&#x000A;<span class="n">article</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;New Title&quot;</span>&#x000A;&#x000A;<span class="c1"># And only that updated attribute is persisted to the db</span>&#x000A;<span class="n">article</span><span class="o">.</span><span class="n">save</span>&#x000A;  <span class="c1">#=&gt;  &quot;UPDATE articles SET title = &#39;New Title&#39; WHERE id = 1&quot;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p><em>Note:</em> Your <code>updated_at/on</code> magic fields will only be set if there are unsaved attributes that need persisting.  If there are no changed attributes for the object being persisted then there won&#8217;t be any <span class="caps">SQL</span> updates made.</p>&#x000A;<p>To disable this functionality, set <code>partial_updates = false</code> for each model you wish to not take advantage of partial updates.  To disable this system-wide add this line to your <code>environment.rb</code> or, better yet, in a <code>config/initializer</code>:</p>&#x000A;<div class="highlight"><pre><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">partial_updates</span> <span class="o">=</span> <span class="kp">false</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p><em>Note:</em> There&#8217;s currently a <code>config/initializers/new_rails_defaults.rb</code> file that has this setting, so edit that file if you have it.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>ActionMailer::Base.server_settings Deprecated</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: January 31st, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: January 31st, 2007
                 </div>
                 &#x000A;<p>Configuring your action mailer settings just got a little tweak that you&#8217;re going to want to pay attention to, especially if you&#8217;re running off edge.  Instead of using <code>ActionMailer::Base.server_settings</code> you&#8217;re going to want to use <code>ActionMailer::Base.smtp_settings</code>.  The syntax remains the same, it&#8217;s just a name change:</p>&#x000A;<div class="highlight"><pre><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">delivery_method</span> <span class="o">=</span> <span class="ss">:smtp</span>&#x000A;<span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">smtp_settings</span> <span class="o">=</span> <span class="p">{</span>&#x000A;	<span class="ss">:address</span>		<span class="o">=&gt;</span> <span class="s2">&quot;smtp.mymailserver.com&quot;</span><span class="p">,</span>&#x000A;	<span class="ss">:authentication</span>	<span class="o">=&gt;</span> <span class="ss">:login</span><span class="p">,</span>&#x000A;	<span class="ss">:user_name</span>		<span class="o">=&gt;</span> <span class="s2">&quot;me&quot;</span><span class="p">,</span>&#x000A;	<span class="ss">:password</span>		<span class="o">=&gt;</span> <span class="s2">&quot;password&quot;</span>&#x000A;<span class="p">}</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>In the <a href="http://dev.rubyonrails.org/changeset/6094"><code>1-2-stable</code></a> rails branch the use of <code>server_settings</code> has been deprecated, while over in <a href="http://dev.rubyonrails.org/changeset/6095"><code>edge</code></a> it&#8217;s been renamed outright and you&#8217;ll need to update your usage.</p>&#x000A;<p>Also in the same update is the ability to specify your sendmail executable location and command line arguments options with the new <code>ActionMailer::Base.sendmail_settings</code> (if you&#8217;re using sendmail):</p>&#x000A;<div class="highlight"><pre><span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">delivery_method</span> <span class="o">=</span> <span class="ss">:sendmail</span>&#x000A;<span class="no">ActionMailer</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">sendmail_settings</span> <span class="o">=</span> <span class="p">{</span> &#x000A;  <span class="ss">:location</span>       <span class="o">=&gt;</span> <span class="s1">&#39;/usr/sbin/sendmail&#39;</span><span class="p">,</span> &#x000A;  <span class="ss">:arguments</span>      <span class="o">=&gt;</span> <span class="s1">&#39;-i -t&#39;</span>&#x000A;<span class="p">}</span> &#x000A;</pre>&#x000A;</div>&#x000A;<p>See the <a href="http://api.rubyonrails.org/classes/ActionMailer/Base.html">ActionMailer::Base</a> api for further option details.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

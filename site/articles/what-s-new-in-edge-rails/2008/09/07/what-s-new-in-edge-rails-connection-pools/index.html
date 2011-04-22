@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Connection Pools</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: September 7th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: September 7th, 2008
                 </div>
                 &#x000A;<p>With the <a href="http://weblog.rubyonrails.org/2008/8/16/josh-peek-officially-joins-the-rails-core">upcoming thread-safety of Rails</a> comes the necessity of <a href="http://github.com/rails/rails/commit/6f932b4790371e548c0df9033da96b2cf8f51dcc">database connection pools</a>.  While less a feature and more a hidden implementation detail, you do have the ability to adjust the max size of these new pools (default is 5).  In your database.yml configuration file just set the <code>pool</code> key:</p>&#x000A;<div class="highlight"><pre><span class="n">development</span><span class="p">:</span>&#x000A;  <span class="n">adapter</span><span class="p">:</span> <span class="n">mysql</span>&#x000A;  <span class="n">username</span><span class="p">:</span> <span class="n">root</span>&#x000A;  <span class="n">database</span><span class="p">:</span> <span class="n">myapp_dev</span>&#x000A;  <span class="n">pool</span><span class="p">:</span> <span class="mi">10</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>So there ya go &#8211; connection pools.  That was easy&#8230;</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

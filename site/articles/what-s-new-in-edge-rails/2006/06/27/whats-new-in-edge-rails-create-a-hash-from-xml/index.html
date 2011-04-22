@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Create a Hash from XML</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: June 27th, 2006
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: June 27th, 2006
                 </div>
                 &#x000A;<p><code>Hash</code> <a href="http://dev.rubyonrails.org/changeset/4453">has been extended</a> to provide the ability to create a new hash from an xml string.  While this is now used internally by Rails to handle <span class="caps">XML</span> requests, it&#8217;s also available for use as you see fit.</p>&#x000A;<p>The basic premise is that <span class="caps">XML</span> is <em>mostly</em> a nested set of key =&gt; value pairs which is pretty much what a hash is.  Population and creation of a hash from an <span class="caps">XML</span> structure makes perfect sense and can simplify your use of <span class="caps">XML</span>.</p>&#x000A;<p>What happens when you call <code>Hash.from_xml(xml)</code> is that each xml element gets set as a key in the hash and the value of that element is stored as the value in the hash (with typecasting).</p>&#x000A;<p>For instance, this:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;Hash.from_xml &lt;&lt;EOX&#x000A;&lt;user&gt;&#x000A;  &lt;id type="integer"&gt;1&lt;/id&gt;&#x000A;  &lt;user-name&gt;ryan&lt;/user-name&gt;</p>&#x000A;</user>&#x000A;<p><span class="caps">EOX</span><br />&#x000A;</code><br />&#x000A;</pre><br />&#x000A;gets you this hash:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;{ :user =&gt; { :id =&gt; 1, :user_name =&gt; "ryan" } }&#x000A;</code><br />&#x000A;</pre><br />&#x000A;Notice how the integer value of the id was actually cast as an integer.  Also note how element names such as <code>user-name</code> get modified into the Ruby form <code>user_name</code>.</p>&#x000A;<p>Collections of more than one item are handled pretty intuitively as well &#8211; being stored as an array of hashes:<br />&#x000A;<pre><br />&#x000A;<code>&#x000A;hash = Hash.from_xml &lt;&lt;EOX&#x000A;&lt;users&gt;&#x000A;  &lt;user&gt;&#x000A;    &lt;id type="integer"&gt;1&lt;/id&gt;&#x000A;    &lt;user-name&gt;ryan&lt;/user-name&gt;</p>&#x000A;</user>&#x000A;<user>&#x000A;    <id type="integer">2</id>&#x000A;    <user-name>doug</user-name>&#x000A;</user>&#x000A;</users>&#x000A;<p><span class="caps">EOX</span></p>&#x000A;<p>hash[:users] #=&gt; {:user =&gt; [ { :id =&gt; 1, :user_name =&gt; &#8220;ryan&#8221; },<br />&#x000A;                             { :id =&gt; 2, :user_name =&gt; &#8220;doug&#8221; } ] }</p>&#x000A;<p>hash[:users][:user].last #=&gt; { :id =&gt; 2, :user_name =&gt; &#8220;doug&#8221; }<br />&#x000A;</code><br />&#x000A;</pre></p>&#x000A;<p>All in all just a really easy way to process <span class="caps">XML</span>.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

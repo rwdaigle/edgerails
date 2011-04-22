@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Has One :through</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: March 24th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: March 24th, 2008
                 </div>
                 &#x000A;<p><a href="http://dev.rubyonrails.org/changeset/9067">It would appear</a> that <code>has_one</code> has finally grown up the stature of <code>has_many</code> and now has support for the <code>:through</code> option.</p>&#x000A;<div class="highlight"><pre><span class="k">class</span> <span class="nc">Magazine</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">has_many</span> <span class="ss">:subscriptions</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="k">class</span> <span class="nc">Subscription</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">belongs_to</span> <span class="ss">:magazine</span>&#x000A;  <span class="n">belongs_to</span> <span class="ss">:user</span>&#x000A;<span class="k">end</span>&#x000A;&#x000A;<span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>&#x000A;  <span class="n">has_many</span> <span class="ss">:subscriptions</span>&#x000A;  <span class="n">has_one</span> <span class="ss">:magazine</span><span class="p">,</span> <span class="ss">:through</span> <span class="o">=&gt;</span> <span class="p">:</span> <span class="n">subscriptions</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;subscriptions.active = ?&#39;</span><span class="p">,</span> <span class="kp">true</span><span class="o">]</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>The intermediate associations are properly handled when doing assignments as well:</p>&#x000A;<div class="highlight"><pre><span class="vi">@ryan</span><span class="o">.</span><span class="n">subscriptions</span> <span class="c1">#=&gt; []</span>&#x000A;<span class="vi">@ryan</span><span class="o">.</span><span class="n">magazine</span> <span class="o">=</span> <span class="no">Magazine</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Hustler&#39;</span><span class="p">)</span>&#x000A;<span class="vi">@ryan</span><span class="o">.</span><span class="n">subscriptions</span> <span class="c1">#=&gt; [&lt;Subscription magazine_id: 1, user_id: 1 ...&gt;]</span>&#x000A;</pre>&#x000A;</div>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

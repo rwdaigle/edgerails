@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Bringin' Sexy Back</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: May 6th, 2007
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: May 6th, 2007
                 </div>
                 &#x000A;<p>You know those <a href="http://errtheblog.com/post/2381">sexy migrations</a> you&#8217;ve been lusting over?  Yeah, well they&#8217;re <a href="http://dev.rubyonrails.org/changeset/6667">mainstream now</a>.  I won&#8217;t unnecessarily duplicate here what&#8217;s already been written about them &#8211; but the gist is that a sexy migrations inspired syntax is now part of Rails.</p>&#x000A;<p>You can now do:</p>&#x000A;<div class="highlight"><pre><span class="n">create_table</span> <span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="ss">:force</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span> &#x000A;  <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:group_id</span><span class="p">,</span> <span class="ss">:employer_id</span>&#x000A;  <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:first</span><span class="p">,</span> <span class="ss">:last</span>&#x000A;  <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>&#x000A;<span class="k">end</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>To get <code>integer</code> columns in <code>group_id</code> and <code>employer_id</code> and <code>string</code> columns in <code>first</code> and <code>last</code>.  <code>timestamps</code> gets you the <a href="http://rails.raaum.org/database-conventions.html#magic-columns">magic columns</a> <code>created_at</code> and <code>updated_at</code>.</p>&#x000A;<p>The list of supported column types are:</p>&#x000A;<ul>&#x000A;	<li><code>string</code></li>&#x000A;	<li><code>text</code></li>&#x000A;	<li><code>integer</code></li>&#x000A;	<li><code>float</code></li>&#x000A;	<li><code>decimal</code></li>&#x000A;	<li><code>datetime</code></li>&#x000A;	<li><code>timestamp</code></li>&#x000A;	<li><code>time</code></li>&#x000A;	<li><code>date</code></li>&#x000A;	<li><code>binary</code></li>&#x000A;	<li><code>boolean</code></li>&#x000A;</ul>&#x000A;<p>So spin that Barry White record and lay it down right, sexy&#8217;s back.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>

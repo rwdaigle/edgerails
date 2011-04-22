@@ -98,7 +98,9 @@
               <div class='article'>
                 <h2>Dynamic Scope Methods</h2>
                 <div class='meta'>
-                  by: Ryan Daigle | posted: December 29th, 2008
+                  by:
+                  <a href='http://ryandaigle.com'>Ryan Daigle</a>
+                  | posted: December 29th, 2008
                 </div>
                 &#x000A;<span class="version"><strong>Rails</strong> 2.3 or 3.0</span><p>For quite some time now you&#8217;ve been able to perform simple queries using dynamic <code>find_all_by_xx_and_yy</code> methods:</p>&#x000A;<div class="highlight"><pre><span class="no">Article</span><span class="o">.</span><span class="n">find_by_published_and_user_id</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>&#x000A;  <span class="c1">#=&gt; &quot;SELECT * FROM articles WHERE published = 1 AND user_id = 1&quot;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>These dynamic finders provide an easy way to quickly encapsulate non-reused query conditions (for commonly used query logic you should consider using <a href="/articles/2008/3/24/what-s-new-in-edge-rails-has-finder-functionality">named scopes</a>).  The downside, however, is that you can&#8217;t chain query conditions when using these dynamic finders.</p>&#x000A;<p>With the recent addition of <a href="http://github.com/rails/rails/commit/66ee5890c5f21995b7fe0c486547f1287afe2b55">dynamic scopes</a>, however, you now have a way to both quickly specify query logic and chain further conditions.  The naming works in the same manner as dynamic finders and the chaining works in the same fashion as conventional named scopes:</p>&#x000A;<div class="highlight"><pre><span class="no">Article</span><span class="o">.</span><span class="n">scoped_by_published_and_user_id</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:all</span><span class="p">,</span> <span class="ss">:limit</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">)</span>&#x000A;  <span class="c1">#=&gt; &quot;SELECT * FROM articles WHERE published = 1 AND user_id = 1 LIMIT 5&quot;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>Note how you can hang further chainable query methods off the dynamic scope here?  You could also have preceded the dynamic scope with another scope, or even another dynamic scope:</p>&#x000A;<div class="highlight"><pre><span class="no">Article</span><span class="o">.</span><span class="n">scoped_by_published</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span><span class="o">.</span><span class="n">scoped_by_user_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>&#x000A;  <span class="c1">#=&gt; &quot;SELECT * FROM articles WHERE published = 1 AND user_id = 1&quot;</span>&#x000A;</pre>&#x000A;</div>&#x000A;<p>This is really just another tool to put in your toolbox based on the powerful named_scope functionality of ActiveRecord.</p>
               </div>
@@ -143,7 +145,7 @@
               <h4>Related articles</h4>
               <div class='posts'>
                 <div class='post'>
-                  <a href='/articles/what-s-new-in-edge-rails/2011/04/01/activerecord-identity-map'>ActiveRecord Identity Map</a>
+                  <a href='/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map'>ActiveRecord Identity Map</a>
                 </div>
                 <div class='post'>
                   <a href='/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization'>Custom ActiveRecord Attribute Serialization</a>
