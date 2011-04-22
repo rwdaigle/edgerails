@@ -7,10 +7,15 @@
             %h2= page.title
             - if page.respond_to? :author
               .meta
-                by: #{page.author} | posted: #{page.date.strftime("%B #{page.date.day.ordinalize}, %Y")}
+                by:
+                - if page.respond_to? :author_url
+                  %a{:href => page.author_url}= page.author
+                - else
+                  #{page.author}
+                | posted: #{page.date.strftime("%B #{page.date.day.ordinalize}, %Y")}
             = preserve rp(content)
           #disqus_thread= include "disqus_thread.haml"
       - else
         = preserve rp(content)
-      
+
   #sidebar= include "sidebar.haml"
