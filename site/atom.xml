@@ -3,7 +3,7 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-05-06T11:19:51+05:30</updated>
+  <updated>2011-05-06T22:48:52+05:30</updated>
   <id>http://edgerails.info</id>
   <entry>
     <title>Reversible Migrations</title>
@@ -166,6 +166,15 @@
           &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
       &lt;/pre&gt;
       &lt;/div&gt;
+      &lt;/div&gt;
+      
+      
+      
+      
+      &lt;div class=&quot;notice&quot;&gt;
+        &lt;p&gt;
+          You can still use the old class methods in your migrations. You can define the &#8216;old self.up and self.down if your feeling nostalgic. More importantly your existing migrations will not break.
+        &lt;/p&gt;
       &lt;/div&gt;
       
       

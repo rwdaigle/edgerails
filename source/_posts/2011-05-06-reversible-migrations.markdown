@@ -151,6 +151,12 @@ The only change to the old up and down methods is that they are now instance met
 {% endhighlight %}
 </div>
 
+<div class="notice">
+  <p>
+    You can still use the old class methods in your migrations. You can define the 'old self.up and self.down if your feeling nostalgic. More importantly your existing migrations will not break.
+  </p>
+</div>
+
 ### More magic? :(
 
 I guess a few people are wondering if ponies are carrying out the reversal of migrations. In the spirit of [Jose Valim](http://github.com/josevalim)'s wish to see all Rails magic deconstructed I thought I'll give a brief idea as to how Rails is reversing a migration automagically.
