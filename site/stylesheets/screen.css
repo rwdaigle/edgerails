@@ -944,7 +944,7 @@ pre.console .stdin {
 #sidebar .group {
   *zoom: 1;
 }
-/* line 22, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #sidebar .group:after {
   content: "\0020";
   display: block;
@@ -1074,7 +1074,7 @@ pre.console .stdin {
   text-indent: -119988px;
   overflow: hidden;
   text-align: left;
-  background-image: url('/images/edgerails-logo.png?1304642212');
+  background-image: url('/images/edgerails-logo.png?1262698163');
   background-repeat: no-repeat;
   background-position: 50% 50%;
   display: inline-block;
@@ -1087,7 +1087,7 @@ pre.console .stdin {
   text-indent: -119988px;
   overflow: hidden;
   text-align: left;
-  background-image: url('/images/fork.png?1304642212');
+  background-image: url('/images/fork.png?1262698163');
   background-repeat: no-repeat;
   background-position: 50% 50%;
   width: 150px;
@@ -1126,7 +1126,7 @@ body.publish #nav li.publish a {
   -khtml-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 22, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #nav .page_width:after {
   content: "\0020";
   display: block;
@@ -1147,7 +1147,7 @@ body.publish #nav li.publish a {
   margin: 0 auto;
   overflow: visible;
 }
-/* line 56, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/lists/_horizontal-list.scss */
+/* line 56, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/lists/_horizontal-list.scss */
 #nav ul li {
   list-style-image: none;
   list-style-type: none;
@@ -1158,11 +1158,11 @@ body.publish #nav li.publish a {
   padding-left: 0;
   padding-right: 0;
 }
-/* line 45, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/lists/_horizontal-list.scss */
+/* line 45, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/lists/_horizontal-list.scss */
 #nav ul li:first-child, #nav ul li.first {
   padding-left: 0;
 }
-/* line 46, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/lists/_horizontal-list.scss */
+/* line 46, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/lists/_horizontal-list.scss */
 #nav ul li:last-child, #nav ul li.last {
   padding-right: 0;
 }
@@ -1191,7 +1191,7 @@ body.publish #nav li.publish a {
 /* line 40, ../../stylesheets/partials/_navigation.sass */
 #nav ul li.subscribe a {
   display: inline-block;
-  background: url('/images/rss.png?1304642212') no-repeat left center;
+  background: url('/images/rss.png?1262272449') no-repeat left center;
   padding-left: 26px;
 }
 /* line 44, ../../stylesheets/partials/_navigation.sass */
@@ -1235,7 +1235,7 @@ body.publish #nav li.publish a {
   *zoom: 1;
   font-family: "Lucida Grande", "Lucida Sans Unicode", "Trebuchet MS", Helvetica, Arial, Verdana, sans-serif;
 }
-/* line 22, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #page:after {
   content: "\0020";
   display: block;
@@ -1249,7 +1249,7 @@ body.publish #nav li.publish a {
   *zoom: 1;
   position: relative;
 }
-/* line 22, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #page .page_width:after {
   content: "\0020";
   display: block;
@@ -1274,7 +1274,7 @@ body.publish #nav li.publish a {
 #sidebar .group {
   *zoom: 1;
 }
-/* line 22, ../../../../.rvm/gems/ree-1.8.7-2011.03/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 22, ../../../../../../../.rvm/gems/ree-1.8.7-2010.02@edgerails/gems/compass-0.10.6/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #sidebar .group:after {
   content: "\0020";
   display: block;

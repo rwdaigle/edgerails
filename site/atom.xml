@@ -3,7 +3,7 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-05-07T11:16:39+05:30</updated>
+  <updated>2011-05-07T09:29:34-04:00</updated>
   <id>http://edgerails.info</id>
   <entry>
     <title>Reversible Migrations</title>
@@ -11,12 +11,12 @@
     <author>
       <name>Rohit Arondekar</name>
     </author>
-    <updated>2011-05-06T00:00:00+05:30</updated>
+    <updated>2011-05-06T00:00:00-04:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/05/06/reversible-migrations</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
       
-      &lt;p&gt;A killer feature of Ruby on Rails that has filled web developers with joy is Migrations. In Rails 3.1 Migrations have got a new trick up their sleeves that will make you even more happy. If you need a little refresher on what migrations are then I suggest reading the official &lt;a href=&quot;http://guides.rubyonrails.org/migrations.html&quot;&gt;Rails guide&lt;/a&gt;.&lt;/p&gt;
+      &lt;p&gt;Migrations have always been considered one of the many killer features in Rails. And in Rails 3.1 Migrations got a new trick up their sleeve that will greatly simplify the process of maintaining both the &lt;code&gt;up&lt;/code&gt; and &lt;code&gt;down&lt;/code&gt; logic. If you need a little refresher on what migrations are then I suggest reading the official &lt;a href=&quot;http://guides.rubyonrails.org/migrations.html&quot;&gt;Rails guide&lt;/a&gt;.&lt;/p&gt;
       
       &lt;p&gt;Lets start by looking at how a typical migration looks like in Rails 3.0&lt;/p&gt;
       
@@ -41,7 +41,7 @@
       &lt;/div&gt;
       
       
-      &lt;p&gt;This migration creates a posts table with two fields &mdash; title and body of type string and text respectively. The timestamps helper creates datetime fields &mdash; created_at and updated_at for free. To reverse this migration we simply need to drop the posts table. The class method down does precisely this. When Rails is applying a migration it runs the class method up. To reverse the migration it runs the class method down.&lt;/p&gt;
+      &lt;p&gt;This migration creates a &lt;code&gt;posts&lt;/code&gt; table with two fields &mdash; &lt;code&gt;title&lt;/code&gt; and &lt;code&gt;body&lt;/code&gt; of type string and text, respectively. The &lt;code&gt;timestamps&lt;/code&gt; helper creates &lt;code&gt;datetime&lt;/code&gt; fields &mdash; &lt;code&gt;created_at&lt;/code&gt; and &lt;code&gt;updated_at&lt;/code&gt; for free. To reverse this migration we simply need to drop the &lt;code&gt;posts&lt;/code&gt; table. The class method &lt;code&gt;down&lt;/code&gt; does precisely this. When Rails is applying a migration it runs the class method &lt;code&gt;up&lt;/code&gt;. To reverse the migration (as can be done with &lt;code&gt;rake db:rollback&lt;/code&gt;) it runs the class method &lt;code&gt;down&lt;/code&gt;.&lt;/p&gt;
       
       &lt;p&gt;Two questions come up when you look at this migration &mdash;&lt;/p&gt;
       
@@ -55,9 +55,9 @@
       &lt;/ul&gt;
       
       
-      &lt;p&gt;The ever awesome &lt;a href=&quot;http://tenderlovemaking.com&quot;&gt;Aaron Patterson&lt;/a&gt; asked these questions and decided to simplify things for you and me.&lt;/p&gt;
+      &lt;p&gt;The ever awesome &lt;a href=&quot;http://tenderlovemaking.com&quot;&gt;Aaron Patterson&lt;/a&gt; thought the same thing and and decided to simplify things for you and I.&lt;/p&gt;
       
-      &lt;h3&gt;Introducing change&lt;/h3&gt;
+      &lt;h3&gt;Introducing &lt;code&gt;change&lt;/code&gt;&lt;/h3&gt;
       
       &lt;p&gt;If you run the following command in Edge Rails, the genarated migration will look something like the example below:&lt;/p&gt;
       
@@ -88,7 +88,7 @@
       &lt;/div&gt;
       
       
-      &lt;p&gt;By default Rails 3.1 will generate migrations for models using the change method that will hold the up logic. While trying to rollback, Rails will figure out how to reverse the migration for you. Go ahead and apply the migration and then rollback! You should see something like the following:&lt;/p&gt;
+      &lt;p&gt;By default Rails 3.1 will generate migrations for models using the &lt;code&gt;change&lt;/code&gt; method that will hold the &lt;code&gt;up&lt;/code&gt; logic. When a rollback is requested Rails will figure out how to reverse the migration for you merely by examining the &#8216;up&#8217; direction directives. Go ahead and apply the migration and then rollback. You should see something like the following:&lt;/p&gt;
       
       &lt;div class=&quot;code_window&quot;&gt;
       &lt;em&gt;console&lt;/em&gt;
@@ -115,7 +115,7 @@
       
       &lt;h3&gt;What about commands that can&#8217;t be reversed?&lt;/h3&gt;
       
-      &lt;p&gt;There are certain commands like remove_column that cannot be automatically reversed. This is because the information required to re-create the column is not available in the remove_column command. If Rails encounters such commands while reversing a migration, an ActiveRecord::IrreversibleMigration exception will be raised.&lt;/p&gt;
+      &lt;p&gt;There are certain commands like &lt;code&gt;remove_column&lt;/code&gt; that cannot be automatically reversed. This is because the information required to re-create the column is not available in the &lt;code&gt;remove_column&lt;/code&gt; command. If Rails encounters such commands while reversing a migration, an &lt;code&gt;ActiveRecord::IrreversibleMigration&lt;/code&gt; exception will be raised.&lt;/p&gt;
       
       &lt;div class=&quot;code_window&quot;&gt;
       &lt;em&gt;Ruby - db/migrate/20110505101449_remove_title_from_post.rb&lt;/em&gt;
@@ -147,11 +147,11 @@
       &lt;/div&gt;
       
       
-      &lt;p&gt;If you want to handle such cases manually you can define the up and down methods &lt;em&gt;almost&lt;/em&gt; like before.&lt;/p&gt;
+      &lt;p&gt;If you want to handle such cases manually you can still define the &lt;code&gt;up&lt;/code&gt; and &lt;code&gt;down&lt;/code&gt; methods &lt;em&gt;almost&lt;/em&gt; like before.&lt;/p&gt;
       
-      &lt;h3&gt;Up and Down instance methods&lt;/h3&gt;
+      &lt;h3&gt;&lt;code&gt;up&lt;/code&gt; and &lt;code&gt;down&lt;/code&gt; instance methods&lt;/h3&gt;
       
-      &lt;p&gt;The only change to the old up and down methods is that they are now instance methods. Say good bye to those awkward self.up and self.down method definitions.&lt;/p&gt;
+      &lt;p&gt;The only change to the old &lt;code&gt;up&lt;/code&gt; and &lt;code&gt;down&lt;/code&gt; methods is that they are now instance methods. Say good bye to those awkward &lt;code&gt;self.up&lt;/code&gt; and &lt;code&gt;self.down&lt;/code&gt; method definitions.&lt;/p&gt;
       
       &lt;div class=&quot;code_window&quot;&gt;
       &lt;em&gt;Ruby - db/migrate/20110505101557_remove_title_from_post.rb&lt;/em&gt;
@@ -173,18 +173,18 @@
       
       &lt;div class=&quot;notice&quot;&gt;
         &lt;p&gt;
-          You can still use the old class methods in your migrations. You can define the &#8216;old self.up and self.down if your feeling nostalgic. More importantly your existing migrations will not break.
+          If you&#8217;re the difficult type you can still use the old class methods in your migrations. More importantly your existing migrations will not break.
         &lt;/p&gt;
       &lt;/div&gt;
       
       
       &lt;h3&gt;More magic? :(&lt;/h3&gt;
       
-      &lt;p&gt;I guess a few people are wondering if ponies are carrying out the reversal of migrations. In the spirit of &lt;a href=&quot;http://github.com/josevalim&quot;&gt;Jose Valim&lt;/a&gt;&#8217;s wish to see all Rails magic deconstructed I thought I&#8217;ll give a brief idea as to how Rails is reversing a migration automagically.&lt;/p&gt;
+      &lt;p&gt;If you&#8217;re wondering how migration reversal is determined, and in the spirit of &lt;a href=&quot;http://github.com/josevalim&quot;&gt;Jose Valim&lt;/a&gt;&#8217;s wish to see all Rails magic deconstructed, I thought I&#8217;d give a brief idea as to how Rails is reversing a migration automagically.&lt;/p&gt;
       
-      &lt;p&gt;The magic, erm I mean heavy lifting happens in the &lt;a href=&quot;https://github.com/rails/rails/blob/master/activerecord/lib/active_record/migration/command_recorder.rb&quot;&gt;ActiveRecord::Migration::CommandRecorder&lt;/a&gt; class. Basically if you define a change method in your migration and are applying the migration then the commands are executed as normal.&lt;/p&gt;
+      &lt;p&gt;The magic, erm I mean heavy lifting, happens in the &lt;a href=&quot;https://github.com/rails/rails/blob/master/activerecord/lib/active_record/migration/command_recorder.rb&quot;&gt;ActiveRecord::Migration::CommandRecorder&lt;/a&gt; class. Basically if you define a &lt;code&gt;change&lt;/code&gt; method in your migration and are applying the migration then the commands are executed as normal.&lt;/p&gt;
       
-      &lt;p&gt;However while reversing the migration, the commands are recorded and a list of inverse commands is generated and run. Inverse commands are simply commands that perform the opposite of the original command. For eg: the inverse of rename_table(old, new) is rename_table(new, old). The logic to obtain an inverse of a command is provided in the class itself. For those commands whose inverse cannot be obtained, ActiveRecord::IrreversibleMigration is raised.&lt;/p&gt;
+      &lt;p&gt;However while reversing the migration, the commands are recorded and a list of inverse commands is generated and run. Inverse commands are simply commands that perform the opposite of the original command. For eg: the inverse of &lt;code&gt;rename_table(old, new)&lt;/code&gt; is &lt;code&gt;rename_table(new, old)&lt;/code&gt;. The logic to obtain an inverse of a command is provided in the class itself. For those commands whose inverse cannot be obtained, ActiveRecord::IrreversibleMigration is raised.&lt;/p&gt;
       
       &lt;p&gt;That was a very simple overview of what is happening behind the scenes. I encourage you to take a look at the &lt;a href=&quot;https://github.com/rails/rails/blob/master/activerecord/lib/active_record/migration/command_recorder.rb&quot;&gt;code&lt;/a&gt; for yourself to understand how it works.&lt;/p&gt;
     </content>
@@ -195,7 +195,7 @@
     <author>
       <name>Josh Kalderimis</name>
     </author>
-    <updated>2011-04-21T00:00:00+05:30</updated>
+    <updated>2011-04-21T00:00:00-04:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/04/21/activerecord-identity-map</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
@@ -311,7 +311,7 @@
     <author>
       <name>Jeff Kreeftmeijer</name>
     </author>
-    <updated>2011-03-09T00:00:00+05:30</updated>
+    <updated>2011-03-09T00:00:00-05:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/03/09/custom-activerecord-attribute-serialization</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
@@ -414,7 +414,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2011-01-12T00:00:00+05:30</updated>
+    <updated>2011-01-12T00:00:00-05:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2011/01/12/template-inheritance</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
@@ -472,7 +472,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2010-02-23T00:00:00+05:30</updated>
+    <updated>2010-02-23T00:00:00-05:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;/p&gt;
@@ -865,7 +865,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2010-02-18T00:00:00+05:30</updated>
+    <updated>2010-02-18T00:00:00-05:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/18/notes-from-the-first-rails-online-conference</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;/p&gt;
@@ -893,7 +893,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2010-02-10T00:00:00+05:30</updated>
+    <updated>2010-02-10T00:00:00-05:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources</id>
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.0&lt;/span&gt;&lt;/p&gt;
@@ -1043,7 +1043,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2010-02-08T00:00:00+05:30</updated>
+    <updated>2010-02-08T00:00:00-05:00</updated>
     <id>http://edgerails.info/articles/announcements/2010/02/08/edgerails.info-is-live</id>
     <content type="html">
       &lt;p&gt;As I mentioned back on my &lt;a href=&quot;http://ryandaigle.com/articles/2010/2/8/what-s-new-in-edge-rails-moves-to-edgerails-info&quot;&gt;personal site&lt;/a&gt;, the continuation and evolution of the What&#8217;s New in Edge Rails series continues here as EdgeRails.info.  I&#8217;ve long wanted to give the Edge Rails series it&#8217;s own dedicated site and have finally pulled my act together to get this party started.&lt;/p&gt;
@@ -1067,7 +1067,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2009-12-20T00:00:00+05:30</updated>
+    <updated>2009-12-20T00:00:00-05:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/12/20/what-s-new-in-edge-rails-set-flash-in-redirect_to</id>
     <content type="html">
       
@@ -1110,7 +1110,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2009-08-11T00:00:00+05:30</updated>
+    <updated>2009-08-11T00:00:00-04:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/11/what-s-new-in-edge-rails-independent-model-validators</id>
     <content type="html">
       
@@ -1173,7 +1173,7 @@
     <author>
       <name>Ryan Daigle</name>
     </author>
-    <updated>2009-08-10T00:00:00+05:30</updated>
+    <updated>2009-08-10T00:00:00-04:00</updated>
     <id>http://edgerails.info/articles/what-s-new-in-edge-rails/2009/08/10/what-s-new-in-edge-rails-default-restful-rendering</id>
     <content type="html">
       
