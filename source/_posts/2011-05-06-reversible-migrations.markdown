@@ -45,7 +45,7 @@ Two questions come up when you look at this migration &mdash;
   </li>
 </ul>
 
-The ever awesome [Aaron Patterson](http://www.tendorloving.com) asked these questions and decided to simplify things for you and me.
+The ever awesome [Aaron Patterson](http://tenderlovemaking.com) asked these questions and decided to simplify things for you and me.
 
 ### Introducing change
 

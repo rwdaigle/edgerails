@@ -3,7 +3,7 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-05-06T22:48:52+05:30</updated>
+  <updated>2011-05-07T11:16:39+05:30</updated>
   <id>http://edgerails.info</id>
   <entry>
     <title>Reversible Migrations</title>
@@ -55,7 +55,7 @@
       &lt;/ul&gt;
       
       
-      &lt;p&gt;The ever awesome &lt;a href=&quot;http://www.tendorloving.com&quot;&gt;Aaron Patterson&lt;/a&gt; asked these questions and decided to simplify things for you and me.&lt;/p&gt;
+      &lt;p&gt;The ever awesome &lt;a href=&quot;http://tenderlovemaking.com&quot;&gt;Aaron Patterson&lt;/a&gt; asked these questions and decided to simplify things for you and me.&lt;/p&gt;
       
       &lt;h3&gt;Introducing change&lt;/h3&gt;
       
