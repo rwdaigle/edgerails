@@ -8,6 +8,12 @@ categories:
 
 <span class="version">**Rails** 3.1</span>
 
+<div class="notice">
+  <p>
+    Due to some recently discovered issues with updating objects in associations, the Identity Map will be turned off by default in Rails 3.1. You can still turn the Identity Map on, but it is recommended you <a href="https://github.com/rails/rails/blob/master/activerecord/lib/active_record/identity_map.rb">read the documentation</a> for further information.
+  </p>
+</div>
+
 If you've been using rails for a while now you may be familiar with Active Record's query cache. The query cache is a powerful part of Active Record which reduces unnecessary SQL calls and provides general speed improvements, especially when dealing with associations. The problem with the query cache, however, is when retrieving two identical records from the database two in-memory objects will still be created.
 
 <div class="code_window">
@@ -77,7 +83,7 @@ The identity map is created on a per-request basis and is flushed at the complet
 {% endhighlight %}
 </div>
 
-Although Rails 3.1 will come with the identity map built-in and turned on out of the box, you can try it out for yourself by living on the edge and changing the following in application.rb :
+Although Rails 3.1 will come with the identity map built-in <strong>but turned off by default</strong>, you can try it out for yourself by living on the edge and adding the following to application.rb :
 
 <div class="code_window">
 <em>Ruby - config/application.rb</em>
