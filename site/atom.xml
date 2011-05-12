@@ -3,7 +3,7 @@
   <title>Edge Rails.info</title>
   <link href="http://edgerails.info/atom.xml" rel="self" />
   <link href="http://edgerails.info" />
-  <updated>2011-05-07T09:29:34-04:00</updated>
+  <updated>2011-05-12T09:13:50-04:00</updated>
   <id>http://edgerails.info</id>
   <entry>
     <title>Reversible Migrations</title>
@@ -200,6 +200,13 @@
     <content type="html">
       &lt;p&gt;&lt;span class=&quot;version&quot;&gt;&lt;strong&gt;Rails&lt;/strong&gt; 3.1&lt;/span&gt;&lt;/p&gt;
       
+      &lt;div class=&quot;notice&quot;&gt;
+        &lt;p&gt;
+          Due to some recently discovered issues with updating objects in associations, the Identity Map will be turned off by default in Rails 3.1. You can still turn the Identity Map on, but it is recommended you &lt;a href=&quot;https://github.com/rails/rails/blob/master/activerecord/lib/active_record/identity_map.rb&quot;&gt;read the documentation&lt;/a&gt; for further information.
+        &lt;/p&gt;
+      &lt;/div&gt;
+      
+      
       &lt;p&gt;If you&#8217;ve been using rails for a while now you may be familiar with Active Record&#8217;s query cache. The query cache is a powerful part of Active Record which reduces unnecessary SQL calls and provides general speed improvements, especially when dealing with associations. The problem with the query cache, however, is when retrieving two identical records from the database two in-memory objects will still be created.&lt;/p&gt;
       
       &lt;div class=&quot;code_window&quot;&gt;
@@ -281,7 +288,7 @@
       &lt;/div&gt;
       
       
-      &lt;p&gt;Although Rails 3.1 will come with the identity map built-in and turned on out of the box, you can try it out for yourself by living on the edge and changing the following in application.rb :&lt;/p&gt;
+      &lt;p&gt;Although Rails 3.1 will come with the identity map built-in &lt;strong&gt;but turned off by default&lt;/strong&gt;, you can try it out for yourself by living on the edge and adding the following to application.rb :&lt;/p&gt;
       
       &lt;div class=&quot;code_window&quot;&gt;
       &lt;em&gt;Ruby - config/application.rb&lt;/em&gt;
