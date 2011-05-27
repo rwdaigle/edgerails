@@ -9,6 +9,7 @@ nav: articles
       %h2= link_to(post.title, post.url, {:class=>"title"})
       .meta
         posted: #{post.date.strftime("%B #{post.date.day.ordinalize}, %Y")}
+        by: #{link_to((post.data["author"] || "Ryan Daigle"), (post.data["author_url"] || "http://ryandaigle.com")) }
       = preserve rp(post.content)
       - if page.respond_to? :disqus_short_name
         .footer
