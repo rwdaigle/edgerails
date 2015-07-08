@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rack-rewrite', '~> 1.0.0'  
+gem 'thin'
+gem 'rack-rewrite', '~> 1.0.0'
 
 group :development do
   gem 'activesupport', "2.3.5"
@@ -14,4 +15,5 @@ group :development do
   gem 'rake'
   gem 'heroku'
   gem 'rack'
+  gem 'foreman'
 end
